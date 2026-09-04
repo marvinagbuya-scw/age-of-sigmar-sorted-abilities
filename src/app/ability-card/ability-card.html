@@ -1,0 +1,45 @@
+<header class="ability-card__header">
+  @if (frequency(); as frequency) {
+    <p class="ability-card__frequency">{{ frequency }}</p>
+  }
+  <p class="ability-card__timing">{{ timing() }}</p>
+</header>
+
+<div class="ability-card__body">
+  <div class="ability-card__title-row">
+    <h3 class="ability-card__name">{{ ability().name }}</h3>
+    @if (value(); as value) {
+      <span class="ability-card__value" [attr.aria-label]="value.label + ' ' + value.value">
+        {{ value.value }}
+      </span>
+    }
+  </div>
+
+  @if (ability().sample) {
+    <p class="ability-card__sample">Sample data — not verified against the rules</p>
+  }
+
+  @if (ability().declare; as declare) {
+    <p class="ability-card__text">
+      <span class="ability-card__label">Declare:</span> {{ declare }}
+    </p>
+  }
+
+  <p class="ability-card__text">
+    <span class="ability-card__label">Effect:</span> {{ ability().effect }}
+  </p>
+
+  @if (ability().usedBy; as usedBy) {
+    <p class="ability-card__used-by">
+      <span class="ability-card__label">Used by:</span> {{ usedBy }}
+    </p>
+  }
+</div>
+
+@if (ability().keywords.length > 0) {
+  <footer class="ability-card__keywords">
+    @for (keyword of ability().keywords; track keyword) {
+      <span class="ability-card__keyword">{{ keyword }}</span>
+    }
+  </footer>
+}

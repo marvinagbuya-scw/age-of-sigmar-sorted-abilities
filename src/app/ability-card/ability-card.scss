@@ -1,0 +1,137 @@
+@use 'bands';
+
+:host {
+  // Fallback so a card still renders sanely if no band attribute is applied.
+  --band: var(--aos-deployment);
+
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+// Emits `:host([data-band='deployment'])`, `...hero`, ... each rebinding `--band`.
+@include bands.host-band-modifiers;
+
+.ability-card__header {
+  background: var(--band);
+  // White on the gold hero band is only ~3.3:1, so header text is bold and
+  // slightly enlarged to stay legible on screen and in print.
+  color: #fff;
+  padding: var(--space-2) var(--space-3);
+}
+
+.ability-card__frequency {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.ability-card__timing {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ability-card__body {
+  flex: 1;
+  padding: var(--space-3);
+}
+
+.ability-card__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.ability-card__name {
+  margin: 0 0 var(--space-2);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.ability-card__value {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 1.85rem;
+  min-height: 1.85rem;
+  border-radius: 50%;
+  background: var(--band);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.ability-card__sample {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-left: 3px solid #c58a00;
+  background: #fff7e0;
+  color: #6b4e00;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.ability-card__text {
+  margin: 0 0 var(--space-2);
+  font-size: 0.85rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ability-card__label {
+  font-weight: 700;
+}
+
+.ability-card__used-by {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.ability-card__keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--rule);
+  background: var(--surface-sunken);
+}
+
+.ability-card__keyword {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+@media print {
+  :host {
+    // Keep a whole card on one page.
+    break-inside: avoid;
+    border-color: #999;
+  }
+
+  .ability-card__header,
+  .ability-card__value {
+    // Browsers strip background colours when printing by default; the phase
+    // colour is the entire point of this list, so force it.
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

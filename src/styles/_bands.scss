@@ -1,0 +1,33 @@
+// Age of Sigmar 4th edition ability card colour bands.
+//
+// The eight bands below match the colours printed on the real cards. `deployment`
+// doubles as the band for passive and start-of-battle-round abilities, `end`
+// covers both end-of-turn and end-of-battle-round, and `reaction` overrides
+// whatever band a phase would otherwise produce.
+//
+// Keep this list in sync with the `BANDS` const in `core/models/timing.ts`.
+
+$bands: deployment, hero, movement, shooting, charge, combat, end, reaction;
+
+// Emits one `:host([data-band='...'])` rule per band, each setting the local
+// `--band` variable. Consumers then style against `var(--band)` in a single
+// rule rather than repeating themselves eight times.
+//
+// Call at the top level of a component stylesheet, not nested inside `:host`.
+@mixin host-band-modifiers {
+  @each $band in $bands {
+    :host([data-band='#{$band}']) {
+      --band: var(--aos-#{$band});
+    }
+  }
+}
+
+// As above, but for a plain element carrying `data-band` (e.g. a phase heading
+// inside another component's template).
+@mixin band-modifiers($selector: '&') {
+  @each $band in $bands {
+    #{$selector}[data-band='#{$band}'] {
+      --band: var(--aos-#{$band});
+    }
+  }
+}

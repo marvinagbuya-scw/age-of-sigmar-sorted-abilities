@@ -1,0 +1,138 @@
+@use 'bands';
+
+:host {
+  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.page-header__title {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.page-header__subtitle {
+  margin: var(--space-1) 0 0;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+
+.print-button {
+  flex: none;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--ink);
+  border-radius: var(--card-radius);
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: #000;
+  }
+}
+
+.banner {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3);
+  border-left: 4px solid #c58a00;
+  border-radius: var(--card-radius);
+  background: #fff7e0;
+  color: #6b4e00;
+  font-size: 0.85rem;
+}
+
+.status {
+  padding: var(--space-6) 0;
+  color: var(--ink-muted);
+
+  &--error {
+    color: #831418;
+  }
+}
+
+code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  background: rgb(0 0 0 / 8%);
+  font-size: 0.9em;
+}
+
+/* --- phase sections ------------------------------------------------------ */
+
+.phase {
+  margin-bottom: var(--space-6);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@include bands.band-modifiers('.phase__heading');
+
+.phase__heading {
+  --band: var(--aos-deployment);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--card-radius);
+  background: var(--band);
+  color: #fff;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.phase__count {
+  font-size: 0.8rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.phase__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+/* --- print --------------------------------------------------------------- */
+
+@media print {
+  :host {
+    max-width: none;
+    padding: 0;
+  }
+
+  .phase {
+    margin-bottom: 6mm;
+    // Don't orphan a heading at the foot of a page.
+    break-inside: auto;
+  }
+
+  .phase__heading {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    break-after: avoid;
+    break-inside: avoid;
+    font-size: 11pt;
+  }
+
+  .phase__cards {
+    // Two columns fit an A4 portrait page comfortably at this font size.
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4mm;
+  }
+}

@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "npm run validate:data && ng test",
+    "test:unit": "ng test",
+    "validate:data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/validate-data.mts"
   },
   "private": true,
   "packageManager": "npm@11.17.0",

@@ -74,18 +74,28 @@ back-references, malformed effects and missing effect text.
 ### Linting and key order
 
 `npm run lint` uses [`eslint-plugin-jsonc`](https://ota-meshi.github.io/eslint-plugin-jsonc/)
-on `public/data/**/*.json`. It enforces **alphabetically sorted keys** — all
-auto-fixable with `npm run lint:fix` — plus no duplicate keys, valid JSON
-numbers, and no comments (these are strict `.json`; use the `_note` key for
-commentary).
+on `public/data/**/*.json`. It enforces **key order matching how an ability
+reads** — all auto-fixable with `npm run lint:fix` — plus no duplicate keys,
+valid JSON numbers, and no comments (these are strict `.json`; use the `_note`
+key for commentary).
 
-Alphabetical ordering keeps diffs small and removes any argument about where a
-key goes, but it does split up keys that read together on the physical card — an
-ability ends up ordered `castingValue, declare, effect, id, keywords, name,
-sample, source, timing, usedBy`, and the top-level `id`/`name` land in the middle
-of the section keys. `eslint.config.mjs` contains a ready-made alternative that
-sorts by the card's reading order instead; swapping to it is a single edit and
-`npm run lint:fix` will reorder every file to match.
+An ability's keys go:
+
+```
+id, name, sample, keywords, timing, castingValue, chantingValue,
+declare, effect, usedBy, source
+```
+
+and nested objects follow suit — `timing` as `phase, turn, reaction, frequency`,
+`source` as `kind` then its id, units as `id, name, keywords, abilities`.
+
+Both orders are defined at the top of `eslint.config.mjs`. Adding a new field
+there is all it takes to bring it under the rule; unlisted keys are left
+unconstrained rather than failing the lint.
+
+Alphabetical sorting was tried first and rejected — it buried `id`/`name` in the
+middle of each ability and put `effect` before you knew which ability you were
+reading.
 
 > **Some bundled Soulblight Gravelords abilities are still sample data.** Any
 > ability flagged `"sample": true` was written to exercise the layout, not
@@ -118,25 +128,22 @@ An empty section is a known gap, not an error.
 {
   "id": "sbgl-the-hunger", // unique across the file
   "name": "The Hunger",
+  "sample": true, // optional; omit once verified against the rules
+  "keywords": ["Core", "Heal"], // use [] if none
   "timing": {
     "phase": "combat", // decides the printed section
     "turn": "your", // "your" | "any" | "enemy" — optional
     "reaction": "You declared a Fight ability for this unit", // optional; forces the green band
     "frequency": "once-per-battle", // "once-per-battle" | "once-per-turn" | "once-per-turn-army"
   },
-  "declare": "Pick a friendly unit that has fought this phase.", // omit for passives
-  "effect": "Heal (1) that unit.", // required; string or array, see below
-  "keywords": ["Core", "Heal"], // use [] if none
   "castingValue": 7, // Spell only
   "chantingValue": 4, // Prayer only
+  "declare": "Pick a friendly unit that has fought this phase.", // omit for passives
+  "effect": "Heal (1) that unit.", // required; string or array, see below
   "usedBy": "Friendly SOULBLIGHT GRAVELORDS units", // optional
   "source": { "kind": "faction" },
-  "sample": true, // optional; omit once verified against the rules
 }
 ```
-
-Keys are shown here in the card's reading order for clarity. On disk they're
-sorted alphabetically by the linter — see above.
 
 ### Effects with lists
 
@@ -194,10 +201,10 @@ silently breaking army filtering later.
     {
       "id": "sbgl-vl-supernatural-strength",
       "name": "Supernatural Strength",
+      "keywords": ["Once Per Turn"],
       "timing": { "phase": "combat", "turn": "any" },
       "declare": "Pick a friendly SUMMONABLE unit wholly within 12\" of this unit.",
       "effect": "Add 1 to the Attacks characteristic of that unit's melee weapons.",
-      "keywords": ["Once Per Turn"],
       "source": { "kind": "warscroll", "unitId": "sbgl-vampire-lord" },
     },
   ],

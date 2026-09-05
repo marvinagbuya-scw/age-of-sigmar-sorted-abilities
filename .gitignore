@@ -45,3 +45,7 @@ Thumbs.db
 
 *storybook.log
 storybook-static
+
+# local dev logs
+serve.log
+sb.log

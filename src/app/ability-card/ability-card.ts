@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import {
   FREQUENCY_LABELS,
   bandForTiming,
+  normaliseEffect,
   timingLabel,
   type Ability,
   type Band,
@@ -32,6 +33,12 @@ export class AbilityCard {
 
   /** The text shown in the coloured timing bar. */
   readonly timing = computed(() => timingLabel(this.ability().timing));
+
+  /**
+   * The effect broken into renderable blocks, so an effect authored as a
+   * lead-in plus a bulleted list renders as a real `<ul>`.
+   */
+  readonly effectBlocks = computed(() => normaliseEffect(this.ability().effect));
 
   /** e.g. `Once Per Battle`, shown above the timing. */
   readonly frequency = computed(() => {

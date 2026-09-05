@@ -57,6 +57,75 @@ interface ExpectedSource {
   refValue?: string;
 }
 
+/**
+ * Validates `effect`, which may be a plain string or an array mixing paragraph
+ * strings and `{ "list": [...] }` blocks.
+ */
+function validateEffect(value: unknown, path: string): void {
+  if (typeof value === 'string') {
+    if (value.trim() === '') {
+      fail(path, '"effect" must not be empty');
+    }
+    return;
+  }
+
+  if (!Array.isArray(value)) {
+    fail(path, '"effect" must be a string, or an array of strings and { "list": [...] } blocks');
+    return;
+  }
+
+  if (value.length === 0) {
+    fail(path, '"effect" must not be an empty array');
+    return;
+  }
+
+  let renderable = 0;
+
+  value.forEach((block, i) => {
+    const blockPath = `${path}.effect[${i}]`;
+
+    if (typeof block === 'string') {
+      if (block.trim() === '') {
+        warn(blockPath, 'empty paragraph will be dropped when rendering');
+      } else {
+        renderable++;
+      }
+      return;
+    }
+
+    if (!isPlainObject(block)) {
+      fail(blockPath, 'must be a string or a { "list": [...] } object');
+      return;
+    }
+
+    const unknownKeys = Object.keys(block).filter((k) => k !== 'list' && k !== 'ordered');
+    if (unknownKeys.length > 0) {
+      fail(blockPath, `unexpected key(s): ${unknownKeys.join(', ')}`);
+    }
+
+    const list = block['list'];
+    if (!Array.isArray(list) || list.some((item) => typeof item !== 'string')) {
+      fail(blockPath, '"list" must be an array of strings');
+      return;
+    }
+
+    const items = (list as string[]).filter((item) => item.trim() !== '');
+    if (items.length === 0) {
+      fail(blockPath, '"list" must contain at least one non-empty item');
+    } else {
+      renderable++;
+    }
+
+    if (block['ordered'] !== undefined && typeof block['ordered'] !== 'boolean') {
+      fail(blockPath, '"ordered" must be a boolean');
+    }
+  });
+
+  if (renderable === 0) {
+    fail(path, '"effect" has no renderable content');
+  }
+}
+
 function validateAbility(raw: unknown, path: string, expected: ExpectedSource): void {
   if (!isPlainObject(raw)) {
     fail(path, 'ability must be an object');
@@ -65,7 +134,12 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
 
   const id = requireString(raw, 'id', path);
   requireString(raw, 'name', path);
-  requireString(raw, 'effect', path);
+
+  if (raw['effect'] === undefined) {
+    fail(path, '"effect" is required');
+  } else {
+    validateEffect(raw['effect'], path);
+  }
 
   if (id) {
     const previous = seenAbilityIds.get(id);

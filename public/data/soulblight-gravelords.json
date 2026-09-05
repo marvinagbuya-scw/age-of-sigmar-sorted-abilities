@@ -1,198 +1,217 @@
 {
   "_note": [
-    "SAMPLE DATA ONLY. Every ability below is marked \"sample\": true and was",
-    "written to exercise the card layout and phase sorting, not transcribed from",
-    "the published rules. Rules text is paraphrased and values may be wrong.",
+    "Abilities still flagged \"sample\": true were written to exercise the card",
+    "layout and are NOT accurate rules text. Replace them with the real wording",
+    "and drop the flag; the warning banner disappears once none remain.",
     "",
-    "Replace these with the real text from your book/app, then drop the",
-    "\"sample\" flag so the banner in the UI disappears.",
+    "Sections that are empty are known gaps, not bugs.",
     "",
-    "Sections that are empty are known gaps, not bugs. Run `npm run validate:data`",
-    "after editing to catch schema mistakes."
-  ],
-  "id": "soulblight-gravelords",
-  "name": "Soulblight Gravelords",
-
-  "factionAbilities": [
-    {
-      "id": "sbgl-deathless-minions",
-      "name": "Deathless Minions",
-      "sample": true,
-      "timing": { "phase": "passive" },
-      "effect": "This unit has WARD (6+) while it is wholly within 12\" of any friendly SOULBLIGHT GRAVELORDS HERO.",
-      "keywords": ["Core", "Ward"],
-      "usedBy": "Friendly SOULBLIGHT GRAVELORDS units",
-      "source": { "kind": "faction" }
-    },
-    {
-      "id": "sbgl-the-hunger",
-      "name": "The Hunger",
-      "sample": true,
-      "timing": {
-        "phase": "combat",
-        "reaction": "You declared a Fight ability for this unit and it destroyed any enemy models"
-      },
-      "declare": "Pick a friendly SOULBLIGHT GRAVELORDS unit that has fought this phase.",
-      "effect": "Heal (1) that unit.",
-      "keywords": ["Core", "Heal"],
-      "source": { "kind": "faction" }
-    }
-  ],
-
-  "battleFormations": [
-    {
-      "id": "sbgl-legion-of-night",
-      "name": "Legion of Night",
-      "abilities": [
-        {
-          "id": "sbgl-lon-swift-and-deadly",
-          "name": "Swift and Deadly",
-          "sample": true,
-          "timing": { "phase": "deployment" },
-          "declare": "Pick up to 2 friendly SOULBLIGHT GRAVELORDS units that have not been deployed.",
-          "effect": "Those units are placed to one side and are considered to be in ambush. At the end of any turn, you can set them up anywhere on the battlefield more than 9\" from all enemy units.",
-          "keywords": ["Deployment"],
-          "source": { "kind": "battle-formation", "formationId": "sbgl-legion-of-night" }
-        },
-        {
-          "id": "sbgl-lon-unquiet-dead",
-          "name": "The Unquiet Dead",
-          "sample": true,
-          "timing": { "phase": "end-of-turn", "turn": "your", "frequency": "once-per-turn-army" },
-          "declare": "Pick a friendly SOULBLIGHT GRAVELORDS SUMMONABLE unit that is not in combat.",
-          "effect": "Return up to 3 slain models to that unit.",
-          "keywords": ["Once Per Turn (Army)"],
-          "source": { "kind": "battle-formation", "formationId": "sbgl-legion-of-night" }
-        }
-      ]
-    }
-  ],
-
-  "heroicTraits": [
-    {
-      "id": "sbgl-trait-terrifying-visage",
-      "name": "Terrifying Visage",
-      "sample": true,
-      "timing": { "phase": "charge", "turn": "enemy" },
-      "declare": "Pick an enemy unit within 12\" of this unit that has declared a Charge ability.",
-      "effect": "Subtract 1 from that unit's charge roll.",
-      "keywords": ["Heroic Trait"],
-      "source": { "kind": "heroic-trait" }
-    }
+    "Run `npm run validate:data` to check the schema and `npm run lint:fix` to",
+    "sort the keys after editing."
   ],
 
   "artefactsOfPower": [
     {
-      "id": "sbgl-artefact-ring-of-domination",
-      "name": "Ring of Domination",
-      "sample": true,
-      "timing": { "phase": "hero", "turn": "your", "frequency": "once-per-battle" },
       "declare": "Pick a visible enemy unit within 12\" of the bearer.",
       "effect": "Until the start of your next turn, that unit cannot use commands and subtract 1 from hit rolls for its attacks. This is a long deliberately verbose effect used to check that cards with a lot of text still lay out sensibly, do not clip their container, and do not break across a printed page in an awkward place.",
+      "id": "sbgl-artefact-ring-of-domination",
       "keywords": ["Artefact of Power", "Once Per Battle"],
-      "source": { "kind": "artefact-of-power" }
+      "name": "Ring of Domination",
+      "sample": true,
+      "source": { "kind": "artefact-of-power" },
+      "timing": { "frequency": "once-per-battle", "phase": "hero", "turn": "your" }
+    }
+  ],
+  "battleFormations": [
+    {
+      "abilities": [
+        {
+          "declare": "Pick up to 2 friendly SOULBLIGHT GRAVELORDS units that have not been deployed.",
+          "effect": "Those units are placed to one side and are considered to be in ambush. At the end of any turn, you can set them up anywhere on the battlefield more than 9\" from all enemy units.",
+          "id": "sbgl-lon-swift-and-deadly",
+          "keywords": ["Deployment"],
+          "name": "Swift and Deadly",
+          "sample": true,
+          "source": { "formationId": "sbgl-legion-of-night", "kind": "battle-formation" },
+          "timing": { "phase": "deployment" }
+        },
+        {
+          "declare": "Pick a friendly SOULBLIGHT GRAVELORDS SUMMONABLE unit that is not in combat.",
+          "effect": "Return up to 3 slain models to that unit.",
+          "id": "sbgl-lon-unquiet-dead",
+          "keywords": ["Once Per Turn (Army)"],
+          "name": "The Unquiet Dead",
+          "sample": true,
+          "source": { "formationId": "sbgl-legion-of-night", "kind": "battle-formation" },
+          "timing": { "frequency": "once-per-turn-army", "phase": "end-of-turn", "turn": "your" }
+        }
+      ],
+      "id": "sbgl-legion-of-night",
+      "name": "Legion of Night"
     }
   ],
 
-  "spellLores": [
+  "factionAbilities": [
     {
-      "id": "sbgl-lore-of-the-vampires",
-      "name": "Lore of the Vampires",
-      "abilities": [
+      "effect": "If there is a friendly CURSED SEPULCHRE on the battlefield, you can set up 2 additional CURSED SEPULCHRES on the battlefield. The first must be set up more than 3\" from all units, objectives and other terrain features. The second must be set up wholly outside enemy territory and more than 3\" from all units, objectives and other terrain features",
+      "id": "sbgl-ancient-burial-sites",
+      "keywords": [],
+      "name": "Ancient Burial Sites",
+      "sample": false,
+      "source": { "kind": "faction" },
+      "timing": { "phase": "deployment" }
+    },
+    {
+      "declare": "Pick a friendly VAMPIRE unit that used a FIGHT ability this turn to be the targets.",
+      "effect": "Heal (D3) each target. Heal (2D3) the target instead if it destroyed an enemy unit this turn using a FIGHT ability.",
+      "id": "sbgl-the-hunger",
+      "keywords": [],
+      "name": "The Hunger",
+      "sample": false,
+      "source": { "kind": "faction" },
+      "timing": {
+        "frequency": "once-per-turn-army",
+        "phase": "end-of-turn",
+        "turn": "any"
+      }
+    },
+    {
+      "declare": "Pick a friendly SOULBLIGHT GRAVELORDS HERO to use this ability, then pick up to 3 friendly DEATHRATTLE or DEADWALKERS units wholly within 12\" of that HERO to be the targets.",
+      "effect": [
+        "For each target:",
         {
-          "id": "sbgl-spell-amaranthine-orb",
-          "name": "Amaranthine Orb",
-          "sample": true,
-          "timing": { "phase": "hero", "turn": "any" },
-          "castingValue": 7,
-          "declare": "Pick a visible enemy unit within 18\" of this WIZARD.",
-          "effect": "Roll a dice for each model in that unit that is within range. For each 5+, inflict 1 mortal damage on that unit.",
-          "keywords": ["Spell", "Damage"],
-          "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-the-vampires" }
+          "list": [
+            "If the target is damaged, Heal (3) the target.",
+            "If the target is not damaged, return a number of slain models to it with a combined Health characteristic of up to 3."
+          ]
         }
-      ]
+      ],
+      "id": "sbgl-deathly-invocation",
+      "keywords": [],
+      "name": "Deathly Invocation",
+      "sample": false,
+      "source": { "kind": "faction" },
+      "timing": {
+        "frequency": "once-per-turn-army",
+        "phase": "hero",
+        "turn": "any"
+      }
     }
   ],
+  "heroicTraits": [
+    {
+      "declare": "Pick an enemy unit within 12\" of this unit that has declared a Charge ability.",
+      "effect": "Subtract 1 from that unit's charge roll.",
+      "id": "sbgl-trait-terrifying-visage",
+      "keywords": ["Heroic Trait"],
+      "name": "Terrifying Visage",
+      "sample": true,
+      "source": { "kind": "heroic-trait" },
+      "timing": { "phase": "charge", "turn": "enemy" }
+    }
+  ],
+
+  "id": "soulblight-gravelords",
 
   "manifestationLores": [
     {
-      "id": "sbgl-lore-of-the-dead",
-      "name": "Lore of the Dead",
       "abilities": [
         {
-          "id": "sbgl-manifest-corpse-cart",
-          "name": "Summon Chalice of Ushoran",
-          "sample": true,
-          "timing": { "phase": "hero", "turn": "any" },
           "castingValue": 8,
           "declare": "Pick a point on the battlefield within 12\" of this WIZARD.",
           "effect": "Set up a CHALICE OF USHORAN manifestation wholly within 12\" of this WIZARD and more than 9\" from all enemy units.",
+          "id": "sbgl-manifest-corpse-cart",
           "keywords": ["Spell", "Summon"],
-          "source": { "kind": "manifestation-lore", "loreId": "sbgl-lore-of-the-dead" }
+          "name": "Summon Chalice of Ushoran",
+          "sample": true,
+          "source": { "kind": "manifestation-lore", "loreId": "sbgl-lore-of-the-dead" },
+          "timing": { "phase": "hero", "turn": "any" }
         }
-      ]
+      ],
+      "id": "sbgl-lore-of-the-dead",
+      "name": "Lore of the Dead"
     }
   ],
 
+  "name": "Soulblight Gravelords",
+  "spellLores": [
+    {
+      "abilities": [
+        {
+          "castingValue": 7,
+          "declare": "Pick a visible enemy unit within 18\" of this WIZARD.",
+          "effect": "Roll a dice for each model in that unit that is within range. For each 5+, inflict 1 mortal damage on that unit.",
+          "id": "sbgl-spell-amaranthine-orb",
+          "keywords": ["Spell", "Damage"],
+          "name": "Amaranthine Orb",
+          "sample": true,
+          "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-the-vampires" },
+          "timing": { "phase": "hero", "turn": "any" }
+        }
+      ],
+      "id": "sbgl-lore-of-the-vampires",
+      "name": "Lore of the Vampires"
+    }
+  ],
   "units": [
     {
-      "id": "sbgl-vampire-lord",
-      "name": "Vampire Lord",
-      "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "VAMPIRE"],
       "abilities": [
         {
-          "id": "sbgl-vl-supernatural-strength",
-          "name": "Supernatural Strength",
-          "sample": true,
-          "timing": { "phase": "combat", "turn": "any" },
           "declare": "Pick a friendly SUMMONABLE unit wholly within 12\" of this unit.",
           "effect": "Add 1 to the Attacks characteristic of that unit's melee weapons until the end of the phase.",
+          "id": "sbgl-vl-supernatural-strength",
           "keywords": ["Once Per Turn"],
-          "source": { "kind": "warscroll", "unitId": "sbgl-vampire-lord" }
+          "name": "Supernatural Strength",
+          "sample": true,
+          "source": { "kind": "warscroll", "unitId": "sbgl-vampire-lord" },
+          "timing": { "phase": "combat", "turn": "any" }
         }
-      ]
+      ],
+      "id": "sbgl-vampire-lord",
+      "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "VAMPIRE"],
+      "name": "Vampire Lord"
     },
     {
-      "id": "sbgl-deadwalker-zombies",
-      "name": "Deadwalker Zombies",
-      "keywords": ["INFANTRY", "SUMMONABLE"],
       "abilities": [
         {
+          "effect": "Add 1 to hit rolls for this unit's attacks if it has 10 or more models.",
           "id": "sbgl-dz-dragged-down",
+          "keywords": [],
           "name": "Dragged Down and Torn Apart",
           "sample": true,
-          "timing": { "phase": "combat", "turn": "any" },
-          "effect": "Add 1 to hit rolls for this unit's attacks if it has 10 or more models.",
-          "keywords": [],
-          "source": { "kind": "warscroll", "unitId": "sbgl-deadwalker-zombies" }
+          "source": { "kind": "warscroll", "unitId": "sbgl-deadwalker-zombies" },
+          "timing": { "phase": "combat", "turn": "any" }
         }
-      ]
+      ],
+      "id": "sbgl-deadwalker-zombies",
+      "keywords": ["INFANTRY", "SUMMONABLE"],
+      "name": "Deadwalker Zombies"
     },
     {
-      "id": "sbgl-dire-wolves",
-      "name": "Dire Wolves",
-      "keywords": ["INFANTRY", "SUMMONABLE"],
       "abilities": [
         {
+          "effect": "This unit can run and still use Charge abilities later in the turn.",
           "id": "sbgl-dw-slavering-charge",
+          "keywords": [],
           "name": "Slavering Charge",
           "sample": true,
-          "timing": { "phase": "movement", "turn": "your" },
-          "effect": "This unit can run and still use Charge abilities later in the turn.",
-          "keywords": [],
-          "source": { "kind": "warscroll", "unitId": "sbgl-dire-wolves" }
+          "source": { "kind": "warscroll", "unitId": "sbgl-dire-wolves" },
+          "timing": { "phase": "movement", "turn": "your" }
         },
         {
-          "id": "sbgl-dw-vigour-mortis",
-          "name": "Vigour Mortis",
-          "sample": true,
-          "timing": { "phase": "shooting", "turn": "enemy" },
           "declare": "Pick this unit if it is the target of a shooting attack.",
           "effect": "Subtract 1 from hit rolls for that attack if this unit has 10 or more models.",
+          "id": "sbgl-dw-vigour-mortis",
           "keywords": [],
-          "source": { "kind": "warscroll", "unitId": "sbgl-dire-wolves" }
+          "name": "Vigour Mortis",
+          "sample": true,
+          "source": { "kind": "warscroll", "unitId": "sbgl-dire-wolves" },
+          "timing": { "phase": "shooting", "turn": "enemy" }
         }
-      ]
+      ],
+      "id": "sbgl-dire-wolves",
+      "keywords": ["INFANTRY", "SUMMONABLE"],
+      "name": "Dire Wolves"
     }
   ]
 }

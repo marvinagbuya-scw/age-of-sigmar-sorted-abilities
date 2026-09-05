@@ -1,3 +1,4 @@
+import type { EffectInput } from './effect';
 import type { Timing } from './timing';
 
 export const SOURCE_KINDS = [
@@ -72,8 +73,13 @@ export interface Ability {
    * declaration step.
    */
   declare?: string;
-  /** The `Effect:` text. Always present. */
-  effect: string;
+  /**
+   * The `Effect:` text. Always present.
+   *
+   * Either a single paragraph, or an array mixing paragraphs and
+   * `{ "list": [...] }` blocks — see `EffectInput`.
+   */
+  effect: EffectInput;
   /** Card keywords, e.g. `Spell`, `Rampage`, `Core`. */
   keywords: string[];
   /** Casting value for a `Spell` ability. */

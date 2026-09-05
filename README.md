@@ -11,8 +11,11 @@ No backend — all ability data lives in JSON files under `public/data`.
 npm install
 npm start              # dev server on http://localhost:4200
 npm run storybook      # component previews on http://localhost:6006
-npm test               # validates the data, then runs unit tests
-npm run validate:data  # data checks on their own
+npm test               # lint, validate the data, then run unit tests
+npm run lint           # JSON data linting (key order, duplicates, syntax)
+npm run lint:fix       # auto-fix the above, including re-sorting keys
+npm run format         # Prettier over source, stories and data
+npm run validate:data  # schema checks on their own
 npm run build          # production build
 ```
 
@@ -58,15 +61,37 @@ place, not eight.
 
 ## Adding ability data
 
-Data lives in `public/data/<faction-id>.json`. Run `npm run validate:data` after
-editing; it fails on unknown phases, duplicate ids, broken back-references and
-missing effect text.
+Data lives in `public/data/<faction-id>.json`. After editing:
 
-> **The bundled Soulblight Gravelords data is sample data.** Every ability is
-> flagged `"sample": true` and was written to exercise the layout, not
-> transcribed from the rules. Values and wording are not accurate. Replace them
-> with the real text and drop the flag — the in-app warning banner disappears
-> once no ability is flagged.
+```bash
+npm run lint:fix       # sorts keys alphabetically, catches duplicates
+npm run validate:data  # checks the schema
+```
+
+`validate:data` fails on unknown phases, duplicate ids, broken
+back-references, malformed effects and missing effect text.
+
+### Linting and key order
+
+`npm run lint` uses [`eslint-plugin-jsonc`](https://ota-meshi.github.io/eslint-plugin-jsonc/)
+on `public/data/**/*.json`. It enforces **alphabetically sorted keys** — all
+auto-fixable with `npm run lint:fix` — plus no duplicate keys, valid JSON
+numbers, and no comments (these are strict `.json`; use the `_note` key for
+commentary).
+
+Alphabetical ordering keeps diffs small and removes any argument about where a
+key goes, but it does split up keys that read together on the physical card — an
+ability ends up ordered `castingValue, declare, effect, id, keywords, name,
+sample, source, timing, usedBy`, and the top-level `id`/`name` land in the middle
+of the section keys. `eslint.config.mjs` contains a ready-made alternative that
+sorts by the card's reading order instead; swapping to it is a single edit and
+`npm run lint:fix` will reorder every file to match.
+
+> **Some bundled Soulblight Gravelords abilities are still sample data.** Any
+> ability flagged `"sample": true` was written to exercise the layout, not
+> transcribed from the rules — its wording and values are not accurate. Replace
+> it with the real text and drop the flag; the in-app warning banner disappears
+> once no ability is flagged. `validate:data` reports how many remain.
 
 ### File shape
 
@@ -100,15 +125,48 @@ An empty section is a known gap, not an error.
     "frequency": "once-per-battle", // "once-per-battle" | "once-per-turn" | "once-per-turn-army"
   },
   "declare": "Pick a friendly unit that has fought this phase.", // omit for passives
-  "effect": "Heal (1) that unit.", // required
+  "effect": "Heal (1) that unit.", // required; string or array, see below
   "keywords": ["Core", "Heal"], // use [] if none
   "castingValue": 7, // Spell only
   "chantingValue": 4, // Prayer only
   "usedBy": "Friendly SOULBLIGHT GRAVELORDS units", // optional
   "source": { "kind": "faction" },
-  "sample": true, // remove once verified against the rules
+  "sample": true, // optional; omit once verified against the rules
 }
 ```
+
+Keys are shown here in the card's reading order for clarity. On disk they're
+sorted alphabetically by the linter — see above.
+
+### Effects with lists
+
+Plenty of cards read as a lead-in sentence followed by bullets. `effect` accepts
+either a plain string, or an array mixing paragraph strings with
+`{ "list": [...] }` blocks:
+
+```jsonc
+"effect": [
+  "For each target:",
+  {
+    "list": [
+      "If the target is damaged, Heal (3) the target.",
+      "If the target is not damaged, return a number of slain models to it."
+    ]
+  },
+  "An optional trailing paragraph."
+]
+```
+
+Bullets render as a `<ul>`. Add `"ordered": true` to a block to get a numbered
+`<ol>` instead, for effects that must be resolved in sequence. A plain string is
+still valid, so most abilities need no change.
+
+The `Effect:` label sits inline with a leading paragraph; if an effect starts
+with a list, the label goes on its own line above it. Empty strings and empty
+list items are dropped rather than rendering blank lines.
+
+> `declare` is currently string-only. It can reuse the same `normaliseEffect`
+> helper, so switching it over is a small change if a card needs it.
 
 ### `source` must match its section
 
@@ -150,10 +208,11 @@ silently breaking army filtering later.
 
 ```
 public/data/                 faction JSON
+eslint.config.mjs            JSON lint rules (key order, duplicates)
 scripts/validate-data.mts    data validation (imports the app's own enums)
 src/styles.scss              --aos-* palette, resets, @page print rules
 src/styles/_bands.scss       band list + mixins that generate the colour classes
-src/app/core/models/         Ability, Timing/Phase/Band, ArmyList, grouping
+src/app/core/models/         Ability, Effect, Timing/Phase/Band, ArmyList, grouping
 src/app/core/services/       data loading, army selection
 src/app/ability-card/        the card component + Storybook stories
 src/app/ability-list/        phase-grouped list and print layout

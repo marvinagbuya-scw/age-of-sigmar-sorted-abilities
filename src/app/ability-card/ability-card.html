@@ -26,8 +26,35 @@
   }
 
   <p class="ability-card__text">
-    <span class="ability-card__label">Effect:</span> {{ ability().effect }}
+    <span class="ability-card__label">Effect:</span>
+    <!-- A leading paragraph continues inline after the label; a leading list
+         gets the label on its own line instead. -->
+    @if (effectBlocks()[0]; as first) {
+      @if (first.kind === 'text') {
+        {{ first.text }}
+      }
+    }
   </p>
+
+  @for (block of effectBlocks(); track $index; let isFirst = $first) {
+    @if (block.kind === 'list') {
+      @if (block.ordered) {
+        <ol class="ability-card__list">
+          @for (item of block.items; track $index) {
+            <li>{{ item }}</li>
+          }
+        </ol>
+      } @else {
+        <ul class="ability-card__list">
+          @for (item of block.items; track $index) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      }
+    } @else if (!isFirst) {
+      <p class="ability-card__text">{{ block.text }}</p>
+    }
+  }
 
   @if (ability().usedBy; as usedBy) {
     <p class="ability-card__used-by">

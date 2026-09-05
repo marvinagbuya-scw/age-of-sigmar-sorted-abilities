@@ -137,6 +137,61 @@ export const OncePerBattle: Story = {
   },
 };
 
+/**
+ * An effect authored as a lead-in paragraph plus a bulleted list, which is how
+ * a lot of cards actually read.
+ */
+export const EffectWithList: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: 'Deathly Invocation',
+      timing: { phase: 'hero', turn: 'any', frequency: 'once-per-turn-army' },
+      declare:
+        'Pick a friendly SOULBLIGHT GRAVELORDS HERO to use this ability, then pick up to 3 friendly DEATHRATTLE or DEADWALKERS units wholly within 12" of that HERO to be the targets.',
+      effect: [
+        'For each target:',
+        {
+          list: [
+            'If the target is damaged, Heal (3) the target.',
+            'If the target is not damaged, return a number of slain models to it with a combined Health characteristic of up to 3.',
+          ],
+        },
+      ],
+      keywords: [],
+      source: { kind: 'faction' },
+    },
+  },
+};
+
+/**
+ * A list can sit between two paragraphs, and can be numbered when the order
+ * matters.
+ */
+export const EffectWithOrderedList: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: 'Sequenced Effect',
+      timing: { phase: 'combat', turn: 'your' },
+      declare: 'Pick a friendly unit to be the target.',
+      effect: [
+        'Resolve the following in order:',
+        {
+          ordered: true,
+          list: [
+            "Roll a dice and add the target's Health characteristic.",
+            'On a 7+, heal (D3) the target.',
+            'Otherwise, inflict 1 mortal damage on the target.',
+          ],
+        },
+        'The target cannot be picked for this ability again this turn.',
+      ],
+      keywords: ['Once Per Turn'],
+    },
+  },
+};
+
 /** No declare, no keywords, no value — the most stripped-back card possible. */
 export const MinimalCard: Story = {
   args: {

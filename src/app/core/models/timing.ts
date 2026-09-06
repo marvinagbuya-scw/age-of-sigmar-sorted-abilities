@@ -154,6 +154,42 @@ export function sectionForTiming(timing: Timing): Phase {
 }
 
 /**
+ * Templates for the card's timing bar, where `{turn}` is where the "Your" /
+ * "Any" / "Enemy" qualifier goes.
+ *
+ * The qualifier's position varies with the wording: it prefixes a phase name
+ * ("Any Hero Phase") but sits *inside* a phrase built around "of"
+ * ("End of Any Turn", not "Any End of Turn").
+ *
+ * Phases with no `{turn}` slot aren't owned by a player — a battle round belongs
+ * to neither side, and deployment and passives have no turn. `timing.turn` is
+ * ignored for those, and `validate:data` warns if it's set.
+ */
+const TIMING_TEMPLATES: Record<Phase, string> = {
+  deployment: 'Deployment',
+  'start-of-battle-round': 'Start of Battle Round',
+  hero: '{turn}Hero Phase',
+  movement: '{turn}Movement Phase',
+  shooting: '{turn}Shooting Phase',
+  charge: '{turn}Charge Phase',
+  combat: '{turn}Combat Phase',
+  'end-of-turn': 'End of {turn}Turn',
+  'end-of-battle-round': 'End of Battle Round',
+  passive: 'Passive',
+};
+
+const TURN_WORDS: Record<Turn, string> = {
+  your: 'Your',
+  any: 'Any',
+  enemy: 'Enemy',
+};
+
+/** Whether `timing.turn` affects the label for a given phase. */
+export function phaseTakesTurn(phase: Phase): boolean {
+  return TIMING_TEMPLATES[phase].includes('{turn}');
+}
+
+/**
  * Renders the text shown in the card's timing bar, mirroring the wording used
  * on the printed cards.
  */
@@ -162,22 +198,9 @@ export function timingLabel(timing: Timing): string {
     return `Reaction: ${timing.reaction}`;
   }
 
-  if (timing.phase === 'passive') {
-    return 'Passive';
-  }
+  const turn = timing.turn ? `${TURN_WORDS[timing.turn]} ` : '';
 
-  const base = PHASE_LABELS[timing.phase];
-
-  switch (timing.turn) {
-    case 'your':
-      return `Your ${base}`;
-    case 'enemy':
-      return `Enemy ${base}`;
-    case 'any':
-      return `Any ${base}`;
-    default:
-      return base;
-  }
+  return TIMING_TEMPLATES[timing.phase].replace('{turn}', turn);
 }
 
 /** Prefix shown above the timing, e.g. `Once Per Battle`. */

@@ -145,8 +145,7 @@
       "sample": false,
       "keywords": [],
       "timing": { "phase": "passive", "section": "shooting", "band": "shooting" },
-      "declare": "Pick a visible enemy unit within 12\" of the bearer.",
-      "effect": "Until the start of your next turn, that unit cannot use commands and subtract 1 from hit rolls for its attacks. This is a long deliberately verbose effect used to check that cards with a lot of text still lay out sensibly, do not clip their container, and do not break across a printed page in an awkward place.",
+      "effect": " Ignore modifiers to save rolls for shooting attacks that target this unit (positive and negative).",
       "source": { "kind": "artefact-of-power" }
     }
   ],
@@ -165,6 +164,28 @@
           "castingValue": 7,
           "declare": "Pick a friendly SOULBLIGHT GRAVELORDS WIZARD to cast this spell, pick a visible enemy unit within 18\" of them to be the target, then make a casting roll of 2D6.",
           "effect": "Roll a number of dice equal to the number of models in the target unit. For each 6, inflict 1 mortal damage on that unit. If any enemy models were slain by this spell, Heal (D3) the caster.",
+          "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-undeath" }
+        },
+        {
+          "id": "sbgl-prison-of-grief",
+          "name": "Prison of Grief",
+          "sample": false,
+          "keywords": ["Spell"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "Pick a friendly SOULBLIGHT GRAVELORDS WIZARD to cast this spell, pick a visible enemy unit within 12\" of them to be the target, then make a casting roll of 2D6.",
+          "effect": "The target has STRIKE-LAST until the start of your next turn.",
+          "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-undeath" }
+        },
+        {
+          "id": "sbgl-waste-away",
+          "name": "Vile Transference",
+          "sample": false,
+          "keywords": ["Spell", "Unlimited"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "Pick a friendly SOULBLIGHT GRAVELORDS WIZARD to cast this spell, pick a visible enemy unit within 12\" of them to be the target, then make a casting roll of 2D6.",
+          "effect": "For the rest of the turn, subtract 1 from the Damage characteristic of the target’s melee weapons.",
           "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-undeath" }
         }
       ]
@@ -191,65 +212,167 @@
     }
   ],
 
-  "generalsHandbook": [],
+  "generalsHandbook": [
+    {
+      "id": "sbgl-the-never-dead",
+      "name": "The Never-Dead",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "hero", "turn": "any" },
+      "effect": [
+        "Spend 1 rage dice. If your opponent's fury level is lower than yours, they must increase their fury level by 1, to a maximum of 7.",
+        "Then, for the rest of the turn, each time you make an unmodified save roll of 5+ for an attack that targets this unit, the attack fails and the attack sequence ends."
+      ],
+      "source": { "kind": "generals-handbook" }
+    }
+  ],
 
   "units": [
     {
       "id": "sbgl-vampire-lord",
       "name": "Vampire Lord",
-      "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "VAMPIRE"],
+      "keywords": [
+        "HERO",
+        "WIZARD (1)",
+        "INFANTRY",
+        "WARD (6+)",
+        "VAMPIRE",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS"
+      ],
       "abilities": [
         {
-          "id": "sbgl-vl-supernatural-strength",
-          "name": "Supernatural Strength",
-          "sample": true,
-          "keywords": ["Once Per Turn"],
-          "timing": { "phase": "combat", "turn": "any" },
-          "declare": "Pick a friendly SUMMONABLE unit wholly within 12\" of this unit.",
-          "effect": "Add 1 to the Attacks characteristic of that unit's melee weapons until the end of the phase.",
+          "id": "sbgl-sanguine-blur",
+          "name": "Sanguine Blur",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "hero", "turn": "your", "frequency": "once-per-turn-army" },
+          "effect": "Roll a dice. On a 3+ remove this unit from the battlefield and set it up again on the battlefield more than 9\" from all enemy non-HERO units and more than 3\" from all enemy HEROES.",
+          "usedBy": "Vampire Lord",
           "source": { "kind": "warscroll", "unitId": "sbgl-vampire-lord" }
         }
       ]
     },
     {
-      "id": "sbgl-deadwalker-zombies",
-      "name": "Deadwalker Zombies",
-      "keywords": ["INFANTRY", "SUMMONABLE"],
+      "id": "sbgl-necromancer",
+      "name": "Necromancer",
+      "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "WARD (6+)", "DEATH", "SOULBLIGHT GRAVELORDS"],
       "abilities": [
         {
-          "id": "sbgl-dz-dragged-down",
-          "name": "Dragged Down and Torn Apart",
-          "sample": true,
+          "id": "sbgl-vanhels-danse-macabre",
+          "name": "Vanhel's Danse Macabre",
+          "sample": false,
           "keywords": [],
-          "timing": { "phase": "passive", "section": "combat" },
-          "effect": "Add 1 to hit rolls for this unit's attacks if it has 10 or more models.",
-          "source": { "kind": "warscroll", "unitId": "sbgl-deadwalker-zombies" }
+          "timing": { "phase": "combat", "turn": "your", "frequency": "once-per-turn-army" },
+          "declare": "Pick a friendly DEATHRATTLE or DEADWALKERS unit wholly within 12\" of this unit to be the target.",
+          "effect": "The target can use 2 FIGHT abilities this phase. After the first is used, the target has STRIKE-LAST for the rest of the turn.",
+          "usedBy": "Necromancer",
+          "source": { "kind": "warscroll", "unitId": "sbgl-necromancer" }
+        },
+        {
+          "id": "sbgl-undead-minions",
+          "name": "Undead Minions",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
+          "effect": [
+            "While this unit is within the combat range of a friendly DEATHRATTLE or DEADWALKERS unit:",
+            {
+              "list": [
+                "This unit has WARD (4+)",
+                "Each time you make a successful ward roll for this unit, allocate 1 damage point to a friendly DEATHRATTLE or DEADWALKERS unit within this unit's combat range after the damage sequence for this unit has been resolved (ward rolls cannot be made for those damage points)."
+              ]
+            }
+          ],
+          "usedBy": "Necromancer",
+          "source": { "kind": "warscroll", "unitId": "sbgl-necromancer" }
         }
       ]
     },
     {
-      "id": "sbgl-dire-wolves",
-      "name": "Dire Wolves",
-      "keywords": ["INFANTRY", "SUMMONABLE"],
+      "id": "sbgl-barrow-knights",
+      "name": "Barrow Knights",
+      "keywords": [
+        "CALVARY",
+        "CHAMPION",
+        "MUSICIAN (1/5)",
+        "STANDARD BEARER (1/5)",
+        "WARD (6+)",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS",
+        "DEATHRATTLE"
+      ],
       "abilities": [
         {
-          "id": "sbgl-dw-slavering-charge",
-          "name": "Slavering Charge",
-          "sample": true,
+          "id": "sbgl-knights-of-the-king",
+          "name": "Knights of the King",
+          "sample": false,
           "keywords": [],
-          "timing": { "phase": "passive", "section": "movement", "band": "movement" },
-          "effect": "This unit can run and still use Charge abilities later in the turn.",
-          "source": { "kind": "warscroll", "unitId": "sbgl-dire-wolves" }
+          "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
+          "effect": "While any friendly DEATHRATTLE CALVARY HEROES are within this unit's combat range both this unit and those friendly units have ward (5+)",
+          "usedBy": "Barrow Knights",
+          "source": { "kind": "warscroll", "unitId": "sbgl-barrow-knights" }
         },
         {
-          "id": "sbgl-dw-vigour-mortis",
-          "name": "Vigour Mortis",
-          "sample": true,
+          "id": "sbgl-curse-to-rise-once-more",
+          "name": "Curse to Rise Once More",
+          "sample": false,
           "keywords": [],
-          "timing": { "phase": "shooting", "turn": "enemy" },
-          "declare": "Pick this unit if it is the target of a shooting attack.",
-          "effect": "Subtract 1 from hit rolls for that attack if this unit has 10 or more models.",
-          "source": { "kind": "warscroll", "unitId": "sbgl-dire-wolves" }
+          "timing": { "phase": "end-of-turn", "turn": "any", "frequency": "once-per-turn-army" },
+          "effect": "You can return 1 slain model to this unit",
+          "usedBy": "Barrow Knights",
+          "source": { "kind": "warscroll", "unitId": "sbgl-barrow-knights" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-barrow-guard",
+      "name": "Barrow Guard",
+      "keywords": [
+        "INFANTRY",
+        "CHAMPION",
+        "MUSICIAN (1/5)",
+        "STANDARD BEARER (1/5)",
+        "WARD (6+)",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS",
+        "DEATHRATTLE"
+      ],
+      "abilities": [
+        {
+          "id": "sbgl-guardians-of-the-king",
+          "name": "Guardians of the King",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
+          "effect": "While any friendly DEATHRATTLE INFANTRY HEROES are within this unit's combat range both this unit and those friendly units have ward (5+)",
+          "usedBy": "Barrow Guard",
+          "source": { "kind": "warscroll", "unitId": "sbgl-barrow-guard" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-deathrattle-skeletons",
+      "name": "Deathrattle Skeletons",
+      "keywords": [
+        "INFANTRY",
+        "CHAMPION",
+        "STANDARD BEARER (1/10)",
+        "WARD (6+)",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS",
+        "DEATHRATTLE"
+      ],
+      "abilities": [
+        {
+          "id": "sbgl-skeleton-legion",
+          "name": "Skeleton Legion",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "end-of-turn", "turn": "any" },
+          "effect": "You can return D3 slain models to this unit.",
+          "usedBy": "Deathrattle Skeletons",
+          "source": { "kind": "warscroll", "unitId": "sbgl-deathrattle-skeletons" }
         }
       ]
     }

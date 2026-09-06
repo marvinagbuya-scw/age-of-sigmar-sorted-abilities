@@ -16,6 +16,7 @@ import {
   PHASES,
   TURNS,
   bandForPhase,
+  phaseTakesTurn,
   type Phase,
 } from '../src/app/core/models/timing.ts';
 
@@ -216,6 +217,15 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
     const turn = timing['turn'];
     if (turn !== undefined && !(TURNS as readonly string[]).includes(turn as string)) {
       fail(path, `timing.turn "${String(turn)}" is not one of: ${TURNS.join(', ')}`);
+    } else if (
+      turn !== undefined &&
+      typeof phase === 'string' &&
+      (PHASES as readonly string[]).includes(phase) &&
+      !phaseTakesTurn(phase as Phase)
+    ) {
+      // A battle round belongs to neither player, and deployment/passive have no
+      // turn, so the qualifier never reaches the label.
+      warn(path, `timing.turn has no effect for phase "${phase}" and will not be shown`);
     }
 
     const section = timing['section'];

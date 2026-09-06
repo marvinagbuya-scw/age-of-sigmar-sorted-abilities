@@ -1,4 +1,13 @@
-import { bandForPhase, bandForTiming, sectionForTiming, timingLabel, type Timing } from './timing';
+import {
+  PHASES,
+  TURNS,
+  bandForPhase,
+  bandForTiming,
+  phaseTakesTurn,
+  sectionForTiming,
+  timingLabel,
+  type Timing,
+} from './timing';
 
 describe('bandForPhase', () => {
   it('maps each combat-sequence phase to its own band', () => {
@@ -79,12 +88,37 @@ describe('timingLabel', () => {
     expect(timingLabel({ phase: 'hero', turn: 'any' })).toBe('Any Hero Phase');
   });
 
+  it('prefixes every in-turn phase the same way', () => {
+    expect(timingLabel({ phase: 'movement', turn: 'any' })).toBe('Any Movement Phase');
+    expect(timingLabel({ phase: 'shooting', turn: 'enemy' })).toBe('Enemy Shooting Phase');
+    expect(timingLabel({ phase: 'charge', turn: 'your' })).toBe('Your Charge Phase');
+    expect(timingLabel({ phase: 'combat', turn: 'any' })).toBe('Any Combat Phase');
+  });
+
+  it('puts the qualifier inside the phrase for end of turn, not in front of it', () => {
+    // "Any End of Turn" would be wrong — the qualifier describes the turn.
+    expect(timingLabel({ phase: 'end-of-turn', turn: 'any' })).toBe('End of Any Turn');
+    expect(timingLabel({ phase: 'end-of-turn', turn: 'your' })).toBe('End of Your Turn');
+    expect(timingLabel({ phase: 'end-of-turn', turn: 'enemy' })).toBe('End of Enemy Turn');
+  });
+
   it('omits the prefix when the turn is unspecified', () => {
     expect(timingLabel({ phase: 'charge' })).toBe('Charge Phase');
+    expect(timingLabel({ phase: 'end-of-turn' })).toBe('End of Turn');
+  });
+
+  it('ignores turn for phases that no player owns', () => {
+    // A battle round belongs to neither side, and deployment has no turn.
+    expect(timingLabel({ phase: 'end-of-battle-round', turn: 'any' })).toBe('End of Battle Round');
+    expect(timingLabel({ phase: 'start-of-battle-round', turn: 'your' })).toBe(
+      'Start of Battle Round',
+    );
+    expect(timingLabel({ phase: 'deployment', turn: 'any' })).toBe('Deployment');
   });
 
   it('renders passive abilities as Passive', () => {
     expect(timingLabel({ phase: 'passive' })).toBe('Passive');
+    expect(timingLabel({ phase: 'passive', turn: 'any' })).toBe('Passive');
   });
 
   it('still reads Passive when filed under another phase', () => {
@@ -101,5 +135,31 @@ describe('timingLabel', () => {
     expect(timingLabel({ phase: 'combat', reaction: 'This unit was destroyed' })).toBe(
       'Reaction: This unit was destroyed',
     );
+  });
+
+  it('leaves no unreplaced placeholder or stray spacing for any combination', () => {
+    for (const phase of PHASES) {
+      for (const turn of [undefined, ...TURNS] as const) {
+        const label = timingLabel({ phase, turn });
+        expect(label).not.toContain('{turn}');
+        expect(label).not.toMatch(/\s{2,}/);
+        expect(label.trim()).toBe(label);
+      }
+    }
+  });
+});
+
+describe('phaseTakesTurn', () => {
+  it('is true for the phases a player takes', () => {
+    expect(phaseTakesTurn('hero')).toBe(true);
+    expect(phaseTakesTurn('combat')).toBe(true);
+    expect(phaseTakesTurn('end-of-turn')).toBe(true);
+  });
+
+  it('is false for phases no player owns', () => {
+    expect(phaseTakesTurn('deployment')).toBe(false);
+    expect(phaseTakesTurn('start-of-battle-round')).toBe(false);
+    expect(phaseTakesTurn('end-of-battle-round')).toBe(false);
+    expect(phaseTakesTurn('passive')).toBe(false);
   });
 });

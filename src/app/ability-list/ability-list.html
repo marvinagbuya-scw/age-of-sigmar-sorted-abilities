@@ -1,17 +1,33 @@
 <header class="page-header no-print">
   <div>
     <h1 class="page-header__title">{{ factionName() || 'Abilities' }}</h1>
-    <p class="page-header__subtitle">{{ totalAbilities() }} abilities, sorted by phase</p>
+    <p class="page-header__subtitle">
+      @if (filtersActive()) {
+        {{ visibleCount() }} of {{ totalCount() }} abilities, sorted by phase
+      } @else {
+        {{ totalCount() }} abilities, sorted by phase
+      }
+    </p>
   </div>
   <button type="button" class="print-button" (click)="print()">Print list</button>
 </header>
+
+<app-army-selector />
+
+<!-- Printed page needs its own heading, since the screen header is hidden. -->
+<h1 class="print-heading">
+  {{ factionName() }}
+  @if (filtersActive()) {
+    <span class="print-heading__note">army list</span>
+  }
+</h1>
 
 @if (hasSampleData()) {
   <p class="banner no-print">
     <strong>This list contains sample data.</strong>
     Abilities marked as samples were written to demonstrate the layout and are not accurate rules
     text. Edit
-    <code>public/data/soulblight-gravelords.json</code>
+    <code>public/data/{{ factionId() }}.json</code>
     to replace them.
   </p>
 }
@@ -21,10 +37,18 @@
 } @else if (error()) {
   <p class="status status--error">
     Could not load ability data. Check that
-    <code>public/data/soulblight-gravelords.json</code> exists and is valid JSON.
+    <code>public/data/{{ factionId() }}.json</code> exists and is valid JSON.
+  </p>
+} @else if (isEmpty()) {
+  <p class="status">
+    No abilities yet for this faction. Add them to
+    <code>public/data/{{ factionId() }}.json</code>.
   </p>
 } @else if (groups().length === 0) {
-  <p class="status">No abilities to show.</p>
+  <p class="status">
+    Nothing matches the current army list. Add units to your selection, or clear it to see every
+    ability again.
+  </p>
 } @else {
   @for (group of groups(); track group.phase) {
     <section class="phase">

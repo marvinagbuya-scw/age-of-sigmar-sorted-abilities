@@ -1,0 +1,28 @@
+{
+  "_note": [
+    "Empty scaffold. Add abilities section by section as you acquire and paint",
+    "the models — an empty section is a known gap, not a bug.",
+    "",
+    "Run `npm run validate:data` to check the schema and `npm run lint:fix` to",
+    "sort the keys after editing."
+  ],
+
+  "id": "slaves-to-darkness",
+  "name": "Slaves to Darkness",
+
+  "factionAbilities": [],
+
+  "battleFormations": [],
+
+  "heroicTraits": [],
+
+  "artefactsOfPower": [],
+
+  "spellLores": [],
+
+  "manifestationLores": [],
+
+  "generalsHandbook": [],
+
+  "units": []
+}

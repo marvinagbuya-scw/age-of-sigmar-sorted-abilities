@@ -10,6 +10,7 @@ import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { SOURCE_KINDS } from '../src/app/core/models/ability.ts';
+import { FACTIONS, isKnownFaction } from '../src/app/core/models/factions.ts';
 import {
   BANDS,
   FREQUENCIES,
@@ -55,6 +56,9 @@ function requireString(
 
 /** Ability ids seen so far, mapped to where they were first declared. */
 const seenAbilityIds = new Map<string, string>();
+
+/** Ability names seen so far, mapped to the id that first used them. */
+const seenAbilityNames = new Map<string, string>();
 
 /**
  * Phrases that only ever appeared in the seeded sample data. If one survives
@@ -168,7 +172,18 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
   }
 
   const id = requireString(raw, 'id', path);
-  requireString(raw, 'name', path);
+  const name = requireString(raw, 'name', path);
+
+  // Two abilities sharing a name inside one faction is nearly always a
+  // copy-pasted card whose name was never changed.
+  if (name && id) {
+    const previous = seenAbilityNames.get(name);
+    if (previous) {
+      warn(path, `name "${name}" is already used by "${previous}" — is one a copy-paste?`);
+    } else {
+      seenAbilityNames.set(name, id);
+    }
+  }
 
   if (raw['effect'] === undefined) {
     fail(path, '"effect" is required');
@@ -472,6 +487,9 @@ if (files.length === 0) {
 let sampleCount = 0;
 let abilityCount = 0;
 
+/** File name (minus .json) -> the `id` declared inside it. */
+const fileIds = new Map<string, string>();
+
 for (const file of files) {
   currentFile = file;
   const text = await readFile(join(DATA_DIR, file), 'utf8');
@@ -485,10 +503,45 @@ for (const file of files) {
   }
 
   seenAbilityIds.clear();
+  seenAbilityNames.clear();
   validateFaction(parsed);
+
+  if (isPlainObject(parsed) && typeof parsed['id'] === 'string') {
+    fileIds.set(file.replace(/\.json$/, ''), parsed['id']);
+  }
 
   abilityCount += seenAbilityIds.size;
   sampleCount += (text.match(/"sample"\s*:\s*true/g) ?? []).length;
+}
+
+// --- registry / file cross-check -------------------------------------------
+//
+// Keeps `FACTIONS` and the data directory in step, so switching faction in the
+// UI can never 404 and a new file can't be silently unreachable.
+currentFile = 'src/app/core/models/factions.ts';
+
+for (const faction of FACTIONS) {
+  if (!fileIds.has(faction.id)) {
+    fail(
+      `FACTIONS["${faction.id}"]`,
+      `listed in FACTIONS but public/data/${faction.id}.json does not exist`,
+    );
+  }
+}
+
+for (const [fileName, declaredId] of fileIds) {
+  if (fileName !== declaredId) {
+    fail(
+      `$.id in ${fileName}.json`,
+      `is "${declaredId}" but the file is named "${fileName}.json" — they must match`,
+    );
+  }
+  if (!isKnownFaction(fileName)) {
+    fail(
+      `public/data/${fileName}.json`,
+      'exists but is not listed in FACTIONS (src/app/core/models/factions.ts), so it is unreachable',
+    );
+  }
 }
 
 for (const warning of warnings) {

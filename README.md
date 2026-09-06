@@ -101,6 +101,56 @@ values are the eight band names: `deployment, hero, movement, shooting, charge,
 combat, end, reaction`. `validate:data` rejects anything else and warns when the
 override matches what `phase` would have produced anyway.
 
+## Army-list filtering
+
+The **Your army** panel above the list narrows it to what you're actually
+fielding. Pick a battle formation, units, heroic traits, artefacts and lores;
+everything else drops out. Faction abilities and General's Handbook abilities
+always stay, because they apply regardless of what you take.
+
+With nothing selected the full faction list renders, so the panel is opt-in.
+
+State lives in the query string, so a list can be bookmarked or shared:
+
+```
+/?f=soulblight-gravelords&bf=sbgl-deathmarch&u=sbgl-vampire-lord,sbgl-deathrattle-skeletons&ht=sbgl-eternal-thrall&sl=sbgl-lore-of-undeath
+```
+
+| Key  | Holds                  |
+| ---- | ---------------------- |
+| `f`  | faction id             |
+| `bf` | battle formation id    |
+| `u`  | unit ids               |
+| `ht` | heroic trait ids       |
+| `ar` | artefact ids           |
+| `sl` | spell lore ids         |
+| `ml` | manifestation lore ids |
+
+The last used list is also kept in `localStorage`, so a plain visit to `/`
+restores it. URL wins when both are present. History is _replaced_ rather than
+pushed, so Back doesn't walk you through every checkbox you ticked.
+
+Ids that no longer exist in the data are pruned on load. The data file is
+hand-edited and grows over time, so a bookmark from last week can easily point
+at a unit that's since been renamed — without pruning, those ids would linger
+invisibly and silently narrow the list.
+
+The panel is hidden when printing.
+
+## Adding a faction
+
+Two steps:
+
+1. Add an entry to `FACTIONS` in `src/app/core/models/factions.ts`
+2. Create `public/data/<id>.json` with a matching `id`
+
+`validate:data` cross-checks the two in both directions — a listed faction with
+no file, or a file that isn't listed, both fail. That way the faction picker can
+never offer something that 404s, and a new file can't sit there unreachable.
+
+Copy `public/data/skaven.json` as a starting point: it has every section present
+and empty, which is a valid state.
+
 ## Adding ability data
 
 Data lives in `public/data/<faction-id>.json`. After editing:
@@ -111,10 +161,16 @@ npm run validate:data  # checks the schema
 ```
 
 `validate:data` fails on unknown phases, duplicate ids, broken
-back-references, malformed effects and missing effect text. It also warns when
-an ability that is no longer flagged `"sample": true` still contains text from
-the seeded placeholder cards — the usual sign that a sample card was repurposed
-and its rules text never replaced.
+back-references, malformed effects, missing effect text, and any mismatch
+between `FACTIONS` and the data files. It also warns when:
+
+- an ability no longer flagged `"sample": true` still contains text from the
+  seeded placeholder cards — the usual sign that a sample card was repurposed
+  and its rules text never replaced
+- two abilities in one faction share a name, which is nearly always a
+  copy-pasted card whose name was never changed
+- an override has no effect (`section` equal to `phase`, a `band` matching what
+  `phase` already produces, or `turn` on a phase no player owns)
 
 ### Linting and key order
 
@@ -277,10 +333,11 @@ src/app/ability-list/        phase-grouped list and print layout
 
 ## Not built yet
 
-Army-list filtering. The model and `SelectionService` are in place —
-`isUnlocked` already decides whether an ability applies to a given army, and
-faction and General's Handbook abilities always pass — but there's no picker UI,
-so the full faction list renders. Adding the UI is additive; no rework needed.
+- **Model counts.** Selection is presence-only: a unit is either in the list or
+  not. Nothing currently needs to know you took three of something.
+- **Seasonal General's Handbook content.** Overwrite the section when a new
+  season lands; there's no `season` field yet.
+- **Regiments.** Units aren't grouped under the hero that leads them.
 
 ## Notes for future work
 

@@ -1,4 +1,5 @@
 import type { Ability } from './ability';
+import type { KnownIds } from './army-list';
 
 /** A named thing the player picks when building an army. */
 export interface NamedEntry {
@@ -61,4 +62,21 @@ export function allAbilities(faction: Faction): Ability[] {
     ...faction.generalsHandbook,
     ...faction.units.flatMap((u) => u.abilities),
   ];
+}
+
+/**
+ * Every selectable id in a faction, used to prune stale selections out of a
+ * bookmarked URL or a previous session's saved list.
+ */
+export function knownIds(faction: Faction): KnownIds {
+  return {
+    battleFormationIds: new Set(faction.battleFormations.map((f) => f.id)),
+    unitIds: new Set(faction.units.map((u) => u.id)),
+    // A trait or artefact *is* a single ability, so its ability id is the
+    // selectable id.
+    heroicTraitIds: new Set(faction.heroicTraits.map((a) => a.id)),
+    artefactIds: new Set(faction.artefactsOfPower.map((a) => a.id)),
+    spellLoreIds: new Set(faction.spellLores.map((l) => l.id)),
+    manifestationLoreIds: new Set(faction.manifestationLores.map((l) => l.id)),
+  };
 }

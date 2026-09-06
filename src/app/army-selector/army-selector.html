@@ -1,0 +1,105 @@
+<div class="panel">
+  <header class="panel__header">
+    <div class="panel__title-row">
+      <h2 class="panel__title">Your army</h2>
+      <button
+        type="button"
+        class="panel__toggle"
+        [attr.aria-expanded]="expanded()"
+        (click)="toggleExpanded()"
+      >
+        {{ expanded() ? 'Hide' : 'Show' }}
+      </button>
+    </div>
+
+    <p class="panel__summary">
+      @if (filtersActive()) {
+        {{ selectedCount() }} selected — showing only matching abilities, plus faction and General's
+        Handbook abilities.
+      } @else {
+        Nothing selected, so every ability in the faction is shown. Pick your army to narrow it
+        down.
+      }
+    </p>
+  </header>
+
+  @if (expanded()) {
+    <div class="panel__body">
+      <div class="field">
+        <label class="field__label" for="faction-select">Faction</label>
+        <select id="faction-select" class="field__control" (change)="selectFaction($event)">
+          @for (faction of factions; track faction.id) {
+            <!-- `selected` on the option rather than `[value]` on the select:
+                 the select's value is applied before @for renders the options,
+                 so the binding would be lost. -->
+            <option [value]="faction.id" [selected]="faction.id === factionId()">
+              {{ faction.name }}
+            </option>
+          }
+        </select>
+        <p class="field__hint">Changing faction clears the current selection.</p>
+      </div>
+
+      @if (isLoading()) {
+        <p class="panel__status">Loading…</p>
+      } @else if (hasNothingToPick()) {
+        <p class="panel__status">
+          This faction has no data yet. Add units and abilities to
+          <code>public/data/{{ factionId() }}.json</code> and they'll appear here.
+        </p>
+      } @else {
+        @if (battleFormations().length > 0) {
+          <div class="field">
+            <label class="field__label" for="formation-select">Battle formation</label>
+            <select
+              id="formation-select"
+              class="field__control"
+              (change)="setBattleFormation($event)"
+            >
+              <option value="" [selected]="!armyList().battleFormationId">None</option>
+              @for (formation of battleFormations(); track formation.id) {
+                <option
+                  [value]="formation.id"
+                  [selected]="formation.id === armyList().battleFormationId"
+                >
+                  {{ formation.name }}
+                </option>
+              }
+            </select>
+          </div>
+        }
+
+        @for (group of groups(); track group.key) {
+          <fieldset class="group">
+            <legend class="group__legend">{{ group.label }}</legend>
+            <ul class="group__list">
+              @for (choice of group.choices; track choice.id) {
+                <li>
+                  <label class="choice">
+                    <input
+                      type="checkbox"
+                      [checked]="isSelected(group.key, choice.id)"
+                      (change)="toggle(group.key, choice.id, $event)"
+                    />
+                    <span class="choice__text">
+                      <span class="choice__name">{{ choice.name }}</span>
+                      @if (choice.detail) {
+                        <span class="choice__detail">{{ choice.detail }}</span>
+                      }
+                    </span>
+                  </label>
+                </li>
+              }
+            </ul>
+          </fieldset>
+        }
+
+        <div class="panel__actions">
+          <button type="button" class="button" [disabled]="!filtersActive()" (click)="clear()">
+            Clear selection
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

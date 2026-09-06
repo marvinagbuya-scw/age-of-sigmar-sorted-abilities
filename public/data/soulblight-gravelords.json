@@ -192,25 +192,7 @@
     }
   ],
 
-  "manifestationLores": [
-    {
-      "id": "sbgl-lore-of-the-dead",
-      "name": "Lore of the Dead",
-      "abilities": [
-        {
-          "id": "sbgl-manifest-corpse-cart",
-          "name": "Summon Chalice of Ushoran",
-          "sample": true,
-          "keywords": ["Spell", "Summon"],
-          "timing": { "phase": "hero", "turn": "any" },
-          "castingValue": 8,
-          "declare": "Pick a point on the battlefield within 12\" of this WIZARD.",
-          "effect": "Set up a CHALICE OF USHORAN manifestation wholly within 12\" of this WIZARD and more than 9\" from all enemy units.",
-          "source": { "kind": "manifestation-lore", "loreId": "sbgl-lore-of-the-dead" }
-        }
-      ]
-    }
-  ],
+  "manifestationLores": [],
 
   "generalsHandbook": [
     {
@@ -373,6 +355,31 @@
           "effect": "You can return D3 slain models to this unit.",
           "usedBy": "Deathrattle Skeletons",
           "source": { "kind": "warscroll", "unitId": "sbgl-deathrattle-skeletons" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-vargheists",
+      "name": "Vargheists",
+      "keywords": [
+        "INFANTRY",
+        "CHAMPION",
+        "STANDARD BEARER (1/10)",
+        "WARD (6+)",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS",
+        "DEATHRATTLE"
+      ],
+      "abilities": [
+        {
+          "id": "sbgl-deaths-descent",
+          "name": "Death's Descent",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "movement", "turn": "your", "frequency": "once-per-turn" },
+          "effect": "If this unit is not in combat, remove it from the battlefield and set it up again on the battlefield more than 9\" from all enemy units.",
+          "usedBy": "Vargheists",
+          "source": { "kind": "warscroll", "unitId": "sbgl-vargheists" }
         }
       ]
     }

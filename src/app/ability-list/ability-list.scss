@@ -61,6 +61,11 @@
   }
 }
 
+/* Shown only on paper — the screen has its own header above the selector. */
+.print-heading {
+  display: none;
+}
+
 code {
   padding: 0.05rem 0.3rem;
   border-radius: 3px;
@@ -117,6 +122,18 @@ code {
   :host {
     max-width: none;
     padding: 0;
+  }
+
+  .print-heading {
+    display: block;
+    margin: 0 0 4mm;
+    font-size: 13pt;
+  }
+
+  .print-heading__note {
+    color: #555;
+    font-size: 9pt;
+    font-weight: 400;
   }
 
   .phase {

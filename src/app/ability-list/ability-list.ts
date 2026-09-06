@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
 import { AbilityCard } from '../ability-card/ability-card';
+import { ArmySelector } from '../army-selector/army-selector';
 import { bandForPhase, groupByPhase } from '../core/models';
 import { AbilityDataService } from '../core/services/ability-data.service';
 import { SelectionService } from '../core/services/selection.service';
@@ -10,7 +11,7 @@ import { SelectionService } from '../core/services/selection.service';
   templateUrl: './ability-list.html',
   styleUrl: './ability-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AbilityCard],
+  imports: [AbilityCard, ArmySelector],
 })
 export class AbilityList {
   private readonly data = inject(AbilityDataService);
@@ -19,18 +20,22 @@ export class AbilityList {
   readonly isLoading = this.data.isLoading;
   readonly error = this.data.error;
   readonly hasSampleData = this.data.hasSampleData;
+  readonly isEmpty = this.data.isEmpty;
+  readonly factionId = this.data.factionId;
+  readonly factionName = this.data.factionName;
+  readonly filtersActive = this.selection.filtersActive;
 
-  readonly factionName = computed(() => this.data.faction.value()?.name ?? '');
+  /** Abilities left after applying the army list. */
+  private readonly visible = computed(() => this.selection.filter(this.data.abilities()));
 
   /**
    * Abilities grouped into phase sections in turn-sequence order, narrowed to
    * the current army list (a no-op until the player selects something).
    */
-  readonly groups = computed(() => groupByPhase(this.selection.filter(this.data.abilities())));
+  readonly groups = computed(() => groupByPhase(this.visible()));
 
-  readonly totalAbilities = computed(() =>
-    this.groups().reduce((sum, group) => sum + group.abilities.length, 0),
-  );
+  readonly visibleCount = computed(() => this.visible().length);
+  readonly totalCount = computed(() => this.data.abilities().length);
 
   readonly bandForPhase = bandForPhase;
 

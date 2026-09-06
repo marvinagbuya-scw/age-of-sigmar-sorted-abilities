@@ -71,17 +71,35 @@ a different heading without touching its label or colour:
 
 That prints a **black card reading "Passive"** under the **Combat Phase**
 heading. `phase` still drives the label and the colour; `section` only decides
-which section it's printed in. Because both still derive from `phase`, a card's
-colour and label can never end up contradicting each other.
+which section it's printed in.
 
 Setting `section` to the same value as `phase` is redundant, and
 `validate:data` warns about it.
 
-> There is deliberately **no** raw colour override. One was considered and
-> rejected: it would let you author a black card whose timing bar reads "Combat
-> Phase", which is worse than the problem it solves. If you hit a case that
-> genuinely needs it, that's a signal the phase/band mapping needs revisiting
-> instead.
+### Recolouring a card
+
+By default the colour follows `phase`, so a passive stays black wherever it's
+filed. Add `timing.band` to force a different colour:
+
+```jsonc
+"timing": { "phase": "passive", "section": "shooting", "band": "shooting" }
+```
+
+That prints a **teal card reading "Passive"** under the **Shooting Phase**
+heading — the card blends into its section rather than standing out in black,
+while the label still tells you it's a passive ability.
+
+Both patterns are valid and the choice is per-card:
+
+|                    | Colour               | Reads   | Use when                                                      |
+| ------------------ | -------------------- | ------- | ------------------------------------------------------------- |
+| `section` only     | passive black        | Passive | you want passives to stand out from the phase's own abilities |
+| `section` + `band` | the section's colour | Passive | you want the sheet colour-coded strictly by phase             |
+
+`band` takes precedence over everything, including the reaction rule. Valid
+values are the eight band names: `deployment, hero, movement, shooting, charge,
+combat, end, reaction`. `validate:data` rejects anything else and warns when the
+override matches what `phase` would have produced anyway.
 
 ## Adding ability data
 
@@ -93,7 +111,10 @@ npm run validate:data  # checks the schema
 ```
 
 `validate:data` fails on unknown phases, duplicate ids, broken
-back-references, malformed effects and missing effect text.
+back-references, malformed effects and missing effect text. It also warns when
+an ability that is no longer flagged `"sample": true` still contains text from
+the seeded placeholder cards — the usual sign that a sample card was repurposed
+and its rules text never replaced.
 
 ### Linting and key order
 
@@ -110,9 +131,9 @@ id, name, sample, keywords, timing, castingValue, chantingValue,
 declare, effect, usedBy, source
 ```
 
-and nested objects follow suit — `timing` as `phase, section, turn, reaction,
-frequency`, `source` as `kind` then its id, units as `id, name, keywords,
-abilities`.
+and nested objects follow suit — `timing` as `phase, section, band, turn,
+reaction, frequency`, `source` as `kind` then its id, units as `id, name,
+keywords, abilities`.
 
 Both orders are defined at the top of `eslint.config.mjs`. Adding a new field
 there is all it takes to bring it under the rule; unlisted keys are left
@@ -158,6 +179,7 @@ An empty section is a known gap, not an error.
   "timing": {
     "phase": "combat", // drives the label, the colour, and (by default) the section
     "section": "combat", // optional; file under a different phase, keeping label + colour
+    "band": "combat", // optional; force the colour, overriding phase and reaction
     "turn": "your", // "your" | "any" | "enemy" — optional
     "reaction": "You declared a Fight ability for this unit", // optional; forces the green band
     "frequency": "once-per-battle", // see FREQUENCIES in core/models/timing.ts

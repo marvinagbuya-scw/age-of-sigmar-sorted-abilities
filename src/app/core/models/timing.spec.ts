@@ -38,9 +38,27 @@ describe('bandForTiming', () => {
   });
 
   it('ignores section, so filing a card elsewhere does not recolour it', () => {
-    // The whole point of `section`: a passive filed under combat stays black.
+    // `section` alone must not change the colour; `band` is the opt-in for that.
     expect(bandForTiming({ phase: 'passive', section: 'combat' })).toBe('deployment');
     expect(bandForTiming({ phase: 'hero', section: 'shooting' })).toBe('hero');
+  });
+
+  it('uses an explicit band override over the phase', () => {
+    // The headline use case: a passive filed under shooting, coloured teal so it
+    // matches the section it sits in rather than standing out in black.
+    expect(bandForTiming({ phase: 'passive', section: 'shooting', band: 'shooting' })).toBe(
+      'shooting',
+    );
+  });
+
+  it('lets an explicit band beat the reaction rule', () => {
+    expect(bandForTiming({ phase: 'combat', reaction: 'Something happened', band: 'combat' })).toBe(
+      'combat',
+    );
+  });
+
+  it('still falls back to the phase when no band is set', () => {
+    expect(bandForTiming({ phase: 'shooting' })).toBe('shooting');
   });
 });
 
@@ -71,6 +89,12 @@ describe('timingLabel', () => {
 
   it('still reads Passive when filed under another phase', () => {
     expect(timingLabel({ phase: 'passive', section: 'combat' })).toBe('Passive');
+  });
+
+  it('still reads Passive when recoloured by a band override', () => {
+    expect(timingLabel({ phase: 'passive', section: 'shooting', band: 'shooting' })).toBe(
+      'Passive',
+    );
   });
 
   it('renders a reaction with its trigger text', () => {

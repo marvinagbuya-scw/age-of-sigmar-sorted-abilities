@@ -66,6 +66,18 @@ export interface Timing {
    * can't end up contradicting each other.
    */
   section?: Phase;
+  /**
+   * Forces the colour band, overriding both the phase and the reaction rule.
+   *
+   * Useful with `section`: `{ phase: 'passive', section: 'shooting', band:
+   * 'shooting' }` prints a teal card reading "Passive" under the Shooting Phase
+   * heading, so the colour matches the section it sits in rather than standing
+   * out in passive black.
+   *
+   * Leave it unset unless you specifically want to break the phase's colour —
+   * the default keeps colour and label consistent with each other.
+   */
+  band?: Band;
   turn?: Turn;
   /**
    * The trigger text for a reaction, without the leading `Reaction:`.
@@ -116,13 +128,20 @@ export function bandForPhase(phase: Phase): Band {
 }
 
 /**
- * Resolves the colour band for a timing. A reaction always wears the green
- * band, overriding whatever its phase would otherwise produce.
+ * Resolves the colour band for a timing, in precedence order:
  *
- * Note this deliberately ignores `section`: filing a card elsewhere in the list
- * must not change its colour.
+ *   1. an explicit `band` override
+ *   2. green, if the ability is a reaction
+ *   3. the band its `phase` maps to
+ *
+ * Note `section` is deliberately not consulted: filing a card elsewhere in the
+ * list does not recolour it on its own. Set `band` explicitly if you want the
+ * colour to follow the section.
  */
 export function bandForTiming(timing: Timing): Band {
+  if (timing.band) {
+    return timing.band;
+  }
   return timing.reaction ? 'reaction' : bandForPhase(timing.phase);
 }
 

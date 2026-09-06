@@ -10,7 +10,14 @@ import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { SOURCE_KINDS } from '../src/app/core/models/ability.ts';
-import { FREQUENCIES, PHASES, TURNS } from '../src/app/core/models/timing.ts';
+import {
+  BANDS,
+  FREQUENCIES,
+  PHASES,
+  TURNS,
+  bandForPhase,
+  type Phase,
+} from '../src/app/core/models/timing.ts';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const DATA_DIR = join(ROOT, 'public', 'data');
@@ -47,6 +54,33 @@ function requireString(
 
 /** Ability ids seen so far, mapped to where they were first declared. */
 const seenAbilityIds = new Map<string, string>();
+
+/**
+ * Phrases that only ever appeared in the seeded sample data. If one survives
+ * into an ability that is no longer flagged `sample`, the real rules text almost
+ * certainly hasn't been pasted in yet — easy to miss when repurposing a sample
+ * card as a real one.
+ */
+const FILLER_PHRASES = [
+  'deliberately verbose',
+  'do not clip their container',
+  'stress the layout',
+  'exercise the card layout',
+  'header colour is driven entirely by the timing',
+  'Something happened',
+];
+
+function checkForFiller(text: string, path: string, isSample: boolean): void {
+  if (isSample) {
+    return;
+  }
+  for (const phrase of FILLER_PHRASES) {
+    if (text.toLowerCase().includes(phrase.toLowerCase())) {
+      warn(path, `contains leftover sample text ("${phrase}") but is not flagged "sample": true`);
+      return;
+    }
+  }
+}
 
 interface ExpectedSource {
   /** The source kind this section must declare. */
@@ -141,6 +175,25 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
     validateEffect(raw['effect'], path);
   }
 
+  // Catch sample text that survived into an ability now presented as real.
+  const isSample = raw['sample'] === true;
+  const prose = [raw['declare'], raw['effect'], raw['usedBy']]
+    .flatMap((value) => {
+      if (typeof value === 'string') return [value];
+      if (!Array.isArray(value)) return [];
+      return value.flatMap((block) => {
+        if (typeof block === 'string') return [block];
+        if (isPlainObject(block) && Array.isArray(block['list'])) {
+          return (block['list'] as unknown[]).filter((i): i is string => typeof i === 'string');
+        }
+        return [];
+      });
+    })
+    .join(' ');
+  if (prose !== '') {
+    checkForFiller(prose, path, isSample);
+  }
+
   if (id) {
     const previous = seenAbilityIds.get(id);
     if (previous) {
@@ -171,6 +224,23 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
         fail(path, `timing.section "${String(section)}" is not one of: ${PHASES.join(', ')}`);
       } else if (section === phase) {
         warn(path, 'timing.section is the same as timing.phase, so it has no effect');
+      }
+    }
+
+    const band = timing['band'];
+    if (band !== undefined) {
+      if (typeof band !== 'string' || !(BANDS as readonly string[]).includes(band)) {
+        fail(path, `timing.band "${String(band)}" is not one of: ${BANDS.join(', ')}`);
+      } else if (
+        typeof phase === 'string' &&
+        (PHASES as readonly string[]).includes(phase) &&
+        timing['reaction'] === undefined &&
+        band === bandForPhase(phase as Phase)
+      ) {
+        warn(
+          path,
+          `timing.band "${band}" is what timing.phase already produces, so it has no effect`,
+        );
       }
     }
 

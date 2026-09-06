@@ -100,18 +100,17 @@
 
   "battleFormations": [
     {
-      "id": "sbgl-legion-of-night",
-      "name": "Legion of Night",
+      "id": "sbgl-deathmarch",
+      "name": "Deathmarch",
       "abilities": [
         {
-          "id": "sbgl-lon-unquiet-dead",
-          "name": "The Unquiet Dead",
-          "sample": true,
-          "keywords": ["Once Per Turn (Army)"],
-          "timing": { "phase": "end-of-turn", "turn": "your", "frequency": "once-per-turn-army" },
-          "declare": "Pick a friendly SOULBLIGHT GRAVELORDS SUMMONABLE unit that is not in combat.",
-          "effect": "Return up to 3 slain models to that unit.",
-          "source": { "kind": "battle-formation", "formationId": "sbgl-legion-of-night" }
+          "id": "sbgl-tide-of-bones-and-blades",
+          "name": "Tide of Bones and Blades",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat" },
+          "effect": "Add 1 to the Rend characteristic of melee weapons used by friendly DEATHRATTLE units that charged in the same turn for attacks that target a unit that has fewer models than the attacking unit.",
+          "source": { "kind": "battle-formation", "formationId": "sbgl-deathmarch" }
         }
       ]
     }
@@ -119,24 +118,33 @@
 
   "heroicTraits": [
     {
-      "id": "sbgl-trait-terrifying-visage",
-      "name": "Terrifying Visage",
-      "sample": true,
-      "keywords": ["Heroic Trait"],
-      "timing": { "phase": "charge", "turn": "enemy" },
-      "declare": "Pick an enemy unit within 12\" of this unit that has declared a Charge ability.",
-      "effect": "Subtract 1 from that unit's charge roll.",
+      "id": "sbgl-eternal-thrall",
+      "name": "Eternal Thrall",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "deployment" },
+      "declare": "Pick another friendly non-UNIQUE SOULBLIGHT GRAVELORDS INFANTRY HERO to be the target.",
+      "effect": [
+        "For the rest of the battle, while the target is on the battlefield:",
+        {
+          "list": [
+            "If this unit is a Necromancer, add 1 to this unit's power level.",
+            "If this unit is a VAMPIRE, add 1 to unbinding rolls for this unit.",
+            "If this unit is DEATHRATTLE, ignore the first damage point that would be allocated to this unit in each phase."
+          ]
+        }
+      ],
       "source": { "kind": "heroic-trait" }
     }
   ],
 
   "artefactsOfPower": [
     {
-      "id": "sbgl-artefact-ring-of-domination",
-      "name": "Ring of Domination",
-      "sample": true,
-      "keywords": ["Artefact of Power", "Once Per Battle"],
-      "timing": { "phase": "hero", "turn": "your", "frequency": "once-per-battle" },
+      "id": "sbgl-shard-of-night",
+      "name": "Shard of Night",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "shooting" },
       "declare": "Pick a visible enemy unit within 12\" of the bearer.",
       "effect": "Until the start of your next turn, that unit cannot use commands and subtract 1 from hit rolls for its attacks. This is a long deliberately verbose effect used to check that cards with a lot of text still lay out sensibly, do not clip their container, and do not break across a printed page in an awkward place.",
       "source": { "kind": "artefact-of-power" }
@@ -227,7 +235,7 @@
           "name": "Slavering Charge",
           "sample": true,
           "keywords": [],
-          "timing": { "phase": "movement", "turn": "your" },
+          "timing": { "phase": "passive", "section": "movement", "band": "movement" },
           "effect": "This unit can run and still use Charge abilities later in the turn.",
           "source": { "kind": "warscroll", "unitId": "sbgl-dire-wolves" }
         },

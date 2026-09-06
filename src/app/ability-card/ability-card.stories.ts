@@ -211,6 +211,26 @@ export const PassiveFiledUnderCombat: Story = {
   },
 };
 
+/**
+ * The same idea, but recoloured to match the section it's filed under. `band`
+ * forces the teal shooting colour while the label stays "Passive", so on a
+ * phase-sorted sheet the card blends into its section instead of standing out in
+ * black. Compare with `PassiveFiledUnderCombat`.
+ */
+export const PassiveColouredBySection: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: 'Vigour Mortis',
+      timing: { phase: 'passive', section: 'shooting', band: 'shooting' },
+      declare: undefined,
+      effect:
+        'Subtract 1 from hit rolls for attacks that target this unit if it has 10 or more models.',
+      keywords: [],
+    },
+  },
+};
+
 /** No declare, no keywords, no value — the most stripped-back card possible. */
 export const MinimalCard: Story = {
   args: {

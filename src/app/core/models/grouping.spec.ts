@@ -72,6 +72,16 @@ describe('groupByPhase', () => {
     expect(groups[0].abilities.map((a) => a.id)).toEqual(['faction', 'formation', 'scroll']);
   });
 
+  it("sorts General's Handbook abilities after faction rules but before warscrolls", () => {
+    const groups = groupByPhase([
+      ability('scroll', { phase: 'hero' }, { kind: 'warscroll', unitId: 'u' }),
+      ability('handbook', { phase: 'hero' }, { kind: 'generals-handbook' }),
+      ability('faction', { phase: 'hero' }, { kind: 'faction' }),
+    ]);
+
+    expect(groups[0].abilities.map((a) => a.id)).toEqual(['faction', 'handbook', 'scroll']);
+  });
+
   it('falls back to sorting by name', () => {
     const groups = groupByPhase([
       ability('b', { phase: 'hero' }, { kind: 'faction' }, 'Zealous Blow'),

@@ -38,6 +38,11 @@ export interface Faction {
   artefactsOfPower: Ability[];
   spellLores: Lore[];
   manifestationLores: Lore[];
+  /**
+   * Abilities from the General's Handbook, e.g. battle tactics and grand
+   * strategies. Available to any army, so these always apply.
+   */
+  generalsHandbook: Ability[];
   units: Unit[];
 }
 
@@ -53,6 +58,7 @@ export function allAbilities(faction: Faction): Ability[] {
     ...faction.artefactsOfPower,
     ...faction.spellLores.flatMap((l) => l.abilities),
     ...faction.manifestationLores.flatMap((l) => l.abilities),
+    ...faction.generalsHandbook,
     ...faction.units.flatMap((u) => u.abilities),
   ];
 }

@@ -10,6 +10,14 @@ describe('isUnlocked', () => {
     expect(isUnlocked({ kind: 'faction' }, 'any-id', army())).toBe(true);
   });
 
+  it("always includes General's Handbook abilities", () => {
+    // Battle tactics and grand strategies are available to any army.
+    expect(isUnlocked({ kind: 'generals-handbook' }, 'any-id', army())).toBe(true);
+    expect(
+      isUnlocked({ kind: 'generals-handbook' }, 'any-id', army({ unitIds: new Set(['x']) })),
+    ).toBe(true);
+  });
+
   it('includes a battle formation ability only for the chosen formation', () => {
     const source: AbilitySource = { kind: 'battle-formation', formationId: 'legion-of-night' };
     expect(isUnlocked(source, 'x', army({ battleFormationId: 'legion-of-night' }))).toBe(true);

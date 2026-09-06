@@ -386,6 +386,9 @@ function validateFaction(raw: unknown): void {
   validateAbilityList(raw['factionAbilities'], '$.factionAbilities', { kind: 'faction' });
   validateAbilityList(raw['heroicTraits'], '$.heroicTraits', { kind: 'heroic-trait' });
   validateAbilityList(raw['artefactsOfPower'], '$.artefactsOfPower', { kind: 'artefact-of-power' });
+  validateAbilityList(raw['generalsHandbook'], '$.generalsHandbook', {
+    kind: 'generals-handbook',
+  });
 
   validateGroups(
     raw['battleFormations'],

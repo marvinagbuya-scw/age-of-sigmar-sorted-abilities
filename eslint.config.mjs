@@ -60,6 +60,7 @@ const ROOT_KEY_ORDER = [
   'artefactsOfPower',
   'spellLores',
   'manifestationLores',
+  'generalsHandbook',
   'units',
 ];
 

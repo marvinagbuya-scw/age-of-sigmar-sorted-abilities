@@ -144,7 +144,7 @@
       "name": "Shard of Night",
       "sample": false,
       "keywords": [],
-      "timing": { "phase": "shooting" },
+      "timing": { "phase": "passive", "section": "shooting", "band": "shooting" },
       "declare": "Pick a visible enemy unit within 12\" of the bearer.",
       "effect": "Until the start of your next turn, that unit cannot use commands and subtract 1 from hit rolls for its attacks. This is a long deliberately verbose effect used to check that cards with a lot of text still lay out sensibly, do not clip their container, and do not break across a printed page in an awkward place.",
       "source": { "kind": "artefact-of-power" }
@@ -153,19 +153,19 @@
 
   "spellLores": [
     {
-      "id": "sbgl-lore-of-the-vampires",
-      "name": "Lore of the Vampires",
+      "id": "sbgl-lore-of-undeath",
+      "name": "Lore of Undeath",
       "abilities": [
         {
-          "id": "sbgl-spell-amaranthine-orb",
-          "name": "Amaranthine Orb",
-          "sample": true,
-          "keywords": ["Spell", "Damage"],
-          "timing": { "phase": "hero", "turn": "any" },
+          "id": "sbgl-vile-transference",
+          "name": "Vile Transference",
+          "sample": false,
+          "keywords": ["Spell", "Unlimited"],
+          "timing": { "phase": "hero", "turn": "your" },
           "castingValue": 7,
-          "declare": "Pick a visible enemy unit within 18\" of this WIZARD.",
-          "effect": "Roll a dice for each model in that unit that is within range. For each 5+, inflict 1 mortal damage on that unit.",
-          "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-the-vampires" }
+          "declare": "Pick a friendly SOULBLIGHT GRAVELORDS WIZARD to cast this spell, pick a visible enemy unit within 18\" of them to be the target, then make a casting roll of 2D6.",
+          "effect": "Roll a number of dice equal to the number of models in the target unit. For each 6, inflict 1 mortal damage on that unit. If any enemy models were slain by this spell, Heal (D3) the caster.",
+          "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-undeath" }
         }
       ]
     }
@@ -190,6 +190,8 @@
       ]
     }
   ],
+
+  "generalsHandbook": [],
 
   "units": [
     {

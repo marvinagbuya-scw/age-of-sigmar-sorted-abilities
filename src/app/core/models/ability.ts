@@ -8,6 +8,7 @@ export const SOURCE_KINDS = [
   'artefact-of-power',
   'spell-lore',
   'manifestation-lore',
+  'generals-handbook',
   'warscroll',
 ] as const;
 
@@ -17,8 +18,8 @@ export type SourceKind = (typeof SOURCE_KINDS)[number];
  * Where an ability comes from, and therefore what has to be present in an army
  * list for it to be relevant.
  *
- * `faction` abilities always apply. The rest are unlocked by a specific
- * selection the player makes when building their army.
+ * `faction` and `generals-handbook` abilities always apply. The rest are
+ * unlocked by a specific selection the player makes when building their army.
  */
 export type AbilitySource =
   /** Army-wide rules that always apply, e.g. Deathless Minions. */
@@ -33,6 +34,11 @@ export type AbilitySource =
   | { kind: 'spell-lore'; loreId: string }
   /** Available once the given manifestation lore is chosen. */
   | { kind: 'manifestation-lore'; loreId: string }
+  /**
+   * From the General's Handbook, e.g. battle tactics and grand strategies.
+   * Available to any army, so these always apply.
+   */
+  | { kind: 'generals-handbook' }
   /** Printed on a specific unit's warscroll. */
   | { kind: 'warscroll'; unitId: string };
 
@@ -46,6 +52,7 @@ export const SOURCE_KIND_LABELS: Record<SourceKind, string> = {
   'artefact-of-power': 'Artefact of Power',
   'spell-lore': 'Spell Lore',
   'manifestation-lore': 'Manifestation Lore',
+  'generals-handbook': "General's Handbook",
   warscroll: 'Warscroll',
 };
 
@@ -60,7 +67,8 @@ export const SOURCE_KIND_ORDER: Record<SourceKind, number> = {
   'artefact-of-power': 3,
   'spell-lore': 4,
   'manifestation-lore': 5,
-  warscroll: 6,
+  'generals-handbook': 6,
+  warscroll: 7,
 };
 
 export interface Ability {

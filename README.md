@@ -162,6 +162,7 @@ reading.
   "artefactsOfPower": [], // one ability per artefact
   "spellLores": [], // { id, name, abilities: [] }
   "manifestationLores": [], // { id, name, abilities: [] }
+  "generalsHandbook": [], // always apply, e.g. battle tactics, grand strategies
   "units": [], // { id, name, keywords: [], abilities: [] }
 }
 ```
@@ -236,6 +237,7 @@ silently breaking army filtering later.
 | `artefactsOfPower`               | `{ "kind": "artefact-of-power" }`                                       |
 | `spellLores[].abilities`         | `{ "kind": "spell-lore", "loreId": "<the lore's id>" }`                 |
 | `manifestationLores[].abilities` | `{ "kind": "manifestation-lore", "loreId": "<the lore's id>" }`         |
+| `generalsHandbook`               | `{ "kind": "generals-handbook" }`                                       |
 | `units[].abilities`              | `{ "kind": "warscroll", "unitId": "<the unit's id>" }`                  |
 
 ### Adding a warscroll
@@ -277,8 +279,8 @@ src/app/ability-list/        phase-grouped list and print layout
 
 Army-list filtering. The model and `SelectionService` are in place —
 `isUnlocked` already decides whether an ability applies to a given army, and
-faction/formation/lore abilities always pass — but there's no picker UI, so the
-full faction list renders. Adding the UI is additive; no rework needed.
+faction and General's Handbook abilities always pass — but there's no picker UI,
+so the full faction list renders. Adding the UI is additive; no rework needed.
 
 ## Notes for future work
 

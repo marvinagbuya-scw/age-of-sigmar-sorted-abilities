@@ -165,6 +165,15 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
       fail(path, `timing.turn "${String(turn)}" is not one of: ${TURNS.join(', ')}`);
     }
 
+    const section = timing['section'];
+    if (section !== undefined) {
+      if (typeof section !== 'string' || !(PHASES as readonly string[]).includes(section)) {
+        fail(path, `timing.section "${String(section)}" is not one of: ${PHASES.join(', ')}`);
+      } else if (section === phase) {
+        warn(path, 'timing.section is the same as timing.phase, so it has no effect');
+      }
+    }
+
     const frequency = timing['frequency'];
     if (
       frequency !== undefined &&

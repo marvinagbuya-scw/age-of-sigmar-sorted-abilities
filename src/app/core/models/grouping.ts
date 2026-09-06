@@ -1,5 +1,5 @@
 import { SOURCE_KIND_ORDER, type Ability } from './ability';
-import { PHASES, PHASE_LABELS, TURNS, type Phase } from './timing';
+import { PHASES, PHASE_LABELS, TURNS, sectionForTiming, type Phase } from './timing';
 
 export interface PhaseGroup {
   phase: Phase;
@@ -38,20 +38,24 @@ function compareWithinPhase(a: Ability, b: Ability): number {
  *
  * Phases with no abilities are omitted, so the printed list has no empty
  * headings. Reactions are interleaved into the phase they trigger in.
+ *
+ * Cards are filed by `sectionForTiming`, so an ability can be printed under a
+ * different heading than its own phase while keeping its own label and colour.
  */
 export function groupByPhase(abilities: readonly Ability[]): PhaseGroup[] {
-  const byPhase = new Map<Phase, Ability[]>();
+  const bySection = new Map<Phase, Ability[]>();
 
   for (const ability of abilities) {
-    const bucket = byPhase.get(ability.timing.phase);
+    const section = sectionForTiming(ability.timing);
+    const bucket = bySection.get(section);
     if (bucket) {
       bucket.push(ability);
     } else {
-      byPhase.set(ability.timing.phase, [ability]);
+      bySection.set(section, [ability]);
     }
   }
 
-  return [...byPhase.entries()]
+  return [...bySection.entries()]
     .sort(([a], [b]) => (PHASE_ORDER.get(a) ?? 0) - (PHASE_ORDER.get(b) ?? 0))
     .map(([phase, group]) => ({
       phase,

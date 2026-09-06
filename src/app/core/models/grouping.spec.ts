@@ -85,6 +85,31 @@ describe('groupByPhase', () => {
     expect(groupByPhase([])).toEqual([]);
   });
 
+  it('files an ability under its section override rather than its phase', () => {
+    const groups = groupByPhase([
+      ability('passive-in-combat', { phase: 'passive', section: 'combat' }),
+    ]);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0].phase).toBe('combat');
+    expect(groups[0].label).toBe('Combat Phase');
+  });
+
+  it('sorts a section-overridden ability alongside genuine members of that section', () => {
+    const groups = groupByPhase([
+      ability('native', { phase: 'combat' }),
+      ability('filed', { phase: 'passive', section: 'combat' }),
+    ]);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0].abilities.map((a) => a.id).sort()).toEqual(['filed', 'native']);
+  });
+
+  it('leaves no empty heading behind for the overridden phase', () => {
+    const groups = groupByPhase([ability('a', { phase: 'passive', section: 'combat' })]);
+    expect(groups.map((g) => g.phase)).toEqual(['combat']);
+  });
+
   it('keeps every ability across all phases', () => {
     const phases: Phase[] = ['deployment', 'hero', 'hero', 'combat', 'passive'];
     const abilities = phases.map((phase, i) => ability(`a${i}`, { phase }));

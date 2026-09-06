@@ -13,7 +13,7 @@ import jsonc from 'eslint-plugin-jsonc';
  *
  *   ability      id, name, sample, keywords, timing, castingValue,
  *                chantingValue, declare, effect, usedBy, source
- *   timing       phase, turn, reaction, frequency
+ *   timing       phase, section, turn, reaction, frequency
  *   source       kind, formationId | loreId | unitId
  *   unit         id, name, keywords, abilities
  *   lore/format. id, name, abilities
@@ -29,6 +29,7 @@ const NESTED_KEY_ORDER = [
   'keywords',
   'timing',
   'phase',
+  'section',
   'turn',
   'reaction',
   'frequency',

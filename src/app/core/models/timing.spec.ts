@@ -1,4 +1,4 @@
-import { bandForPhase, bandForTiming, timingLabel, type Timing } from './timing';
+import { bandForPhase, bandForTiming, sectionForTiming, timingLabel, type Timing } from './timing';
 
 describe('bandForPhase', () => {
   it('maps each combat-sequence phase to its own band', () => {
@@ -36,6 +36,22 @@ describe('bandForTiming', () => {
       'reaction',
     );
   });
+
+  it('ignores section, so filing a card elsewhere does not recolour it', () => {
+    // The whole point of `section`: a passive filed under combat stays black.
+    expect(bandForTiming({ phase: 'passive', section: 'combat' })).toBe('deployment');
+    expect(bandForTiming({ phase: 'hero', section: 'shooting' })).toBe('hero');
+  });
+});
+
+describe('sectionForTiming', () => {
+  it('falls back to the phase when no section is set', () => {
+    expect(sectionForTiming({ phase: 'combat' })).toBe('combat');
+  });
+
+  it('uses the section override when present', () => {
+    expect(sectionForTiming({ phase: 'passive', section: 'combat' })).toBe('combat');
+  });
 });
 
 describe('timingLabel', () => {
@@ -51,6 +67,10 @@ describe('timingLabel', () => {
 
   it('renders passive abilities as Passive', () => {
     expect(timingLabel({ phase: 'passive' })).toBe('Passive');
+  });
+
+  it('still reads Passive when filed under another phase', () => {
+    expect(timingLabel({ phase: 'passive', section: 'combat' })).toBe('Passive');
   });
 
   it('renders a reaction with its trigger text', () => {

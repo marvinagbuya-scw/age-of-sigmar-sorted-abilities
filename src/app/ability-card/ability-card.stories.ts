@@ -192,6 +192,25 @@ export const EffectWithOrderedList: Story = {
   },
 };
 
+/**
+ * A genuinely passive ability filed under the Combat Phase section so it's to
+ * hand when it matters. The card keeps the black passive band and the "Passive"
+ * label — `section` only affects which heading it prints under, which is why the
+ * colour and the label can never contradict each other.
+ */
+export const PassiveFiledUnderCombat: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: 'Dragged Down and Torn Apart',
+      timing: { phase: 'passive', section: 'combat' },
+      declare: undefined,
+      effect: "Add 1 to hit rolls for this unit's attacks if it has 10 or more models.",
+      keywords: [],
+    },
+  },
+};
+
 /** No declare, no keywords, no value — the most stripped-back card possible. */
 export const MinimalCard: Story = {
   args: {

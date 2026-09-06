@@ -40,17 +40,37 @@ export const TURNS = ['your', 'any', 'enemy'] as const;
 export type Turn = (typeof TURNS)[number];
 
 /** How often the ability may be used. */
-export const FREQUENCIES = ['once-per-battle', 'once-per-turn', 'once-per-turn-army'] as const;
+export const FREQUENCIES = [
+  'once-per-battle',
+  'once-per-battle-round-army',
+  'once-per-turn',
+  'once-per-turn-army',
+] as const;
 export type Frequency = (typeof FREQUENCIES)[number];
 
 export interface Timing {
-  /** Determines which section of the printed list the card appears in. */
+  /**
+   * When the ability is used. Drives the timing bar text, the colour band, and
+   * — unless `section` says otherwise — which part of the printed list it
+   * appears in.
+   */
   phase: Phase;
+  /**
+   * Files the card under a different phase in the printed list, without
+   * changing its label or colour.
+   *
+   * For an ability that is genuinely passive but only matters during a
+   * particular phase, `{ phase: 'passive', section: 'combat' }` prints a black
+   * card reading "Passive" under the Combat Phase heading — so it's to hand when
+   * you need it. Because the label and colour still come from `phase`, they
+   * can't end up contradicting each other.
+   */
+  section?: Phase;
   turn?: Turn;
   /**
    * The trigger text for a reaction, without the leading `Reaction:`.
    * Presence of this field forces the green `reaction` colour band, but the
-   * card is still grouped under `phase`.
+   * card is still grouped under `phase` (or `section`).
    */
   reaction?: string;
   frequency?: Frequency;
@@ -98,9 +118,20 @@ export function bandForPhase(phase: Phase): Band {
 /**
  * Resolves the colour band for a timing. A reaction always wears the green
  * band, overriding whatever its phase would otherwise produce.
+ *
+ * Note this deliberately ignores `section`: filing a card elsewhere in the list
+ * must not change its colour.
  */
 export function bandForTiming(timing: Timing): Band {
   return timing.reaction ? 'reaction' : bandForPhase(timing.phase);
+}
+
+/**
+ * Which section of the printed list a card belongs in — its `section` override
+ * if set, otherwise its phase.
+ */
+export function sectionForTiming(timing: Timing): Phase {
+  return timing.section ?? timing.phase;
 }
 
 /**
@@ -133,6 +164,7 @@ export function timingLabel(timing: Timing): string {
 /** Prefix shown above the timing, e.g. `Once Per Battle`. */
 export const FREQUENCY_LABELS: Record<Frequency, string> = {
   'once-per-battle': 'Once Per Battle',
+  'once-per-battle-round-army': 'Once Per Battle Round (Army)',
   'once-per-turn': 'Once Per Turn',
   'once-per-turn-army': 'Once Per Turn (Army)',
 };

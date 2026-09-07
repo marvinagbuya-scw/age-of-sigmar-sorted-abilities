@@ -299,10 +299,11 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
     fail(path, '"keywords" must be an array of strings (use [] if there are none)');
   }
 
-  // --- casting / chanting -------------------------------------------------
+  // --- casting / chanting / command ---------------------------------------
   const keywordList = Array.isArray(keywords) ? (keywords as string[]) : [];
   const castingValue = raw['castingValue'];
   const chantingValue = raw['chantingValue'];
+  const commandValue = raw['commandValue'];
 
   if (castingValue !== undefined && typeof castingValue !== 'number') {
     fail(path, '"castingValue" must be a number');
@@ -310,11 +311,25 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
   if (chantingValue !== undefined && typeof chantingValue !== 'number') {
     fail(path, '"chantingValue" must be a number');
   }
+  if (commandValue !== undefined && typeof commandValue !== 'number') {
+    fail(path, '"commandValue" must be a number');
+  }
   if (castingValue !== undefined && !keywordList.includes('Spell')) {
     warn(path, 'has a castingValue but no "Spell" keyword');
   }
   if (chantingValue !== undefined && !keywordList.includes('Prayer')) {
     warn(path, 'has a chantingValue but no "Prayer" keyword');
+  }
+  if (commandValue !== undefined && !keywordList.includes('Command')) {
+    warn(path, 'has a commandValue but no "Command" keyword');
+  }
+
+  // The card has a single value badge, so only one of these can be shown.
+  const valueKeys = ['castingValue', 'chantingValue', 'commandValue'].filter(
+    (key) => raw[key] !== undefined,
+  );
+  if (valueKeys.length > 1) {
+    fail(path, `only one value is allowed per ability, found: ${valueKeys.join(', ')}`);
   }
 
   // --- source -------------------------------------------------------------

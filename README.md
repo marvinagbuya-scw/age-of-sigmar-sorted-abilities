@@ -175,6 +175,15 @@ between `FACTIONS` and the data files. It also warns when:
   copy-pasted card whose name was never changed
 - an override has no effect (`section` equal to `phase`, a `band` matching what
   `phase` already produces, or `turn` on a phase no player owns)
+- a value is set without its matching keyword (`castingValue` without `Spell`,
+  `chantingValue` without `Prayer`, `commandValue` without `Command`)
+
+### Value badges
+
+An ability may carry at most **one** of `castingValue`, `chantingValue` or
+`commandValue` — the card has a single badge, so more than one is an error rather
+than a warning. Command costs render as a rounded square instead of a circle,
+since a command point cost isn't a roll target and shouldn't be misread as one.
 
 ### Linting and key order
 
@@ -187,7 +196,7 @@ key for commentary).
 An ability's keys go:
 
 ```
-id, name, sample, keywords, timing, castingValue, chantingValue,
+id, name, sample, keywords, timing, castingValue, chantingValue, commandValue,
 declare, effect, usedBy, source
 ```
 
@@ -247,6 +256,7 @@ An empty section is a known gap, not an error.
   },
   "castingValue": 7, // Spell only
   "chantingValue": 4, // Prayer only
+  "commandValue": 1, // Command only — command point cost
   "declare": "Pick a friendly unit that has fought this phase.", // omit for passives
   "effect": "Heal (1) that unit.", // required; string or array, see below
   "usedBy": "Friendly SOULBLIGHT GRAVELORDS units", // optional

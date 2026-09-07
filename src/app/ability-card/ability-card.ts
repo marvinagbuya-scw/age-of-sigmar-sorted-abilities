@@ -46,14 +46,33 @@ export class AbilityCard {
     return frequency ? FREQUENCY_LABELS[frequency] : undefined;
   });
 
-  /** Casting or chanting value, whichever the ability has. */
+  /**
+   * The value badge: a spell's casting value, a prayer's chanting value, or a
+   * command ability's command point cost. An ability only ever has one.
+   */
   readonly value = computed(() => {
     const ability = this.ability();
     if (ability.castingValue !== undefined) {
-      return { label: 'Casting value', value: ability.castingValue };
+      return {
+        value: ability.castingValue,
+        kind: 'casting' as const,
+        srLabel: `Casting value ${ability.castingValue}`,
+      };
     }
     if (ability.chantingValue !== undefined) {
-      return { label: 'Chanting value', value: ability.chantingValue };
+      return {
+        value: ability.chantingValue,
+        kind: 'chanting' as const,
+        srLabel: `Chanting value ${ability.chantingValue}`,
+      };
+    }
+    if (ability.commandValue !== undefined) {
+      const points = ability.commandValue === 1 ? 'command point' : 'command points';
+      return {
+        value: ability.commandValue,
+        kind: 'command' as const,
+        srLabel: `Costs ${ability.commandValue} ${points}`,
+      };
     }
     return undefined;
   });

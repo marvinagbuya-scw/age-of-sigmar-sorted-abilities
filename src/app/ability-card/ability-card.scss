@@ -68,6 +68,13 @@
   color: #fff;
   font-size: 0.9rem;
   font-weight: 700;
+
+  // A command point cost isn't a roll target like a casting or chanting value,
+  // so it gets a distinct shape to avoid being misread as one.
+  &[data-kind='command'] {
+    border-radius: var(--card-radius);
+    box-shadow: inset 0 0 0 2px rgb(255 255 255 / 45%);
+  }
 }
 
 .ability-card__sample {

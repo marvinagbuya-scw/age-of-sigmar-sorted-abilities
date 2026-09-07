@@ -231,6 +231,28 @@ export const PassiveColouredBySection: Story = {
   },
 };
 
+/**
+ * A command ability shows its command point cost in the badge. It uses a
+ * rounded square rather than a circle, because a cost isn't a roll target and
+ * shouldn't be misread as a casting value.
+ */
+export const CommandAbility: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: "Vanhel's Danse Macabre",
+      timing: { phase: 'combat', turn: 'your', frequency: 'once-per-turn-army' },
+      commandValue: 1,
+      declare:
+        'Pick a friendly DEATHRATTLE or DEADWALKERS unit wholly within 12" of this unit to be the target.',
+      effect:
+        'The target can use 2 FIGHT abilities this phase. After the first is used, the target has STRIKE-LAST for the rest of the turn.',
+      keywords: ['Command'],
+      usedBy: 'Necromancer',
+    },
+  },
+};
+
 /** No declare, no keywords, no value — the most stripped-back card possible. */
 export const MinimalCard: Story = {
   args: {

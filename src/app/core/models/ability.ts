@@ -94,6 +94,8 @@ export interface Ability {
   castingValue?: number;
   /** Chanting value for a `Prayer` ability. */
   chantingValue?: number;
+  /** Command point cost for a `Command` ability. */
+  commandValue?: number;
   /** The `Used by:` line, where the card specifies one. */
   usedBy?: string;
   source: AbilitySource;

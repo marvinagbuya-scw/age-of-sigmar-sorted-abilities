@@ -39,6 +39,7 @@ export class ArmySelector {
   readonly armyList = this.selection.armyList;
   readonly filtersActive = this.selection.filtersActive;
   readonly isLoading = this.data.isLoading;
+  private readonly hasAbilities = computed(() => this.data.abilities().length > 0);
 
   readonly expanded = signal(true);
 
@@ -106,6 +107,13 @@ export class ArmySelector {
   readonly hasNothingToPick = computed(
     () => this.battleFormations().length === 0 && this.groups().length === 0,
   );
+
+  /**
+   * True when the faction has abilities but none of them are selectable — i.e.
+   * only faction-wide abilities have been transcribed so far. Different from
+   * having no data at all.
+   */
+  readonly onlyFactionWide = computed(() => this.hasNothingToPick() && this.hasAbilities());
 
   isSelected(key: ToggleableKey, id: string): boolean {
     return this.armyList()[key].has(id);

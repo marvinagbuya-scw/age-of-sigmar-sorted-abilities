@@ -19,6 +19,10 @@
     }
   </div>
 
+  @if (ability().flavour; as flavour) {
+    <p class="ability-card__flavour">{{ flavour }}</p>
+  }
+
   @if (ability().sample) {
     <p class="ability-card__sample">Sample data — not verified against the rules</p>
   }

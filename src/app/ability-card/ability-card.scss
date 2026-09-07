@@ -70,6 +70,14 @@
   font-weight: 700;
 }
 
+.ability-card__flavour {
+  margin: 0 0 var(--space-2);
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+  font-style: italic;
+  line-height: 1.35;
+}
+
 .ability-card__sample {
   margin: 0 0 var(--space-2);
   padding: var(--space-1) var(--space-2);

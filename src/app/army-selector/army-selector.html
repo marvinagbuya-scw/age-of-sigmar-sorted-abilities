@@ -42,6 +42,12 @@
 
       @if (isLoading()) {
         <p class="panel__status">Loading…</p>
+      } @else if (onlyFactionWide()) {
+        <p class="panel__status">
+          Nothing to select yet — only faction-wide abilities have been added for this faction, and
+          those are always shown. Add units, traits or lores to
+          <code>public/data/{{ factionId() }}.json</code> and they'll appear here.
+        </p>
       } @else if (hasNothingToPick()) {
         <p class="panel__status">
           This faction has no data yet. Add units and abilities to

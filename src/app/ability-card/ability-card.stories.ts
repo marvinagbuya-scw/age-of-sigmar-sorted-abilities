@@ -253,6 +253,25 @@ export const CommandAbility: Story = {
   },
 };
 
+/**
+ * The italic flavour line under the name. Purely descriptive — it carries no
+ * rules meaning, so it's styled to recede behind the Declare and Effect text.
+ */
+export const WithFlavourText: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: 'The Lurking Vermintide',
+      flavour: 'What scurries beneath the surface?',
+      timing: { phase: 'deployment' },
+      declare: 'Pick a friendly SKAVEN unit that has not been deployed.',
+      effect: 'Set up that unit in reserve in the tunnels below. It has now been deployed.',
+      keywords: ['Deploy'],
+      source: { kind: 'faction' },
+    },
+  },
+};
+
 /** No declare, no keywords, no value — the most stripped-back card possible. */
 export const MinimalCard: Story = {
   args: {

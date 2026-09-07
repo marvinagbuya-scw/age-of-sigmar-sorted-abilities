@@ -75,6 +75,11 @@ export interface Ability {
   /** Stable slug, e.g. `sbgl-deathless-minions`. Must be unique per faction. */
   id: string;
   name: string;
+  /**
+   * The italic flavour line printed under the name, e.g. "What scurries beneath
+   * the surface?". Purely descriptive — it carries no rules meaning.
+   */
+  flavour?: string;
   timing: Timing;
   /**
    * The `Declare:` text. Omitted for passive abilities, which have no

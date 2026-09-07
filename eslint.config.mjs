@@ -11,7 +11,7 @@ import jsonc from 'eslint-plugin-jsonc';
  * only matters between keys that appear in the *same* object, so the list is
  * arranged such that every object type comes out correctly:
  *
- *   ability      id, name, sample, keywords, timing, castingValue,
+ *   ability      id, name, flavour, sample, keywords, timing, castingValue,
  *                chantingValue, commandValue, declare, effect, usedBy, source
  *   timing       phase, section, band, turn, reaction, frequency
  *   source       kind, formationId | loreId | unitId
@@ -25,6 +25,7 @@ import jsonc from 'eslint-plugin-jsonc';
 const NESTED_KEY_ORDER = [
   'id',
   'name',
+  'flavour',
   'sample',
   'keywords',
   'timing',

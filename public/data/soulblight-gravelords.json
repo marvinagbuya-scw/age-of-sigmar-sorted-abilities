@@ -375,7 +375,7 @@
       ],
       "abilities": [
         {
-          "id": "sbgl-battle-damaged",
+          "id": "sbgl-neferata-battle-damaged",
           "name": "Battle Damaged",
           "sample": false,
           "keywords": [],
@@ -444,7 +444,7 @@
       ],
       "abilities": [
         {
-          "id": "sbgl-battle-damaged",
+          "id": "sbgl-mannfred-battle-damaged",
           "name": "Battle Damaged",
           "sample": false,
           "keywords": [],

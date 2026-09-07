@@ -112,4 +112,17 @@ describe('AbilityCard', () => {
     const el = render(ability({ sample: true })).nativeElement as HTMLElement;
     expect(el.textContent).toContain('Sample data');
   });
+
+  it('renders flavour text when present', () => {
+    const el = render(ability({ flavour: 'What scurries beneath the surface?' }))
+      .nativeElement as HTMLElement;
+    expect(el.querySelector('.ability-card__flavour')?.textContent?.trim()).toBe(
+      'What scurries beneath the surface?',
+    );
+  });
+
+  it('omits the flavour element entirely when absent', () => {
+    const el = render(ability()).nativeElement as HTMLElement;
+    expect(el.querySelector('.ability-card__flavour')).toBeNull();
+  });
 });

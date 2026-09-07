@@ -196,7 +196,7 @@ key for commentary).
 An ability's keys go:
 
 ```
-id, name, sample, keywords, timing, castingValue, chantingValue, commandValue,
+id, name, flavour, sample, keywords, timing, castingValue, chantingValue, commandValue,
 declare, effect, usedBy, source
 ```
 
@@ -244,6 +244,7 @@ An empty section is a known gap, not an error.
 {
   "id": "sbgl-the-hunger", // unique across the file
   "name": "The Hunger",
+  "flavour": "What scurries beneath the surface?", // optional italic line under the name
   "sample": true, // optional; omit once verified against the rules
   "keywords": ["Core", "Heal"], // use [] if none
   "timing": {

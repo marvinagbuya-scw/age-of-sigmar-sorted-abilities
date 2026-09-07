@@ -57,8 +57,39 @@ function requireString(
 /** Ability ids seen so far, mapped to where they were first declared. */
 const seenAbilityIds = new Map<string, string>();
 
-/** Ability names seen so far, mapped to the id that first used them. */
+/** Ability names seen so far, keyed by owner so the same name can appear on
+ * different warscrolls (e.g. every monster has its own "Battle Damaged"). */
 const seenAbilityNames = new Map<string, string>();
+
+/**
+ * Identifies what an ability belongs to, so duplicate-name detection is scoped.
+ * Two abilities sharing a name on the *same* unit is a copy-paste; the same name
+ * on two different units is normal.
+ */
+function ownerKey(source: unknown): string {
+  if (!isPlainObject(source)) {
+    return 'unknown';
+  }
+  const kind = String(source['kind']);
+  switch (kind) {
+    case 'warscroll':
+      return `warscroll:${String(source['unitId'])}`;
+    case 'battle-formation':
+      return `battle-formation:${String(source['formationId'])}`;
+    case 'spell-lore':
+      return `spell-lore:${String(source['loreId'])}`;
+    case 'manifestation-lore':
+      return `manifestation-lore:${String(source['loreId'])}`;
+    default:
+      return kind;
+  }
+}
+
+/** Keyword matching is case-insensitive: the data uses card-style caps
+ * ("SPELL") in places and title case elsewhere. */
+function hasKeyword(keywords: readonly string[], keyword: string): boolean {
+  return keywords.some((k) => k.toLowerCase() === keyword.toLowerCase());
+}
 
 /**
  * Phrases that only ever appeared in the seeded sample data. If one survives
@@ -174,14 +205,23 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
   const id = requireString(raw, 'id', path);
   const name = requireString(raw, 'name', path);
 
-  // Two abilities sharing a name inside one faction is nearly always a
-  // copy-pasted card whose name was never changed.
+  // Two abilities sharing a name on the same owner is nearly always a
+  // copy-pasted card whose name was never changed. Scoped by owner, because the
+  // same name legitimately recurs across different warscrolls.
   if (name && id) {
-    const previous = seenAbilityNames.get(name);
+    const key = `${ownerKey(raw['source'])}::${name}`;
+    const previous = seenAbilityNames.get(key);
     if (previous) {
-      warn(path, `name "${name}" is already used by "${previous}" — is one a copy-paste?`);
+      warn(path, `name "${name}" is already used by "${previous}" here — is one a copy-paste?`);
     } else {
-      seenAbilityNames.set(name, id);
+      seenAbilityNames.set(key, id);
+    }
+  }
+
+  if (raw['flavour'] !== undefined) {
+    const flavour = raw['flavour'];
+    if (typeof flavour !== 'string' || flavour.trim() === '') {
+      fail(path, '"flavour" must be a non-empty string when present');
     }
   }
 
@@ -193,7 +233,7 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
 
   // Catch sample text that survived into an ability now presented as real.
   const isSample = raw['sample'] === true;
-  const prose = [raw['declare'], raw['effect'], raw['usedBy']]
+  const prose = [raw['flavour'], raw['declare'], raw['effect'], raw['usedBy']]
     .flatMap((value) => {
       if (typeof value === 'string') return [value];
       if (!Array.isArray(value)) return [];
@@ -314,13 +354,13 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
   if (commandValue !== undefined && typeof commandValue !== 'number') {
     fail(path, '"commandValue" must be a number');
   }
-  if (castingValue !== undefined && !keywordList.includes('Spell')) {
+  if (castingValue !== undefined && !hasKeyword(keywordList, 'Spell')) {
     warn(path, 'has a castingValue but no "Spell" keyword');
   }
-  if (chantingValue !== undefined && !keywordList.includes('Prayer')) {
+  if (chantingValue !== undefined && !hasKeyword(keywordList, 'Prayer')) {
     warn(path, 'has a chantingValue but no "Prayer" keyword');
   }
-  if (commandValue !== undefined && !keywordList.includes('Command')) {
+  if (commandValue !== undefined && !hasKeyword(keywordList, 'Command')) {
     warn(path, 'has a commandValue but no "Command" keyword');
   }
 

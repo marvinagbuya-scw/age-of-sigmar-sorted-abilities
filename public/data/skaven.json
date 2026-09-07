@@ -1,7 +1,7 @@
 {
   "_note": [
-    "Empty scaffold. Add abilities section by section as you acquire and paint",
-    "the models — an empty section is a known gap, not a bug.",
+    "Battle traits transcribed. Other sections are still empty — a known gap,",
+    "not a bug.",
     "",
     "Run `npm run validate:data` to check the schema and `npm run lint:fix` to",
     "sort the keys after editing."
@@ -10,7 +10,62 @@
   "id": "skaven",
   "name": "Skaven",
 
-  "factionAbilities": [],
+  "factionAbilities": [
+    {
+      "id": "skv-the-lurking-vermintide",
+      "name": "The Lurking Vermintide",
+      "flavour": "What scurries beneath the surface?",
+      "sample": false,
+      "keywords": ["Deploy"],
+      "timing": { "phase": "deployment" },
+      "declare": "Pick a friendly SKAVEN unit that has not been deployed.",
+      "effect": "Set up that unit in reserve in the tunnels below. It has now been deployed.",
+      "source": { "kind": "faction" }
+    },
+    {
+      "id": "skv-always-three-clawsteps-ahead",
+      "name": "Always Three Clawsteps Ahead",
+      "flavour": "The best laid plans of the Skaven never go awry (or so they claim).",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "hero", "turn": "enemy", "frequency": "once-per-turn-army" },
+      "declare": "Pick a friendly non-MONSTER SKAVEN unit that is not in combat and was not set up this turn to use this ability.",
+      "effect": "That unit can use the 'Normal Move' ability as if it were your movement phase.",
+      "source": { "kind": "faction" }
+    },
+    {
+      "id": "skv-too-quick-to-hit-hit",
+      "name": "Too Quick to Hit-Hit",
+      "flavour": "These skittish ratmen dart and run in all directions, avoiding retribution as they flee from combat.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "passive" },
+      "effect": "No mortal damage is inflicted on friendly SKAVEN INFANTRY and CAVALRY units by RETREAT abilities.",
+      "source": { "kind": "faction" }
+    },
+    {
+      "id": "skv-splinters-of-the-vermindoom",
+      "name": "Splinters of the Vermindoom",
+      "flavour": "In the aftermath of the Vermindoom, reality continues to fracture and tear as gnawholes bore into reality, spewing forth endless tides of ratmen.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "start-of-battle-round", "frequency": "once-per-battle-round-army" },
+      "declare": "You can use this ability if there are fewer than 3 friendly Gnawholes on the battlefield.",
+      "effect": "Set up a Gnawhole on the battlefield more than 9\" from all enemy units, more than 3\" from all objectives and more than 1\" from all other terrain features.",
+      "source": { "kind": "faction" }
+    },
+    {
+      "id": "skv-gnawhole-ambush",
+      "name": "Gnawhole Ambush",
+      "flavour": "Emerging from a green, glowing rift, the Skaventide pours onto the battlefield.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "movement", "turn": "your" },
+      "declare": "Pick a friendly SKAVEN unit that is in the tunnels below to use this ability.",
+      "effect": "Set up that unit wholly within 6\" of a friendly Gnawhole and more than 9\" from all enemy units.",
+      "source": { "kind": "faction" }
+    }
+  ],
 
   "battleFormations": [],
 

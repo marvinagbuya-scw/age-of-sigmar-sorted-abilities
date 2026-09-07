@@ -10,7 +10,7 @@
     <h3 class="ability-card__name">{{ ability().name }}</h3>
     @if (value(); as value) {
       <span
-        class="ability-card__value ability_{{ value.kind }}"
+        class="ability-card__value ability-card__{{ value.kind }}"
         [attr.data-kind]="value.kind"
         [attr.aria-label]="value.srLabel"
       >

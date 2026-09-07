@@ -189,17 +189,53 @@
         }
       ],
       "source": { "kind": "heroic-trait" }
+    },
+    {
+      "id": "sbgl-immortal-ego",
+      "name": "Immortal Ego",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "passive", "section": "combat" },
+      "effect": "Each phase, you can re-roll 1 hit roll, 1 wound roll and 1 save roll for this unit.",
+      "source": { "kind": "heroic-trait" }
+    },
+    {
+      "id": "sbgl-furious-endings",
+      "name": "Furious Endings",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "passive", "section": "combat" },
+      "effect": "Each time a MANIFESTATION within 12\" of this unit is removed from play, gain 1 rage dice",
+      "source": { "kind": "heroic-trait" }
     }
   ],
 
   "artefactsOfPower": [
+    {
+      "id": "sbgl-terminus-clock",
+      "name": "Terminus Clock",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "hero", "turn": "your" },
+      "effect": "Roll a dice. On a 3+, until the start of your next turn, subtract 1 from casting rolls for enemy WIZARDS while they are within 18\" of this unit.",
+      "source": { "kind": "artefact-of-power" }
+    },
     {
       "id": "sbgl-shard-of-night",
       "name": "Shard of Night",
       "sample": false,
       "keywords": [],
       "timing": { "phase": "passive", "section": "shooting", "band": "shooting" },
-      "effect": " Ignore modifiers to save rolls for shooting attacks that target this unit (positive and negative).",
+      "effect": "Ignore modifiers to save rolls for shooting attacks that target this unit (positive and negative).",
+      "source": { "kind": "artefact-of-power" }
+    },
+    {
+      "id": "sbgl-amulet-of-graves",
+      "name": "Amulet of Graves",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "hero", "turn": "your", "frequency": "once-per-battle" },
+      "effect": "If there are fewer than 3 friendly Cursed Sepulchres on the battlefield, set up a Cursed Sepulchre on the battlefield more than 9\" from all enemy units, more than 1\" from all friendly units and more than 3\" from all objectives and other terrain features.",
       "source": { "kind": "artefact-of-power" }
     }
   ],
@@ -239,14 +275,54 @@
           "timing": { "phase": "hero", "turn": "your" },
           "castingValue": 7,
           "declare": "Pick a friendly SOULBLIGHT GRAVELORDS WIZARD to cast this spell, pick a visible enemy unit within 12\" of them to be the target, then make a casting roll of 2D6.",
-          "effect": "For the rest of the turn, subtract 1 from the Damage characteristic of the target’s melee weapons.",
+          "effect": "For the rest of the turn, subtract 1 from the Damage characteristic of the target's melee weapons.",
           "source": { "kind": "spell-lore", "loreId": "sbgl-lore-of-undeath" }
         }
       ]
     }
   ],
 
-  "manifestationLores": [],
+  "manifestationLores": [
+    {
+      "id": "sbgl-manifestations-of-the-grave",
+      "name": "Manifestations of the Grave",
+      "abilities": [
+        {
+          "id": "sbgl-summon-hand-of-nagash",
+          "name": "Summon Hand of Nagash",
+          "sample": false,
+          "keywords": ["SUMMON", "SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "If there is not a friendly Hand of Nagash on the battlefield, pick a friendly SOULBLIGHT GRAVELORDS WIZARD to cast this spell, then make a casting roll of 2D6.",
+          "effect": "Set up a Hand of Nagash wholly within 12\" of and visible to the caster and more than 9\" from all enemy units.",
+          "source": { "kind": "manifestation-lore", "loreId": "sbgl-manifestations-of-the-grave" }
+        },
+        {
+          "id": "sbgl-summon-sanguine-swarm",
+          "name": "Summon Sanguine Swarm",
+          "sample": false,
+          "keywords": ["SUMMON", "SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 6,
+          "declare": "If there is not a friendly Sanguine Swarm on the battlefield, pick a friendly SOULBLIGHT GRAVELORDS WIZARD to cast this spell, then make a casting roll of 2D6.",
+          "effect": "Set up a Sanguine Swarm wholly within 12\" of and visible to the caster and more than 9\" from all enemy units. A Sanguine Swarm spell has 2 parts that must be set up within 9\" of each other.",
+          "source": { "kind": "manifestation-lore", "loreId": "sbgl-manifestations-of-the-grave" }
+        },
+        {
+          "id": "sbgl-summon-unholy-reliquary",
+          "name": "Summon Unholy Reliquary",
+          "sample": false,
+          "keywords": ["SUMMON", "SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 6,
+          "declare": "Set up an Unholy Reliquary wholly within 12\" of and visible to the caster and more than 9\" from all enemy units.",
+          "effect": "Set up an Unholy Reliquary wholly within 18\" of the caster, visible to them and more than 3\" from all enemy units.",
+          "source": { "kind": "manifestation-lore", "loreId": "sbgl-manifestations-of-the-grave" }
+        }
+      ]
+    }
+  ],
 
   "generalsHandbook": [
     {
@@ -259,6 +335,24 @@
         "Spend 1 rage dice. If your opponent's fury level is lower than yours, they must increase their fury level by 1, to a maximum of 7.",
         "Then, for the rest of the turn, each time you make an unmodified save roll of 5+ for an attack that targets this unit, the attack fails and the attack sequence ends."
       ],
+      "source": { "kind": "generals-handbook" }
+    },
+    {
+      "id": "sbgl-the-empty-graveyard",
+      "name": "The Empty Graveyard",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "deployment" },
+      "effect": "Remove this unit from the battlefield and set it up again more than 9\" from all enemy units and either wholly within 7\" of a terrain feature or wholly within 7\" of the battlefield edge. This unit cannot use MOVE abilities in the first turn of the first battle round.",
+      "source": { "kind": "generals-handbook" }
+    },
+    {
+      "id": "sbgl-the-incarnadine-killers",
+      "name": "The Incarnadine Killers",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "end-of-turn", "turn": "any" },
+      "effect": "If this unit is not in combat and an enemy unit was destroyed by its combat attacks this turn, this unit can move up to D6\". It can end that move in combat.",
       "source": { "kind": "generals-handbook" }
     }
   ],
@@ -305,7 +399,7 @@
           "id": "sbgl-dark-mist",
           "name": "Dark Mist",
           "sample": false,
-          "keywords": ["Spell"],
+          "keywords": ["SPELL"],
           "timing": { "phase": "hero", "turn": "your" },
           "castingValue": 7,
           "declare": "Pick a visible friendly non-MONSTER SOULBLIGHT GRAVELORDS unit wholly within 12\" of this unit to be the target, then make a casting roll of 2D6.",
@@ -330,6 +424,91 @@
           "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
           "effect": "Subtract 1 from hit rolls for combat attacks that target friendly SOULBLIGHT GRAVELORDS units while they are wholly within 6\" of this unit.",
           "source": { "kind": "warscroll", "unitId": "sbgl-neferata-mortarch-of-blood" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-mannfred-von-carstein-mortarch-of-night",
+      "name": "Mannfred Von Carstein, Mortarch of Night",
+      "keywords": [
+        "WARMASTER",
+        "UNIQUE",
+        "HERO",
+        "MONSTER",
+        "WIZARD (2)",
+        "FLY",
+        "WARD (6+)",
+        "VAMPIRE",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS"
+      ],
+      "abilities": [
+        {
+          "id": "sbgl-battle-damaged",
+          "name": "Battle Damaged",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat" },
+          "effect": "While this unit has 10 or more damage points, the Attacks characteristic of Ashigaroth's Claws is 3.",
+          "usedBy": "Mannfred Von Carstein, Mortarch of Night",
+          "source": {
+            "kind": "warscroll",
+            "unitId": "sbgl-mannfred-von-carstein-mortarch-of-night"
+          }
+        },
+        {
+          "id": "sbgl-wind-of-death",
+          "name": "Wind of Death",
+          "sample": false,
+          "keywords": ["SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "Pick a point on the battlefield within 18\" of the caster, pick up to 3 enemy units within 6\" of that point and visible to the caster to be the targets, then make a casting roll of 2D6.",
+          "effect": "Roll a D3 for each target. On a 2+, inflict an amount of mortal damage on the target equal to the roll.",
+          "usedBy": "Mannfred Von Carstein, Mortarch of Night",
+          "source": {
+            "kind": "warscroll",
+            "unitId": "sbgl-mannfred-von-carstein-mortarch-of-night"
+          }
+        },
+        {
+          "id": "sbgl-the-sword-of-unholy-power",
+          "name": "The Sword of Unholy Power",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "combat" },
+          "effect": "If this unit has slain any enemy models this turn, for the rest of the turn, add 1 to the Attacks characteristic of melee weapons used by friendly DEATHRATTLE and DEADWALKERS units while they are wholly within 12\" of this unit.",
+          "source": {
+            "kind": "warscroll",
+            "unitId": "sbgl-mannfred-von-carstein-mortarch-of-night"
+          }
+        },
+        {
+          "id": "sbgl-the-mortarch-of-night",
+          "name": "The Mortarch of Night",
+          "sample": false,
+          "keywords": [],
+          "timing": {
+            "phase": "movement",
+            "reaction": "You declared the 'Redeploy' command for a SOULBLIGHT GRAVELORDS unit wholly within 12\" of this unit"
+          },
+          "effect": "The unit using the 'Redeploy' command can move into combat when using that ability.",
+          "source": {
+            "kind": "warscroll",
+            "unitId": "sbgl-mannfred-von-carstein-mortarch-of-night"
+          }
+        },
+        {
+          "id": "sbgl-ashigaroths-hunger",
+          "name": "Ashigaroth's Hunger",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "combat", "turn": "any", "frequency": "once-per-turn-army" },
+          "effect": " If this unit charged this turn, roll a dice. On a 3+, this unit has STRIKE-FIRST for the rest of the turn.",
+          "source": {
+            "kind": "warscroll",
+            "unitId": "sbgl-mannfred-von-carstein-mortarch-of-night"
+          }
         }
       ]
     },

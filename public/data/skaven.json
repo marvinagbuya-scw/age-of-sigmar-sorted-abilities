@@ -196,11 +196,123 @@
     }
   ],
 
-  "heroicTraits": [],
+  "heroicTraits": [
+    {
+      "id": "skv-masterclan-connections",
+      "name": "Masterclan Connections",
+      "flavour": "This Skaven’s obsequious nature has allowed them to curry favour with a member of the sorcerous Masterclan.",
+      "sample": false,
+      "keywords": [],
+      "timing": {
+        "phase": "hero",
+        "turn": "any",
+        "reaction": "You declared a SPELL or UNBIND ability for a visible Skaven unit wholly within 13\" of this unit"
+      },
+      "effect": "Add D3 to that casting roll or unbinding roll.",
+      "source": { "kind": "heroic-trait" }
+    },
+    {
+      "id": "skv-master-of-the-swarm",
+      "name": "Master of the Swarm",
+      "flavour": "This warlord understands the importance of numbers, ensuring their burrows are teeming with fresh warriors.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "passive" },
+      "effect": "Each time an ability returns 1 or more slain models to a friendly SKAVEN unit wholly within 13\" of this unit, after that ability has been resolved, you can return 1 additional slain model to it.",
+      "source": { "kind": "heroic-trait" }
+    },
+    {
+      "id": "skv-essence-of-the-gnaw",
+      "name": "Essence of the Gnaw",
+      "flavour": "A cursed combination of warpstone and daemonic power allows this rodent to twist reality.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "combat", "turn": "any" },
+      "declare": "Pick another visible SKAVEN unit wholly within 13\" of this unit and in combat to be the target.",
+      "effect": "For the rest of the turn, this unit has STRIKE-FIRST and the target has STRIKE-LAST.",
+      "source": { "kind": "heroic-trait" }
+    }
+  ],
 
-  "artefactsOfPower": [],
+  "artefactsOfPower": [
+    {
+      "id": "skv-foulhide",
+      "name": "Foulhide",
+      "flavour": "Fashioned from the flensed flesh of Rat Ogors and soaked in cloying alchemical agents, this stinking armour sticks to its wearer like a bloated second skin and regrows as fast as it can be hacked apart.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "end-of-turn", "turn": "any" },
+      "effect": "Heal (D3) this unit.",
+      "source": { "kind": "artefact-of-power" }
+    },
+    {
+      "id": "skv-warpstone-charm",
+      "name": "Warpstone Charm",
+      "flavour": "This foul talisman radiates mutating energy that can be directed at an enemy unit to erode their armour.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "combat", "turn": "any" },
+      "declare": "Pick an enemy unit in combat with this unit to be the target.",
+      "effect": "Roll a dice. On a 3+, subtract 1 from save rolls for the target for the rest of the turn.",
+      "source": { "kind": "artefact-of-power" }
+    },
+    {
+      "id": "skv-skavenbrew",
+      "name": "Skavenbrew",
+      "flavour": "This foul concoction, brewed from blood and warpstone, is dispensed to expendable underlings to drive them into a short-lived but devastating killing frenzy.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "combat", "turn": "any", "frequency": "once-per-battle" },
+      "declare": "Pick a friendly non-HERO SKAVEN INFANTRY unit wholly within 13\" of this unit to be the target.",
+      "effect": "Inflict D3 mortal damage on the target. Then, add 1 to the Attacks characteristic of the target’s melee weapons for the rest of the turn.",
+      "source": { "kind": "artefact-of-power" }
+    }
+  ],
 
-  "spellLores": [],
+  "spellLores": [
+    {
+      "id": "skv-lore-of-ruin",
+      "name": "Lore of Ruin",
+      "abilities": [
+        {
+          "id": "skv-skitterleap",
+          "name": "Skitterleap",
+          "flavour": "Vanishing in a puff of foul-smelling smoke, the verminkin reappear elsewhere on the battlefield an eye-blink later.",
+          "sample": false,
+          "keywords": ["SPELL", "UNLIMITED"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 6,
+          "declare": "Pick a friendly SKAVEN WIZARD to cast this spell, pick a visible friendly SKAVEN HERO wholly within 13\" of them to be the target, then make a casting roll of 2D6.",
+          "effect": "Remove the target from the battlefield and set it up again on the battlefield more than 9\" from all enemy units.",
+          "source": { "kind": "spell-lore", "loreId": "skv-lore-of-ruin" }
+        },
+        {
+          "id": "skv-wither",
+          "name": "Wither",
+          "flavour": "The spellcaster hurls a glowing green globe of magical energy at the foe. Anyone touched by the globe starts to shrivel and wither away.",
+          "sample": false,
+          "keywords": ["SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 6,
+          "declare": "Pick a friendly SKAVEN WIZARD to cast this spell, pick a visible enemy unit within 13\" of them to be the target, then make a casting roll of 2D6.",
+          "effect": "Inflict D3 mortal damage on the target.",
+          "source": { "kind": "spell-lore", "loreId": "skv-lore-of-ruin" }
+        },
+        {
+          "id": "skv-warpgale",
+          "name": "Warpgale",
+          "flavour": "Screeching in an unholy tongue, the caster parts the veil of reality and draws a ravening gale of unnatural energies forth.",
+          "sample": false,
+          "keywords": ["SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 6,
+          "declare": "Pick a friendly SKAVEN WIZARD to cast this spell, pick a visible enemy unit within 18\" of them to be the target, then make a casting roll of 2D6.",
+          "effect": "The target has STRIKE-LAST for the rest of the turn.",
+          "source": { "kind": "spell-lore", "loreId": "skv-lore-of-ruin" }
+        }
+      ]
+    }
+  ],
 
   "manifestationLores": [],
 

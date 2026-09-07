@@ -179,7 +179,7 @@
         },
         {
           "id": "sbgl-waste-away",
-          "name": "Vile Transference",
+          "name": "Waste Away",
           "sample": false,
           "keywords": ["Spell", "Unlimited"],
           "timing": { "phase": "hero", "turn": "your" },

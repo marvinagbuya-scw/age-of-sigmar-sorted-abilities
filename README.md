@@ -103,12 +103,15 @@ override matches what `phase` would have produced anyway.
 
 ## Army-list filtering
 
-The **Your army** panel above the list narrows it to what you're actually
-fielding. Pick a battle formation, units, heroic traits, artefacts, lores and
-General's Handbook abilities; everything else drops out. Only **faction
-abilities** always stay, because they apply regardless of what you take.
+The **Your army** panel above the list controls what's shown. Pick a battle
+formation, units, heroic traits, artefacts, lores and General's Handbook
+abilities, and the matching abilities appear.
 
-With nothing selected the full faction list renders, so the panel is opt-in.
+The list **builds up** rather than narrowing down: with nothing selected only
+**faction abilities** are shown, since those apply whatever you field. Everything
+else appears as you select it. That keeps the printed sheet to exactly what's in
+your army, and means a half-transcribed faction doesn't bury you in cards for
+units you don't own.
 
 State lives in the query string, so a list can be bookmarked or shared:
 

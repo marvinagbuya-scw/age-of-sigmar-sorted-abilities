@@ -46,14 +46,23 @@ describe('SelectionService', () => {
     selection = TestBed.inject(SelectionService);
   });
 
-  it('starts with nothing selected, so filtering is a pass-through', () => {
+  it('shows only faction abilities when nothing is selected', () => {
     const abilities = [
       ability('faction-a', { kind: 'faction' }),
       ability('scroll-a', { kind: 'warscroll', unitId: 'unit-a' }),
+      ability('trait-a', { kind: 'heroic-trait' }),
+      ability('handbook-a', { kind: 'generals-handbook' }),
     ];
 
+    // The list starts near-empty and fills in as the army is built up, rather
+    // than starting full and shrinking.
     expect(selection.filtersActive()).toBe(false);
-    expect(selection.filter(abilities)).toEqual(abilities);
+    expect(selection.filter(abilities).map((a) => a.id)).toEqual(['faction-a']);
+  });
+
+  it('returns nothing at all when the faction has no faction-wide abilities', () => {
+    const abilities = [ability('scroll-a', { kind: 'warscroll', unitId: 'unit-a' })];
+    expect(selection.filter(abilities)).toEqual([]);
   });
 
   it('narrows to the selected units once something is picked', () => {
@@ -73,8 +82,6 @@ describe('SelectionService', () => {
   it("includes a General's Handbook ability only once it is selected", () => {
     const abilities = [ability('handbook-a', { kind: 'generals-handbook' })];
 
-    // Filtering is a pass-through until something is picked.
-    selection.toggle('unitIds', 'unit-a');
     expect(selection.filter(abilities)).toEqual([]);
 
     selection.toggle('generalsHandbookIds', 'handbook-a');

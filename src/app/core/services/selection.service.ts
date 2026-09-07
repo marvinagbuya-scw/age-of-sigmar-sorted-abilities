@@ -93,12 +93,12 @@ export class SelectionService {
 
   /**
    * Narrows a list of abilities to those unlocked by the current army list.
-   * Returns the input untouched while no selections have been made.
+   *
+   * Always applied, including when nothing is selected — in that state only
+   * faction abilities survive, since they apply whatever you field. The list
+   * fills in as the army is built up rather than starting full and shrinking.
    */
   filter(abilities: readonly Ability[]): readonly Ability[] {
-    if (!this.filtersActive()) {
-      return abilities;
-    }
     const army = this.army();
     return abilities.filter((ability) => isUnlocked(ability.source, ability.id, army));
   }

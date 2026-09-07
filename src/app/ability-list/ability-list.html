@@ -2,11 +2,8 @@
   <div>
     <h1 class="page-header__title">{{ factionName() || 'Abilities' }}</h1>
     <p class="page-header__subtitle">
-      @if (filtersActive()) {
-        {{ visibleCount() }} of {{ totalCount() }} abilities, sorted by phase
-      } @else {
-        {{ totalCount() }} abilities, sorted by phase
-      }
+      <!-- Always "x of y": the list is filtered even with nothing selected. -->
+      {{ visibleCount() }} of {{ totalCount() }} abilities, sorted by phase
     </p>
   </div>
   <button type="button" class="print-button" (click)="print()">Print list</button>
@@ -46,8 +43,11 @@
   </p>
 } @else if (groups().length === 0) {
   <p class="status">
-    Nothing matches the current army list. Add units to your selection, or clear it to see every
-    ability again.
+    @if (filtersActive()) {
+      Nothing matches the current army list.
+    } @else {
+      Pick your army above to see its abilities.
+    }
   </p>
 } @else {
   @for (group of groups(); track group.phase) {

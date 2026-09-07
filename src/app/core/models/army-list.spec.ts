@@ -68,6 +68,15 @@ describe('isUnlocked', () => {
     ).toBe(true);
   });
 
+  it('keeps prayer lores separate from spell lores', () => {
+    // Prayers are a distinct lore type, so choosing a spell lore must not
+    // unlock a prayer lore that happens to share an id.
+    const prayer: AbilitySource = { kind: 'prayer-lore', loreId: 'lore-a' };
+    expect(isUnlocked(prayer, 'x', army({ prayerLoreIds: new Set(['lore-a']) }))).toBe(true);
+    expect(isUnlocked(prayer, 'x', army({ spellLoreIds: new Set(['lore-a']) }))).toBe(false);
+    expect(isUnlocked(prayer, 'x', army())).toBe(false);
+  });
+
   it('includes warscroll abilities only for units in the list', () => {
     const source: AbilitySource = { kind: 'warscroll', unitId: 'vampire-lord' };
     expect(isUnlocked(source, 'x', army({ unitIds: new Set(['vampire-lord']) }))).toBe(true);

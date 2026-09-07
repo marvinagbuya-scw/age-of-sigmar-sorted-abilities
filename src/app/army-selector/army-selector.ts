@@ -75,6 +75,11 @@ export class ArmySelector {
         choices: faction.spellLores.map(toChoice),
       },
       {
+        key: 'prayerLoreIds',
+        label: 'Prayer Lores',
+        choices: faction.prayerLores.map(toChoice),
+      },
+      {
         key: 'manifestationLoreIds',
         label: 'Manifestation Lores',
         choices: faction.manifestationLores.map(toChoice),
@@ -98,6 +103,7 @@ export class ArmySelector {
       a.heroicTraitIds.size +
       a.artefactIds.size +
       a.spellLoreIds.size +
+      a.prayerLoreIds.size +
       a.manifestationLoreIds.size +
       a.generalsHandbookIds.size
     );

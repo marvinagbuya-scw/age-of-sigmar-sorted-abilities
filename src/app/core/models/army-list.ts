@@ -18,6 +18,8 @@ export interface ArmyList {
   artefactIds: ReadonlySet<string>;
   /** Ids of spell lores chosen. */
   spellLoreIds: ReadonlySet<string>;
+  /** Ids of prayer lores chosen. */
+  prayerLoreIds: ReadonlySet<string>;
   /** Ids of manifestation lores chosen. */
   manifestationLoreIds: ReadonlySet<string>;
   /**
@@ -34,6 +36,7 @@ export function emptyArmyList(factionId: string): ArmyList {
     heroicTraitIds: new Set(),
     artefactIds: new Set(),
     spellLoreIds: new Set(),
+    prayerLoreIds: new Set(),
     manifestationLoreIds: new Set(),
     generalsHandbookIds: new Set(),
   };
@@ -47,6 +50,7 @@ export function hasSelections(army: ArmyList): boolean {
     army.heroicTraitIds.size > 0 ||
     army.artefactIds.size > 0 ||
     army.spellLoreIds.size > 0 ||
+    army.prayerLoreIds.size > 0 ||
     army.manifestationLoreIds.size > 0 ||
     army.generalsHandbookIds.size > 0
   );
@@ -63,6 +67,7 @@ const PARAM_KEYS = {
   heroicTraits: 'ht',
   artefacts: 'ar',
   spellLores: 'sl',
+  prayerLores: 'pl',
   manifestationLores: 'ml',
   generalsHandbook: 'gh',
 } as const;
@@ -101,6 +106,7 @@ export function armyListToParams(army: ArmyList): Record<string, string> {
     [PARAM_KEYS.heroicTraits, encodeSet(army.heroicTraitIds)],
     [PARAM_KEYS.artefacts, encodeSet(army.artefactIds)],
     [PARAM_KEYS.spellLores, encodeSet(army.spellLoreIds)],
+    [PARAM_KEYS.prayerLores, encodeSet(army.prayerLoreIds)],
     [PARAM_KEYS.manifestationLores, encodeSet(army.manifestationLoreIds)],
     [PARAM_KEYS.generalsHandbook, encodeSet(army.generalsHandbookIds)],
   ];
@@ -129,6 +135,7 @@ export function armyListFromParams(
     heroicTraitIds: decodeSet(params[PARAM_KEYS.heroicTraits]),
     artefactIds: decodeSet(params[PARAM_KEYS.artefacts]),
     spellLoreIds: decodeSet(params[PARAM_KEYS.spellLores]),
+    prayerLoreIds: decodeSet(params[PARAM_KEYS.prayerLores]),
     manifestationLoreIds: decodeSet(params[PARAM_KEYS.manifestationLores]),
     generalsHandbookIds: decodeSet(params[PARAM_KEYS.generalsHandbook]),
   };
@@ -156,6 +163,7 @@ export function pruneArmyList(army: ArmyList, known: KnownIds): ArmyList {
     heroicTraitIds: keep(army.heroicTraitIds, known.heroicTraitIds),
     artefactIds: keep(army.artefactIds, known.artefactIds),
     spellLoreIds: keep(army.spellLoreIds, known.spellLoreIds),
+    prayerLoreIds: keep(army.prayerLoreIds, known.prayerLoreIds),
     manifestationLoreIds: keep(army.manifestationLoreIds, known.manifestationLoreIds),
     generalsHandbookIds: keep(army.generalsHandbookIds, known.generalsHandbookIds),
   };
@@ -168,6 +176,7 @@ export interface KnownIds {
   heroicTraitIds: ReadonlySet<string>;
   artefactIds: ReadonlySet<string>;
   spellLoreIds: ReadonlySet<string>;
+  prayerLoreIds: ReadonlySet<string>;
   manifestationLoreIds: ReadonlySet<string>;
   generalsHandbookIds: ReadonlySet<string>;
 }
@@ -191,6 +200,8 @@ export function isUnlocked(source: AbilitySource, abilityId: string, army: ArmyL
       return army.artefactIds.has(abilityId);
     case 'spell-lore':
       return army.spellLoreIds.has(source.loreId);
+    case 'prayer-lore':
+      return army.prayerLoreIds.has(source.loreId);
     case 'manifestation-lore':
       return army.manifestationLoreIds.has(source.loreId);
     case 'generals-handbook':

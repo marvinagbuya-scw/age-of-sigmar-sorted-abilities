@@ -540,6 +540,7 @@ function validateFaction(raw: unknown): void {
     new Set(),
   );
   validateGroups(raw['spellLores'], '$.spellLores', 'spell-lore', 'loreId', new Set());
+  validateGroups(raw['prayerLores'], '$.prayerLores', 'prayer-lore', 'loreId', new Set());
   validateGroups(
     raw['manifestationLores'],
     '$.manifestationLores',

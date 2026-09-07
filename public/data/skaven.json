@@ -314,9 +314,136 @@
     }
   ],
 
-  "manifestationLores": [],
+  "prayerLores": [
+    {
+      "id": "skv-noxious-prayers",
+      "name": "Noxious Prayers",
+      "abilities": [
+        {
+          "id": "skv-filth-crust",
+          "name": "Filth-Crust",
+          "flavour": "The Great Horned Rat heeds the call of this priest to encrust the weapons of their minions with irresistible contagions.",
+          "sample": false,
+          "keywords": ["PRAYER", "UNLIMITED"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "chantingValue": 4,
+          "declare": "Pick a friendly SKAVEN PRIEST to chant this prayer, pick a visible friendly SKAVEN INFANTRY unit wholly within 13\" of them to be the target, then make a chanting roll of D6.",
+          "effect": "Add 1 to wound rolls for the target’s combat attacks until the start of your next turn. In addition, if the chanting roll was 8+, the target’s melee weapons have Crit (Mortal) until the start of your next turn.",
+          "source": { "kind": "prayer-lore", "loreId": "skv-noxious-prayers" }
+        },
+        {
+          "id": "skv-bile-torrent",
+          "name": "Bile-Torrent",
+          "flavour": "The priest screeches with glowing green eyes as a torrent of bile sweeps over their foe.",
+          "sample": false,
+          "keywords": ["PRAYER"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "chantingValue": 4,
+          "declare": "Pick a friendly SKAVEN PRIEST to chant this prayer, pick a visible enemy unit within 13\" of them to be the target, then make a chanting roll of D6.",
+          "effect": "Roll a number of dice equal to the number of models in the target unit. For each 5+, inflict 1 mortal damage on the target. If the chanting roll was 8+, inflict 1 mortal damage on the target for each 4+ instead.",
+          "source": { "kind": "prayer-lore", "loreId": "skv-noxious-prayers" }
+        },
+        {
+          "id": "skv-rabid-tough",
+          "name": "Rabid-Tough",
+          "flavour": "The priest snarls and conjures a dense cloud of toxins that sends their followers into a frenzy that numbs them to pain.",
+          "sample": false,
+          "keywords": ["PRAYER"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "chantingValue": 5,
+          "declare": "Pick a friendly SKAVEN PRIEST to chant this prayer, pick a visible friendly SKAVEN INFANTRY unit wholly within 13\" of them to be the target, then make a chanting roll of D6.",
+          "effect": "Subtract 1 from wound rolls for attacks that target that unit until the start of your next turn. In addition, if the chanting roll was 8+, add 1 to save rolls for the target until the start of your next turn.",
+          "source": { "kind": "prayer-lore", "loreId": "skv-noxious-prayers" }
+        }
+      ]
+    }
+  ],
 
-  "generalsHandbook": [],
+  "manifestationLores": [
+    {
+      "id": "skv-manifestations-of-doom",
+      "name": "Manifestations of Doom",
+      "abilities": [
+        {
+          "id": "skv-summon-warp-lightning-vortex",
+          "name": "Summon Warp Lightning Vortex",
+          "flavour": "Warpstone shards are cast into the air, growing impossibly large and discharging bolts of warp lightning.",
+          "sample": false,
+          "keywords": ["SUMMON", "SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "If there is not a friendly Warp Lightning Vortex on the battlefield, pick a friendly SKAVEN WIZARD to cast this spell, then make a casting roll of 2D6.",
+          "effect": "Set up the first part of the Warp Lightning Vortex within 18\" of the caster and visible to them, then set up the second and third parts exactly 7\" from the first part and exactly 7\" from each other so that they form a triangle.",
+          "source": { "kind": "manifestation-lore", "loreId": "skv-manifestations-of-doom" }
+        },
+        {
+          "id": "skv-summon-vermintide",
+          "name": "Summon Vermintide",
+          "flavour": "A Skaven spellcaster can summon forth a seething mass of arcane rodents that consumes everything in its path.",
+          "sample": false,
+          "keywords": ["SUMMON", "SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "If there is not a friendly Vermintide on the battlefield, pick a friendly SKAVEN WIZARD to cast this spell, then make a casting roll of 2D6.",
+          "effect": "Set up a Vermintide wholly within 13\" of the caster, visible to them and more than 9\" from all enemy units.",
+          "source": { "kind": "manifestation-lore", "loreId": "skv-manifestations-of-doom" }
+        },
+        {
+          "id": "skv-summon-bell-of-doom",
+          "name": "Summon Bell of Doom",
+          "flavour": "Invoking ancient creation myths, the spellcaster causes a great Bell of Doom to manifest upon the battlefield.",
+          "sample": false,
+          "keywords": ["SUMMON", "SPELL"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "If there is not a friendly Bell of Doom on the battlefield, pick a friendly SKAVEN WIZARD to cast this spell, then make a casting roll of 2D6.",
+          "effect": "Set up a Bell of Doom wholly within 13\" of the caster, visible to them and more than 9\" from all enemy units.",
+          "source": { "kind": "manifestation-lore", "loreId": "skv-manifestations-of-doom" }
+        }
+      ]
+    }
+  ],
+
+  "generalsHandbook": [
+    {
+      "id": "skv-transplanted-brains",
+      "name": "Transplanted Brains",
+      "flavour": "The grey matter of various ‘willing’ Moulder volunteers has been grafted onto these mutants’ brains, allowing them to change their personalities in an instant.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "hero", "turn": "any" },
+      "effect": [
+        "Pick 1 of the following brains. Its effects apply for the rest of the turn:",
+        {
+          "list": [
+            "Warpstone Addict’s Brain: Add 1 to hit rolls for this unit’s combat attacks. This unit has a maximum control score of 1.",
+            "Warlock Whelp’s Brain: Add 10 to this unit’s control score."
+          ]
+        }
+      ],
+      "source": { "kind": "generals-handbook" }
+    },
+    {
+      "id": "skv-anabolic-accelerators",
+      "name": "Anabolic Accelerators",
+      "flavour": "The limbs of these mutants have been injected with a serum that promotes rapid tissue growth, giving them a monstrous – if short-lived – burst of speed.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "charge", "turn": "your" },
+      "effect": "If this unit was set up this turn, when making charge rolls for this unit, add 1 to the number of dice rolled, to a maximum of 3, then remove 1 dice of your choice and use the remaining dice as the charge roll.",
+      "source": { "kind": "generals-handbook" }
+    },
+    {
+      "id": "skv-serrated-bone-protrusions",
+      "name": "Serrated Bone Protrusions",
+      "flavour": "The jagged shards of bone that jut out from these abominations can inflict nasty injuries on careless attackers.",
+      "sample": false,
+      "keywords": [],
+      "timing": { "phase": "passive" },
+      "effect": "For each unmodified hit roll of 1 for a combat attack made by an enemy unit that targets this unit, inflict 1 mortal damage on the attacking unit after the FIGHT ability has been resolved.",
+      "source": { "kind": "generals-handbook" }
+    }
+  ],
 
   "units": []
 }

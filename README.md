@@ -127,6 +127,7 @@ State lives in the query string, so a list can be bookmarked or shared:
 | `ht` | heroic trait ids               |
 | `ar` | artefact ids                   |
 | `sl` | spell lore ids                 |
+| `pl` | prayer lore ids                |
 | `ml` | manifestation lore ids         |
 | `gh` | General's Handbook ability ids |
 
@@ -230,6 +231,7 @@ reading.
   "heroicTraits": [], // one ability per trait
   "artefactsOfPower": [], // one ability per artefact
   "spellLores": [], // { id, name, abilities: [] }
+  "prayerLores": [], // { id, name, abilities: [] } — chosen separately from spell lores
   "manifestationLores": [], // { id, name, abilities: [] }
   "generalsHandbook": [], // always apply, e.g. battle tactics, grand strategies
   "units": [], // { id, name, keywords: [], abilities: [] }
@@ -332,6 +334,7 @@ silently breaking army filtering later.
 | `heroicTraits`                   | `{ "kind": "heroic-trait" }`                                            |
 | `artefactsOfPower`               | `{ "kind": "artefact-of-power" }`                                       |
 | `spellLores[].abilities`         | `{ "kind": "spell-lore", "loreId": "<the lore's id>" }`                 |
+| `prayerLores[].abilities`        | `{ "kind": "prayer-lore", "loreId": "<the lore's id>" }`                |
 | `manifestationLores[].abilities` | `{ "kind": "manifestation-lore", "loreId": "<the lore's id>" }`         |
 | `generalsHandbook`               | `{ "kind": "generals-handbook" }`                                       |
 | `units[].abilities`              | `{ "kind": "warscroll", "unitId": "<the unit's id>" }`                  |

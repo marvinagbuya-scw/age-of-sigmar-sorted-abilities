@@ -7,6 +7,7 @@ export const SOURCE_KINDS = [
   'heroic-trait',
   'artefact-of-power',
   'spell-lore',
+  'prayer-lore',
   'manifestation-lore',
   'generals-handbook',
   'warscroll',
@@ -32,6 +33,8 @@ export type AbilitySource =
   | { kind: 'artefact-of-power' }
   /** Available to casters once the given spell lore is chosen. */
   | { kind: 'spell-lore'; loreId: string }
+  /** Available to priests once the given prayer lore is chosen. */
+  | { kind: 'prayer-lore'; loreId: string }
   /** Available once the given manifestation lore is chosen. */
   | { kind: 'manifestation-lore'; loreId: string }
   /**
@@ -51,6 +54,7 @@ export const SOURCE_KIND_LABELS: Record<SourceKind, string> = {
   'heroic-trait': 'Heroic Trait',
   'artefact-of-power': 'Artefact of Power',
   'spell-lore': 'Spell Lore',
+  'prayer-lore': 'Prayer Lore',
   'manifestation-lore': 'Manifestation Lore',
   'generals-handbook': "General's Handbook",
   warscroll: 'Warscroll',
@@ -66,9 +70,10 @@ export const SOURCE_KIND_ORDER: Record<SourceKind, number> = {
   'heroic-trait': 2,
   'artefact-of-power': 3,
   'spell-lore': 4,
-  'manifestation-lore': 5,
-  'generals-handbook': 6,
-  warscroll: 7,
+  'prayer-lore': 5,
+  'manifestation-lore': 6,
+  'generals-handbook': 7,
+  warscroll: 8,
 };
 
 export interface Ability {

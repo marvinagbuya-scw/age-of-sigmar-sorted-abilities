@@ -180,6 +180,7 @@ export type ToggleableKey =
   | 'heroicTraitIds'
   | 'artefactIds'
   | 'spellLoreIds'
+  | 'prayerLoreIds'
   | 'manifestationLoreIds'
   | 'generalsHandbookIds';
 
@@ -195,6 +196,7 @@ function sameArmyList(a: ArmyList, b: ArmyList): boolean {
     sameSet(a.heroicTraitIds, b.heroicTraitIds) &&
     sameSet(a.artefactIds, b.artefactIds) &&
     sameSet(a.spellLoreIds, b.spellLoreIds) &&
+    sameSet(a.prayerLoreIds, b.prayerLoreIds) &&
     sameSet(a.manifestationLoreIds, b.manifestationLoreIds) &&
     sameSet(a.generalsHandbookIds, b.generalsHandbookIds)
   );

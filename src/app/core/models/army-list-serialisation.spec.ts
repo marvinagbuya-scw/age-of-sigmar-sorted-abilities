@@ -61,6 +61,7 @@ describe('armyListFromParams', () => {
         ht: 'trait-a',
         ar: 'art-a',
         sl: 'lore-a',
+        pl: 'prayer-a',
         ml: 'manifest-a',
         gh: 'handbook-a',
       },
@@ -73,6 +74,7 @@ describe('armyListFromParams', () => {
     expect([...parsed.heroicTraitIds]).toEqual(['trait-a']);
     expect([...parsed.artefactIds]).toEqual(['art-a']);
     expect([...parsed.spellLoreIds]).toEqual(['lore-a']);
+    expect([...parsed.prayerLoreIds]).toEqual(['prayer-a']);
     expect([...parsed.manifestationLoreIds]).toEqual(['manifest-a']);
     expect([...parsed.generalsHandbookIds]).toEqual(['handbook-a']);
   });
@@ -100,6 +102,7 @@ describe('armyListFromParams', () => {
       heroicTraitIds: new Set(['t1']),
       artefactIds: new Set(['a1']),
       spellLoreIds: new Set(['s1']),
+      prayerLoreIds: new Set(['p1']),
       manifestationLoreIds: new Set(['m1']),
       generalsHandbookIds: new Set(['gh1']),
     });
@@ -116,6 +119,7 @@ describe('pruneArmyList', () => {
     heroicTraitIds: new Set(['t-known']),
     artefactIds: new Set(['a-known']),
     spellLoreIds: new Set(['s-known']),
+    prayerLoreIds: new Set(['p-known']),
     manifestationLoreIds: new Set(['m-known']),
     generalsHandbookIds: new Set(['gh-known']),
   };
@@ -130,6 +134,7 @@ describe('pruneArmyList', () => {
         heroicTraitIds: new Set(['t-gone']),
         artefactIds: new Set(['a-known']),
         spellLoreIds: new Set(['s-gone']),
+        prayerLoreIds: new Set(['p-known', 'p-gone']),
         manifestationLoreIds: new Set(['m-known']),
         generalsHandbookIds: new Set(['gh-known', 'gh-gone']),
       }),
@@ -141,6 +146,7 @@ describe('pruneArmyList', () => {
     expect(pruned.heroicTraitIds.size).toBe(0);
     expect([...pruned.artefactIds]).toEqual(['a-known']);
     expect(pruned.spellLoreIds.size).toBe(0);
+    expect([...pruned.prayerLoreIds]).toEqual(['p-known']);
     expect([...pruned.manifestationLoreIds]).toEqual(['m-known']);
     expect([...pruned.generalsHandbookIds]).toEqual(['gh-known']);
   });

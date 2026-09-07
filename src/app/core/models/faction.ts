@@ -38,6 +38,8 @@ export interface Faction {
   heroicTraits: Ability[];
   artefactsOfPower: Ability[];
   spellLores: Lore[];
+  /** Prayer lores, chosen separately from spell lores. */
+  prayerLores: Lore[];
   manifestationLores: Lore[];
   /**
    * Abilities from the General's Handbook, e.g. battle tactics and grand
@@ -58,6 +60,7 @@ export function allAbilities(faction: Faction): Ability[] {
     ...faction.heroicTraits,
     ...faction.artefactsOfPower,
     ...faction.spellLores.flatMap((l) => l.abilities),
+    ...faction.prayerLores.flatMap((l) => l.abilities),
     ...faction.manifestationLores.flatMap((l) => l.abilities),
     ...faction.generalsHandbook,
     ...faction.units.flatMap((u) => u.abilities),
@@ -77,6 +80,7 @@ export function knownIds(faction: Faction): KnownIds {
     heroicTraitIds: new Set(faction.heroicTraits.map((a) => a.id)),
     artefactIds: new Set(faction.artefactsOfPower.map((a) => a.id)),
     spellLoreIds: new Set(faction.spellLores.map((l) => l.id)),
+    prayerLoreIds: new Set(faction.prayerLores.map((l) => l.id)),
     manifestationLoreIds: new Set(faction.manifestationLores.map((l) => l.id)),
     generalsHandbookIds: new Set(faction.generalsHandbook.map((a) => a.id)),
   };

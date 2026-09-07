@@ -65,6 +65,7 @@ const ROOT_KEY_ORDER = [
   'heroicTraits',
   'artefactsOfPower',
   'spellLores',
+  'prayerLores',
   'manifestationLores',
   'generalsHandbook',
   'units',

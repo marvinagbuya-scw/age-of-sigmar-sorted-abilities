@@ -36,7 +36,7 @@ const meta: Meta<AbilityCard> = {
   // than stretching across the whole canvas.
   render: (args) => ({
     props: args,
-    template: `<div style="max-width: 320px"><app-ability-card [ability]="ability" /></div>`,
+    template: `<div style="max-width: 320px"><app-ability-card [ability]="ability" [showFlavour]="showFlavour ?? true" /></div>`,
   }),
 };
 
@@ -304,6 +304,27 @@ export const EffectWithRollTable: Story = {
       keywords: [],
       source: { kind: 'battle-formation', formationId: 'skv-fleshmeld-menagerie' },
     },
+  },
+};
+
+/**
+ * The same card with flavour switched off, which is what the app's "Flavour
+ * text" toggle does. The line is removed from the DOM rather than hidden, so it
+ * costs nothing on paper.
+ */
+export const FlavourTextOff: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: 'The Lurking Vermintide',
+      flavour: 'What scurries beneath the surface?',
+      timing: { phase: 'deployment' },
+      declare: 'Pick a friendly SKAVEN unit that has not been deployed.',
+      effect: 'Set up that unit in reserve in the tunnels below. It has now been deployed.',
+      keywords: ['Deploy'],
+      source: { kind: 'faction' },
+    },
+    showFlavour: false,
   },
 };
 

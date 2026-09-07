@@ -16,6 +16,7 @@ import {
   type ArmyList,
 } from '../models';
 import { AbilityDataService } from './ability-data.service';
+import { readJson, resolveStorage, writeJson } from './local-storage';
 
 const STORAGE_KEY = 'aos-sorted-abilities:army-list';
 
@@ -32,7 +33,7 @@ export class SelectionService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly data = inject(AbilityDataService);
-  private readonly document = inject(DOCUMENT);
+  private readonly storage = resolveStorage(inject(DOCUMENT));
 
   /** Query params as a signal, so the URL is the source of truth. */
   private readonly queryParams = toSignal(this.route.queryParams, { initialValue: {} });
@@ -139,38 +140,13 @@ export class SelectionService {
 
   // --- persistence ---------------------------------------------------------
 
-  /**
-   * `localStorage` is genuinely absent in some environments — private browsing,
-   * storage disabled, and the jsdom setup used by the unit tests. Resolve it
-   * defensively rather than assuming it exists.
-   */
-  private get storage(): Storage | undefined {
-    try {
-      return this.document.defaultView?.localStorage ?? undefined;
-    } catch {
-      return undefined;
-    }
-  }
-
   private readStored(): ArmyList | undefined {
-    try {
-      const raw = this.storage?.getItem(STORAGE_KEY);
-      if (!raw) {
-        return undefined;
-      }
-      return armyListFromParams(JSON.parse(raw) as Record<string, string>, DEFAULT_FACTION_ID);
-    } catch {
-      // Corrupt JSON is not worth failing over; fall back to an empty list.
-      return undefined;
-    }
+    const stored = readJson<Record<string, string>>(this.storage, STORAGE_KEY);
+    return stored ? armyListFromParams(stored, DEFAULT_FACTION_ID) : undefined;
   }
 
   private writeStored(army: ArmyList): void {
-    try {
-      this.storage?.setItem(STORAGE_KEY, JSON.stringify(armyListToParams(army)));
-    } catch {
-      // Quota exceeded or storage blocked mid-session — non-fatal.
-    }
+    writeJson(this.storage, STORAGE_KEY, armyListToParams(army));
   }
 }
 

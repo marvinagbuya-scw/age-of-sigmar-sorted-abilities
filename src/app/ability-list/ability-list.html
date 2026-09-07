@@ -6,7 +6,15 @@
       {{ visibleCount() }} of {{ totalCount() }} abilities, sorted by phase
     </p>
   </div>
-  <button type="button" class="print-button" (click)="print()">Print list</button>
+  <div class="page-header__controls">
+    @if (hasAnyFlavour() || !showFlavour()) {
+      <label class="toggle">
+        <input type="checkbox" [checked]="showFlavour()" (change)="setShowFlavour($event)" />
+        Flavour text
+      </label>
+    }
+    <button type="button" class="print-button" (click)="print()">Print list</button>
+  </div>
 </header>
 
 <app-army-selector />
@@ -59,7 +67,7 @@
 
       <div class="phase__cards">
         @for (ability of group.abilities; track ability.id) {
-          <app-ability-card [ability]="ability" />
+          <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
         }
       </div>
     </section>

@@ -205,6 +205,7 @@
       "keywords": [],
       "timing": {
         "phase": "hero",
+        "band": "hero",
         "turn": "any",
         "reaction": "You declared a SPELL or UNBIND ability for a visible Skaven unit wholly within 13\" of this unit"
       },
@@ -217,7 +218,7 @@
       "flavour": "This warlord understands the importance of numbers, ensuring their burrows are teeming with fresh warriors.",
       "sample": false,
       "keywords": [],
-      "timing": { "phase": "passive" },
+      "timing": { "phase": "passive", "section": "hero" },
       "effect": "Each time an ability returns 1 or more slain models to a friendly SKAVEN unit wholly within 13\" of this unit, after that ability has been resolved, you can return 1 additional slain model to it.",
       "source": { "kind": "heroic-trait" }
     },
@@ -439,7 +440,7 @@
       "flavour": "The jagged shards of bone that jut out from these abominations can inflict nasty injuries on careless attackers.",
       "sample": false,
       "keywords": [],
-      "timing": { "phase": "passive" },
+      "timing": { "phase": "passive", "section": "combat", "band": "combat" },
       "effect": "For each unmodified hit roll of 1 for a combat attack made by an enemy unit that targets this unit, inflict 1 mortal damage on the attacking unit after the FIGHT ability has been resolved.",
       "source": { "kind": "generals-handbook" }
     }

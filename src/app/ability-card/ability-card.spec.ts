@@ -15,9 +15,12 @@ function ability(overrides: Partial<Ability> = {}): Ability {
   };
 }
 
-function render(input: Ability) {
+function render(input: Ability, showFlavour?: boolean) {
   const fixture = TestBed.createComponent(AbilityCard);
   fixture.componentRef.setInput('ability', input);
+  if (showFlavour !== undefined) {
+    fixture.componentRef.setInput('showFlavour', showFlavour);
+  }
   fixture.detectChanges();
   return fixture;
 }
@@ -150,5 +153,24 @@ describe('AbilityCard', () => {
   it('omits the flavour element entirely when absent', () => {
     const el = render(ability()).nativeElement as HTMLElement;
     expect(el.querySelector('.ability-card__flavour')).toBeNull();
+  });
+
+  it('shows flavour by default, so the card is self-contained', () => {
+    const el = render(ability({ flavour: 'Some flavour.' })).nativeElement as HTMLElement;
+    expect(el.querySelector('.ability-card__flavour')).not.toBeNull();
+  });
+
+  it('removes flavour from the DOM when switched off, not just visually', () => {
+    // Hiding with CSS would leave it for screen readers and still cost nothing
+    // on paper, so it has to actually not render.
+    const el = render(ability({ flavour: 'Some flavour.' }), false).nativeElement as HTMLElement;
+    expect(el.querySelector('.ability-card__flavour')).toBeNull();
+    expect(el.textContent).not.toContain('Some flavour.');
+  });
+
+  it('still renders the rest of the card with flavour off', () => {
+    const el = render(ability({ flavour: 'Some flavour.' }), false).nativeElement as HTMLElement;
+    expect(el.textContent).toContain('An Ability');
+    expect(el.textContent).toContain('Effect:');
   });
 });

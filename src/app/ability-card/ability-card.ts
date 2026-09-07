@@ -28,6 +28,16 @@ import {
 export class AbilityCard {
   readonly ability = input.required<Ability>();
 
+  /**
+   * Whether to render the italic flavour line. Off makes the printed sheet
+   * noticeably shorter. Defaults to on so the card stays self-contained for
+   * Storybook and any other direct use.
+   */
+  readonly showFlavour = input(true);
+
+  /** The flavour line, or undefined when there is none or it's switched off. */
+  readonly flavour = computed(() => (this.showFlavour() ? this.ability().flavour : undefined));
+
   /** Colour band; a reaction overrides its phase's colour. */
   readonly band = computed<Band>(() => bandForTiming(this.ability().timing));
 

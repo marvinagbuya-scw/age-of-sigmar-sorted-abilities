@@ -142,6 +142,20 @@ invisibly and silently narrow the list.
 
 The panel is hidden when printing.
 
+## Display options
+
+A **Flavour text** checkbox next to the Print button turns the italic flavour
+line off. It's on by default. Turning it off makes the printed sheet noticeably
+shorter, since flavour is the one part of a card that carries no rules meaning.
+
+The line is removed from the DOM rather than hidden with CSS, so it costs nothing
+on paper and isn't read out by screen readers. The toggle only appears when
+something on screen actually has flavour text.
+
+This is stored in `localStorage`, deliberately **not** in the URL: it describes
+how you want the sheet to look, not what's in the army, so a shared link
+shouldn't impose it on whoever opens it.
+
 ## Adding a faction
 
 Two steps:

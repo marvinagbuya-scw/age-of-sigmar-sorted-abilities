@@ -113,6 +113,60 @@
           "source": { "kind": "battle-formation", "formationId": "sbgl-deathmarch" }
         }
       ]
+    },
+    {
+      "id": "sbgl-legion-of-shyish",
+      "name": "Legion of Shyish",
+      "abilities": [
+        {
+          "id": "sbgl-horror-unending",
+          "name": "Horror Unending",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "hero" },
+          "effect": "You can pick 1 additional target when using the 'Deathly Invocation' ability.",
+          "source": { "kind": "battle-formation", "formationId": "sbgl-legion-of-shyish" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-bacchanal-of-blood",
+      "name": "Bacchanal of Blood",
+      "abilities": [
+        {
+          "id": "sbgl-aristocracy-of-the-night",
+          "name": "Aristocracy of the Night",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "hero" },
+          "effect": "Add 1 to casting rolls for friendly VAMPIRE units that are not in combat and add 1 to wound rolls for combat attacks made by friendly VAMPIRE units that charged in the same turn.",
+          "source": { "kind": "battle-formation", "formationId": "sbgl-bacchanal-of-blood" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-deathstench-drove",
+      "name": "Deathstench Drove",
+      "abilities": [
+        {
+          "id": "sbgl-dragged-down-and-torn-apart",
+          "name": "Dragged Down and Torn Apart",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "end-of-turn", "turn": "any", "frequency": "once-per-turn-army" },
+          "declare": "Pick up to 3 friendly DEADWALKERS units in combat to be the targets.",
+          "effect": [
+            "For each target:",
+            {
+              "list": [
+                "Make a pile-in move.",
+                "Then, pick an enemy unit in combat to be the target and roll a D3. On a 2+, inflict an amount of mortal damage on that enemy unit equal to the roll."
+              ]
+            }
+          ],
+          "source": { "kind": "battle-formation", "formationId": "sbgl-deathstench-drove" }
+        }
+      ]
     }
   ],
 
@@ -211,6 +265,75 @@
 
   "units": [
     {
+      "id": "sbgl-neferata-mortarch-of-blood",
+      "name": "Neferata, Mortarch of Blood",
+      "keywords": [
+        "WARMASTER",
+        "UNIQUE",
+        "HERO",
+        "MONSTER",
+        "WIZARD (2)",
+        "FLY",
+        "WARD (6+)",
+        "VAMPIRE",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS"
+      ],
+      "abilities": [
+        {
+          "id": "sbgl-battle-damaged",
+          "name": "Battle Damaged",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat" },
+          "effect": "While this unit has 10 or more damage points, the Attacks characteristic of Nagadron's Claws is 3.",
+          "usedBy": "Neferata, Mortarch of Blood",
+          "source": { "kind": "warscroll", "unitId": "sbgl-neferata-mortarch-of-blood" }
+        },
+        {
+          "id": "sbgl-the-adevore",
+          "name": "The Adevore",
+          "sample": false,
+          "keywords": ["RAMPAGE"],
+          "timing": { "phase": "end-of-turn", "turn": "any", "frequency": "once-per-turn-army" },
+          "declare": "Pick an enemy HERO that was allocated any damage points inflicted by this unit's Akmet-har this turn to be the target.",
+          "effect": "Roll a dice. On a 5+, the target is automatically destroyed.",
+          "usedBy": "Neferata, Mortarch of Blood",
+          "source": { "kind": "warscroll", "unitId": "sbgl-neferata-mortarch-of-blood" }
+        },
+        {
+          "id": "sbgl-dark-mist",
+          "name": "Dark Mist",
+          "sample": false,
+          "keywords": ["Spell"],
+          "timing": { "phase": "hero", "turn": "your" },
+          "castingValue": 7,
+          "declare": "Pick a visible friendly non-MONSTER SOULBLIGHT GRAVELORDS unit wholly within 12\" of this unit to be the target, then make a casting roll of 2D6.",
+          "effect": "Ignore modifiers to save rolls for the target (positive and negative) until the start of your next turn.",
+          "source": { "kind": "warscroll", "unitId": "sbgl-neferata-mortarch-of-blood" }
+        },
+        {
+          "id": "sbgl-the-mortarch-of-blood",
+          "name": "The Mortarch of Blood",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "deployment" },
+          "declare": "Pick up to 3 friendly DEATHRATTLE INFANTRY or DEADWALKERS INFANTRY units to be the targets.",
+          "effect": "Each target can use the 'Normal Move' ability as if it were your movement phase.",
+          "source": { "kind": "warscroll", "unitId": "sbgl-neferata-mortarch-of-blood" }
+        },
+        {
+          "id": "sbgl-twilights-allure",
+          "name": "Twilight's Allure",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
+          "effect": "Subtract 1 from hit rolls for combat attacks that target friendly SOULBLIGHT GRAVELORDS units while they are wholly within 6\" of this unit.",
+          "source": { "kind": "warscroll", "unitId": "sbgl-neferata-mortarch-of-blood" }
+        }
+      ]
+    },
+    {
       "id": "sbgl-vampire-lord",
       "name": "Vampire Lord",
       "keywords": [
@@ -232,6 +355,45 @@
           "effect": "Roll a dice. On a 3+ remove this unit from the battlefield and set it up again on the battlefield more than 9\" from all enemy non-HERO units and more than 3\" from all enemy HEROES.",
           "usedBy": "Vampire Lord",
           "source": { "kind": "warscroll", "unitId": "sbgl-vampire-lord" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-wight-king",
+      "name": "Wight King",
+      "keywords": [
+        "HERO",
+        "INFANTRY",
+        "WARD (6+)",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS",
+        "DEATHRATTLE"
+      ],
+      "abilities": [
+        {
+          "id": "sbgl-king-of-shambling-bones",
+          "name": "King of Shambling Bones",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "hero", "turn": "your", "frequency": "once-per-turn-army" },
+          "declare": "Pick a friendly DEATHRATTLE unit within this unit's combat range to be the target.",
+          "effect": "Roll a dice. On a 3+, the target's melee weapons have Crit (2 hits) for the rest of the turn.",
+          "usedBy": "Wight King",
+          "source": { "kind": "warscroll", "unitId": "sbgl-wight-king" }
+        },
+        {
+          "id": "sbgl-ancient-strategies",
+          "name": "Ancient Strategies",
+          "sample": false,
+          "keywords": [],
+          "timing": {
+            "phase": "combat",
+            "band": "combat",
+            "reaction": "You declared a FIGHT ability for this unit"
+          },
+          "effect": "Pick a friendly non-HERO DEATHRATTLE INFANTRY unit that has not used a FIGHT ability this turn and is within this unit's combat range to be the target. The target can be picked to use a FIGHT ability immediately after the FIGHT ability used by this unit has been resolved. If it is picked to do so, add 1 to hit rolls for the target's attacks for the rest of the turn.",
+          "usedBy": "Wight King",
+          "source": { "kind": "warscroll", "unitId": "sbgl-wight-king" }
         }
       ]
     },
@@ -275,7 +437,7 @@
       "id": "sbgl-barrow-knights",
       "name": "Barrow Knights",
       "keywords": [
-        "CALVARY",
+        "CAVALRY",
         "CHAMPION",
         "MUSICIAN (1/5)",
         "STANDARD BEARER (1/5)",
@@ -291,7 +453,7 @@
           "sample": false,
           "keywords": [],
           "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
-          "effect": "While any friendly DEATHRATTLE CALVARY HEROES are within this unit's combat range both this unit and those friendly units have ward (5+)",
+          "effect": "While any friendly DEATHRATTLE CAVALRY HEROES are within this unit's combat range both this unit and those friendly units have ward (5+)",
           "usedBy": "Barrow Knights",
           "source": { "kind": "warscroll", "unitId": "sbgl-barrow-knights" }
         },
@@ -380,6 +542,43 @@
           "effect": "If this unit is not in combat, remove it from the battlefield and set it up again on the battlefield more than 9\" from all enemy units.",
           "usedBy": "Vargheists",
           "source": { "kind": "warscroll", "unitId": "sbgl-vargheists" }
+        }
+      ]
+    },
+    {
+      "id": "sbgl-blood-knights",
+      "name": "Blood Knights",
+      "keywords": [
+        "CAVALRY",
+        "CHAMPION",
+        "STANDARD BEARER (1/5)",
+        "WARD (6+)",
+        "VAMPIRE",
+        "DEATH",
+        "SOULBLIGHT GRAVELORDS",
+        "DEATHRATTLE"
+      ],
+      "abilities": [
+        {
+          "id": "sbgl-riders-of-ruin",
+          "name": "Riders of Ruin",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "movement" },
+          "effect": "When this unit moves, it can pass through models in enemy INFANTRY units and can pass through the combat ranges of enemy units, but it cannot end a move in combat unless specified in the ability used.",
+          "usedBy": "Blood Knights",
+          "source": { "kind": "warscroll", "unitId": "sbgl-blood-knights" }
+        },
+        {
+          "id": "sbgl-trampled-to-dust",
+          "name": "Trampled to Dust",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "charge", "turn": "any" },
+          "declare": "Pick an enemy unit that this unit passed across this turn to be the target.",
+          "effect": "Roll a D3. On a 2+, inflict an amount of mortal damage on the target equal to the roll.",
+          "usedBy": "Blood Knights",
+          "source": { "kind": "warscroll", "unitId": "sbgl-blood-knights" }
         }
       ]
     }

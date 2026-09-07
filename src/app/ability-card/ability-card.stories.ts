@@ -272,6 +272,41 @@ export const WithFlavourText: Story = {
   },
 };
 
+/**
+ * A dice roll table. The roll column is tabular and boxed so you can scan down
+ * it to find your result mid-game, rather than reading prose.
+ */
+export const EffectWithRollTable: Story = {
+  args: {
+    ability: {
+      ...base,
+      name: 'Prized Creations',
+      flavour:
+        'Moulder warbeasts are studded with warpstone crystals and pumped full of vile serums that spur their battle-rage.',
+      timing: { phase: 'hero', turn: 'your', frequency: 'once-per-turn-army' },
+      declare: 'Pick up to 3 friendly non-HERO MOULDER units to be the targets.',
+      effect: [
+        'Roll a dice for each target and apply the corresponding effect:',
+        {
+          table: [
+            { roll: '1-2', text: 'Self-destructive Fury: Inflict D3 mortal damage on the target.' },
+            {
+              roll: '3-4',
+              text: "Rabid Infusion: Add 1 to the Attacks characteristic of the target's melee weapons until the start of your next turn.",
+            },
+            {
+              roll: '5-6',
+              text: "Blinded by Frenzy: In addition to the effect of 'Rabid Infusion', the target has WARD (5+) until the start of your next turn.",
+            },
+          ],
+        },
+      ],
+      keywords: [],
+      source: { kind: 'battle-formation', formationId: 'skv-fleshmeld-menagerie' },
+    },
+  },
+};
+
 /** No declare, no keywords, no value — the most stripped-back card possible. */
 export const MinimalCard: Story = {
   args: {

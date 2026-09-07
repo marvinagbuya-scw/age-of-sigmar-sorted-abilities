@@ -18,6 +18,7 @@ import jsonc from 'eslint-plugin-jsonc';
  *   unit         id, name, keywords, abilities
  *   lore/format. id, name, abilities
  *   effect list  list, ordered
+ *   roll table   table, then roll, text per row
  *
  * Keys not listed here are unconstrained, so adding a field won't fail the lint
  * until it's added below.
@@ -42,6 +43,9 @@ const NESTED_KEY_ORDER = [
   'effect',
   'list',
   'ordered',
+  'table',
+  'roll',
+  'text',
   'usedBy',
   'source',
   'kind',

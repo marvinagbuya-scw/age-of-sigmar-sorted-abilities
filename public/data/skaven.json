@@ -39,7 +39,7 @@
       "flavour": "These skittish ratmen dart and run in all directions, avoiding retribution as they flee from combat.",
       "sample": false,
       "keywords": [],
-      "timing": { "phase": "passive" },
+      "timing": { "phase": "passive", "section": "movement" },
       "effect": "No mortal damage is inflicted on friendly SKAVEN INFANTRY and CAVALRY units by RETREAT abilities.",
       "source": { "kind": "faction" }
     },
@@ -67,7 +67,134 @@
     }
   ],
 
-  "battleFormations": [],
+  "battleFormations": [
+    {
+      "id": "skv-virulent-procession",
+      "name": "Virulent Procession",
+      "abilities": [
+        {
+          "id": "skv-vp-corrupted-earth",
+          "name": "Corrupted Earth",
+          "flavour": "The Clans Pestilens are relentless in advancing the spread of plague and corruption.",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "end-of-turn", "turn": "any", "frequency": "once-per-turn-army" },
+          "declare": "Pick up to 3 friendly PESTILENS units that are in combat to be the targets.",
+          "effect": [
+            "For each target:",
+            {
+              "list": [
+                "Make a pile-in move.",
+                "Then, pick an enemy unit in combat with the target and roll a D3. On a 2+, inflict an amount of mortal damage on that enemy unit equal to the roll."
+              ]
+            }
+          ],
+          "source": { "kind": "battle-formation", "formationId": "skv-virulent-procession" }
+        }
+      ]
+    },
+    {
+      "id": "skv-fleshmeld-menagerie",
+      "name": "Fleshmeld Menagerie",
+      "abilities": [
+        {
+          "id": "skv-fm-prized-creations",
+          "name": "Prized Creations",
+          "flavour": "Moulder warbeasts are studded with warpstone crystals and pumped full of vile serums that spur their battle-rage – at the occasional cost of overtaxing their forms.",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "hero", "turn": "your", "frequency": "once-per-turn-army" },
+          "declare": "Pick up to 3 friendly non-HERO MOULDER units to be the targets.",
+          "effect": [
+            "Roll a dice for each target and apply the corresponding effect:",
+            {
+              "table": [
+                {
+                  "roll": "1-2",
+                  "text": "Self-destructive Fury: Inflict D3 mortal damage on the target."
+                },
+                {
+                  "roll": "3-4",
+                  "text": "Rabid Infusion: Add 1 to the Attacks characteristic of the target's melee weapons until the start of your next turn."
+                },
+                {
+                  "roll": "5-6",
+                  "text": "Blinded by Frenzy: In addition to the effect of 'Rabid Infusion', the target has WARD (5+) until the start of your next turn."
+                }
+              ]
+            }
+          ],
+          "source": { "kind": "battle-formation", "formationId": "skv-fleshmeld-menagerie" }
+        }
+      ]
+    },
+    {
+      "id": "skv-claw-horde",
+      "name": "Claw-horde",
+      "abilities": [
+        {
+          "id": "skv-ch-claw-picked",
+          "name": "Claw-picked",
+          "flavour": "The Stormvermin and Clanrats of a Verminus Claw-horde are amongst the most ferocious of all ratmen.",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "combat", "turn": "your", "frequency": "once-per-turn-army" },
+          "declare": "Pick up to 3 friendly VERMINUS units that charged this turn to be the targets.",
+          "effect": "Add 1 to the Rend characteristic of the targets' melee weapons for the rest of the turn.",
+          "source": { "kind": "battle-formation", "formationId": "skv-claw-horde" }
+        }
+      ]
+    },
+    {
+      "id": "skv-warpcog-convocation",
+      "name": "Warpcog Convocation",
+      "abilities": [
+        {
+          "id": "skv-wc-skryre-prototypes",
+          "name": "Skryre Prototypes",
+          "flavour": "The fell contraptions wielded by these ratmen were created by the Clans Skryre's most ingenious weaponsmiths.",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "shooting", "turn": "your", "frequency": "once-per-turn-army" },
+          "declare": "Pick up to 3 friendly SKRYRE units to be the targets.",
+          "effect": [
+            "Roll a dice for each target and apply the corresponding effect:",
+            {
+              "table": [
+                { "roll": "1", "text": "Kaboom!: Inflict D3 mortal damage on the target." },
+                {
+                  "roll": "2-5",
+                  "text": "More Power!: Add 1 to wound rolls for the target's shooting attacks for the rest of the turn."
+                },
+                {
+                  "roll": "6",
+                  "text": "More-more Power!: In addition to the effect of 'More Power!', add 1 to the Rend characteristic of the target's ranged weapons for the rest of the turn."
+                }
+              ]
+            }
+          ],
+          "source": { "kind": "battle-formation", "formationId": "skv-warpcog-convocation" }
+        }
+      ]
+    },
+    {
+      "id": "skv-kill-pack",
+      "name": "Kill-Pack",
+      "abilities": [
+        {
+          "id": "skv-kp-kill-kill-scurry-flee",
+          "name": "Kill-Kill! Scurry-Flee!",
+          "flavour": "A kill-pack has one purpose: slay the target. Once this goal has been achieved and the element of surprise lost, the Eshin agents must see to their own survival…",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "deployment", "frequency": "once-per-turn-army" },
+          "declare": "Pick an enemy HERO to be the target.",
+          "effect": "For the rest of the battle, if the target has been destroyed, add 2\" to the Move characteristic of friendly ESHIN units.",
+          "source": { "kind": "battle-formation", "formationId": "skv-kill-pack" }
+        }
+      ]
+    }
+  ],
 
   "heroicTraits": [],
 

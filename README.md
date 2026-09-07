@@ -288,6 +288,31 @@ Bullets render as a `<ul>`. Add `"ordered": true` to a block to get a numbered
 `<ol>` instead, for effects that must be resolved in sequence. A plain string is
 still valid, so most abilities need no change.
 
+### Dice roll tables
+
+Effects that resolve on a roll use a `table` block instead of a list, so the roll
+stays paired with its outcome:
+
+```jsonc
+"effect": [
+  "Roll a dice for each target and apply the corresponding effect:",
+  {
+    "table": [
+      { "roll": "1-2", "text": "Self-destructive Fury: Inflict D3 mortal damage on the target." },
+      { "roll": "3-4", "text": "Rabid Infusion: Add 1 to the Attacks characteristic." },
+      { "roll": "5-6", "text": "Blinded by Frenzy: The target has WARD (5+)." }
+    ]
+  }
+]
+```
+
+`roll` is free text, so `1`, `2-5`, `6` and `7+` all work. Rows render as a
+two-column definition list with the roll boxed and tabular, so you can scan down
+the left edge to find your result mid-game rather than reading prose. Monster
+damage tables fit the same shape.
+
+A block may hold a `list` or a `table`, not both — the validator rejects it.
+
 The `Effect:` label sits inline with a leading paragraph; if an effect starts
 with a list, the label goes on its own line above it. Empty strings and empty
 list items are dropped rather than rendering blank lines.

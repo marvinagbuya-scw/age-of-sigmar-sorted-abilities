@@ -128,8 +128,47 @@ interface ExpectedSource {
 }
 
 /**
+ * Validates one `{ "table": [...] }` block. Returns true if it holds anything
+ * renderable.
+ */
+function validateEffectTable(block: Record<string, unknown>, blockPath: string): boolean {
+  const table = block['table'];
+  if (!Array.isArray(table)) {
+    fail(blockPath, '"table" must be an array of { "roll", "text" } rows');
+    return false;
+  }
+  if (table.length === 0) {
+    fail(blockPath, '"table" must contain at least one row');
+    return false;
+  }
+
+  let usableRows = 0;
+
+  table.forEach((row, i) => {
+    const rowPath = `${blockPath}.table[${i}]`;
+    if (!isPlainObject(row)) {
+      fail(rowPath, 'must be an object with "roll" and "text"');
+      return;
+    }
+
+    const unknown = Object.keys(row).filter((k) => k !== 'roll' && k !== 'text');
+    if (unknown.length > 0) {
+      fail(rowPath, `unexpected key(s): ${unknown.join(', ')}`);
+    }
+
+    const roll = requireString(row, 'roll', rowPath);
+    const text = requireString(row, 'text', rowPath);
+    if (roll && text) {
+      usableRows++;
+    }
+  });
+
+  return usableRows > 0;
+}
+
+/**
  * Validates `effect`, which may be a plain string or an array mixing paragraph
- * strings and `{ "list": [...] }` blocks.
+ * strings, `{ "list": [...] }` blocks and `{ "table": [...] }` blocks.
  */
 function validateEffect(value: unknown, path: string): void {
   if (typeof value === 'string') {
@@ -140,7 +179,10 @@ function validateEffect(value: unknown, path: string): void {
   }
 
   if (!Array.isArray(value)) {
-    fail(path, '"effect" must be a string, or an array of strings and { "list": [...] } blocks');
+    fail(
+      path,
+      '"effect" must be a string, or an array of strings, { "list": [...] } and { "table": [...] } blocks',
+    );
     return;
   }
 
@@ -164,7 +206,27 @@ function validateEffect(value: unknown, path: string): void {
     }
 
     if (!isPlainObject(block)) {
-      fail(blockPath, 'must be a string or a { "list": [...] } object');
+      fail(blockPath, 'must be a string, a { "list": [...] } or a { "table": [...] } object');
+      return;
+    }
+
+    const isList = 'list' in block;
+    const isTable = 'table' in block;
+
+    if (isList && isTable) {
+      fail(blockPath, 'a block cannot be both a "list" and a "table"');
+      return;
+    }
+
+    if (isTable) {
+      if (validateEffectTable(block, blockPath)) {
+        renderable++;
+      }
+      return;
+    }
+
+    if (!isList) {
+      fail(blockPath, 'object blocks must have either a "list" or a "table" key');
       return;
     }
 

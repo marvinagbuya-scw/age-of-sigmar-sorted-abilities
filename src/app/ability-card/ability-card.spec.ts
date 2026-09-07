@@ -108,6 +108,32 @@ describe('AbilityCard', () => {
     expect(el.querySelector('ul.ability-card__list')).toBeNull();
   });
 
+  it('renders a roll table with the roll and outcome paired up', () => {
+    const el = render(
+      ability({
+        effect: [
+          'Roll a dice:',
+          {
+            table: [
+              { roll: '1-2', text: 'Bad thing.' },
+              { roll: '3-6', text: 'Good thing.' },
+            ],
+          },
+        ],
+      }),
+    ).nativeElement as HTMLElement;
+
+    const rolls = [...el.querySelectorAll('.ability-card__roll')].map((n) => n.textContent?.trim());
+    const outcomes = [...el.querySelectorAll('.ability-card__outcome')].map((n) =>
+      n.textContent?.trim(),
+    );
+
+    expect(rolls).toEqual(['1-2', '3-6']);
+    expect(outcomes).toEqual(['Bad thing.', 'Good thing.']);
+    // A definition list keeps roll and outcome associated for screen readers.
+    expect(el.querySelector('dl.ability-card__table')).not.toBeNull();
+  });
+
   it('flags sample data on the card', () => {
     const el = render(ability({ sample: true })).nativeElement as HTMLElement;
     expect(el.textContent).toContain('Sample data');

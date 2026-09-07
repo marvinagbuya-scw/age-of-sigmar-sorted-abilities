@@ -59,6 +59,13 @@
           }
         </ul>
       }
+    } @else if (block.kind === 'table') {
+      <dl class="ability-card__table">
+        @for (row of block.rows; track $index) {
+          <dt class="ability-card__roll">{{ row.roll }}</dt>
+          <dd class="ability-card__outcome">{{ row.text }}</dd>
+        }
+      </dl>
     } @else if (!isFirst) {
       <p class="ability-card__text">{{ block.text }}</p>
     }

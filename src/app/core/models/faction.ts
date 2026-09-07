@@ -78,5 +78,6 @@ export function knownIds(faction: Faction): KnownIds {
     artefactIds: new Set(faction.artefactsOfPower.map((a) => a.id)),
     spellLoreIds: new Set(faction.spellLores.map((l) => l.id)),
     manifestationLoreIds: new Set(faction.manifestationLores.map((l) => l.id)),
+    generalsHandbookIds: new Set(faction.generalsHandbook.map((a) => a.id)),
   };
 }

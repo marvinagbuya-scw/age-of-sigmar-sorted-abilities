@@ -20,6 +20,11 @@ export interface ArmyList {
   spellLoreIds: ReadonlySet<string>;
   /** Ids of manifestation lores chosen. */
   manifestationLoreIds: ReadonlySet<string>;
+  /**
+   * Ids of the General's Handbook abilities taken. Matched on the ability's own
+   * id, since each entry *is* a single ability.
+   */
+  generalsHandbookIds: ReadonlySet<string>;
 }
 
 export function emptyArmyList(factionId: string): ArmyList {
@@ -30,6 +35,7 @@ export function emptyArmyList(factionId: string): ArmyList {
     artefactIds: new Set(),
     spellLoreIds: new Set(),
     manifestationLoreIds: new Set(),
+    generalsHandbookIds: new Set(),
   };
 }
 
@@ -41,7 +47,8 @@ export function hasSelections(army: ArmyList): boolean {
     army.heroicTraitIds.size > 0 ||
     army.artefactIds.size > 0 ||
     army.spellLoreIds.size > 0 ||
-    army.manifestationLoreIds.size > 0
+    army.manifestationLoreIds.size > 0 ||
+    army.generalsHandbookIds.size > 0
   );
 }
 
@@ -57,6 +64,7 @@ const PARAM_KEYS = {
   artefacts: 'ar',
   spellLores: 'sl',
   manifestationLores: 'ml',
+  generalsHandbook: 'gh',
 } as const;
 
 function encodeSet(ids: ReadonlySet<string>): string | undefined {
@@ -94,6 +102,7 @@ export function armyListToParams(army: ArmyList): Record<string, string> {
     [PARAM_KEYS.artefacts, encodeSet(army.artefactIds)],
     [PARAM_KEYS.spellLores, encodeSet(army.spellLoreIds)],
     [PARAM_KEYS.manifestationLores, encodeSet(army.manifestationLoreIds)],
+    [PARAM_KEYS.generalsHandbook, encodeSet(army.generalsHandbookIds)],
   ];
 
   for (const [key, value] of entries) {
@@ -121,6 +130,7 @@ export function armyListFromParams(
     artefactIds: decodeSet(params[PARAM_KEYS.artefacts]),
     spellLoreIds: decodeSet(params[PARAM_KEYS.spellLores]),
     manifestationLoreIds: decodeSet(params[PARAM_KEYS.manifestationLores]),
+    generalsHandbookIds: decodeSet(params[PARAM_KEYS.generalsHandbook]),
   };
 }
 
@@ -147,6 +157,7 @@ export function pruneArmyList(army: ArmyList, known: KnownIds): ArmyList {
     artefactIds: keep(army.artefactIds, known.artefactIds),
     spellLoreIds: keep(army.spellLoreIds, known.spellLoreIds),
     manifestationLoreIds: keep(army.manifestationLoreIds, known.manifestationLoreIds),
+    generalsHandbookIds: keep(army.generalsHandbookIds, known.generalsHandbookIds),
   };
 }
 
@@ -158,19 +169,19 @@ export interface KnownIds {
   artefactIds: ReadonlySet<string>;
   spellLoreIds: ReadonlySet<string>;
   manifestationLoreIds: ReadonlySet<string>;
+  generalsHandbookIds: ReadonlySet<string>;
 }
 
 /**
  * Whether an ability is relevant to the given army list.
  *
- * Faction and General's Handbook abilities always apply. Heroic traits and
- * artefacts are matched by the ability's own id, since each trait/artefact *is*
- * a single ability.
+ * Only faction abilities always apply. Heroic traits, artefacts and General's
+ * Handbook entries are matched by the ability's own id, since each of those
+ * *is* a single ability.
  */
 export function isUnlocked(source: AbilitySource, abilityId: string, army: ArmyList): boolean {
   switch (source.kind) {
     case 'faction':
-    case 'generals-handbook':
       return true;
     case 'battle-formation':
       return army.battleFormationId === source.formationId;
@@ -182,6 +193,8 @@ export function isUnlocked(source: AbilitySource, abilityId: string, army: ArmyL
       return army.spellLoreIds.has(source.loreId);
     case 'manifestation-lore':
       return army.manifestationLoreIds.has(source.loreId);
+    case 'generals-handbook':
+      return army.generalsHandbookIds.has(abilityId);
     case 'warscroll':
       return army.unitIds.has(source.unitId);
   }

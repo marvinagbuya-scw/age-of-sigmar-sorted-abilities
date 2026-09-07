@@ -20,8 +20,8 @@ interface ChoiceGroup {
 /**
  * The army-list picker. Hidden when printing.
  *
- * Faction abilities and General's Handbook abilities aren't listed here because
- * they always apply, so there's nothing to choose.
+ * Faction abilities aren't listed here because they always apply, so there's
+ * nothing to choose.
  */
 @Component({
   selector: 'app-army-selector',
@@ -78,6 +78,11 @@ export class ArmySelector {
         label: 'Manifestation Lores',
         choices: faction.manifestationLores.map(toChoice),
       },
+      {
+        key: 'generalsHandbookIds',
+        label: SOURCE_KIND_LABELS['generals-handbook'],
+        choices: faction.generalsHandbook.map(toChoice),
+      },
     ];
 
     return groups.filter((group) => group.choices.length > 0);
@@ -92,7 +97,8 @@ export class ArmySelector {
       a.heroicTraitIds.size +
       a.artefactIds.size +
       a.spellLoreIds.size +
-      a.manifestationLoreIds.size
+      a.manifestationLoreIds.size +
+      a.generalsHandbookIds.size
     );
   });
 

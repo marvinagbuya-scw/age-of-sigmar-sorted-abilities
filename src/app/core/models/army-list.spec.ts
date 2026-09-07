@@ -10,12 +10,24 @@ describe('isUnlocked', () => {
     expect(isUnlocked({ kind: 'faction' }, 'any-id', army())).toBe(true);
   });
 
-  it("always includes General's Handbook abilities", () => {
-    // Battle tactics and grand strategies are available to any army.
-    expect(isUnlocked({ kind: 'generals-handbook' }, 'any-id', army())).toBe(true);
+  it("includes a General's Handbook ability only when it has been taken", () => {
+    // Seasonal content is chosen per army, so it is selected like a trait or an
+    // artefact rather than applying automatically.
     expect(
-      isUnlocked({ kind: 'generals-handbook' }, 'any-id', army({ unitIds: new Set(['x']) })),
+      isUnlocked(
+        { kind: 'generals-handbook' },
+        'gh-a',
+        army({ generalsHandbookIds: new Set(['gh-a']) }),
+      ),
     ).toBe(true);
+    expect(
+      isUnlocked(
+        { kind: 'generals-handbook' },
+        'gh-b',
+        army({ generalsHandbookIds: new Set(['gh-a']) }),
+      ),
+    ).toBe(false);
+    expect(isUnlocked({ kind: 'generals-handbook' }, 'gh-a', army())).toBe(false);
   });
 
   it('includes a battle formation ability only for the chosen formation', () => {

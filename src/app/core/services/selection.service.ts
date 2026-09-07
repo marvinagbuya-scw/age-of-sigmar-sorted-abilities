@@ -176,7 +176,12 @@ export class SelectionService {
 
 /** Keys on `ArmyList` holding a toggleable set of ids. */
 export type ToggleableKey =
-  'unitIds' | 'heroicTraitIds' | 'artefactIds' | 'spellLoreIds' | 'manifestationLoreIds';
+  | 'unitIds'
+  | 'heroicTraitIds'
+  | 'artefactIds'
+  | 'spellLoreIds'
+  | 'manifestationLoreIds'
+  | 'generalsHandbookIds';
 
 function sameSet(a: ReadonlySet<string>, b: ReadonlySet<string>): boolean {
   return a.size === b.size && [...a].every((id) => b.has(id));
@@ -190,7 +195,8 @@ function sameArmyList(a: ArmyList, b: ArmyList): boolean {
     sameSet(a.heroicTraitIds, b.heroicTraitIds) &&
     sameSet(a.artefactIds, b.artefactIds) &&
     sameSet(a.spellLoreIds, b.spellLoreIds) &&
-    sameSet(a.manifestationLoreIds, b.manifestationLoreIds)
+    sameSet(a.manifestationLoreIds, b.manifestationLoreIds) &&
+    sameSet(a.generalsHandbookIds, b.generalsHandbookIds)
   );
 }
 

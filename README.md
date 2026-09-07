@@ -104,9 +104,9 @@ override matches what `phase` would have produced anyway.
 ## Army-list filtering
 
 The **Your army** panel above the list narrows it to what you're actually
-fielding. Pick a battle formation, units, heroic traits, artefacts and lores;
-everything else drops out. Faction abilities and General's Handbook abilities
-always stay, because they apply regardless of what you take.
+fielding. Pick a battle formation, units, heroic traits, artefacts, lores and
+General's Handbook abilities; everything else drops out. Only **faction
+abilities** always stay, because they apply regardless of what you take.
 
 With nothing selected the full faction list renders, so the panel is opt-in.
 
@@ -116,15 +116,16 @@ State lives in the query string, so a list can be bookmarked or shared:
 /?f=soulblight-gravelords&bf=sbgl-deathmarch&u=sbgl-vampire-lord,sbgl-deathrattle-skeletons&ht=sbgl-eternal-thrall&sl=sbgl-lore-of-undeath
 ```
 
-| Key  | Holds                  |
-| ---- | ---------------------- |
-| `f`  | faction id             |
-| `bf` | battle formation id    |
-| `u`  | unit ids               |
-| `ht` | heroic trait ids       |
-| `ar` | artefact ids           |
-| `sl` | spell lore ids         |
-| `ml` | manifestation lore ids |
+| Key  | Holds                          |
+| ---- | ------------------------------ |
+| `f`  | faction id                     |
+| `bf` | battle formation id            |
+| `u`  | unit ids                       |
+| `ht` | heroic trait ids               |
+| `ar` | artefact ids                   |
+| `sl` | spell lore ids                 |
+| `ml` | manifestation lore ids         |
+| `gh` | General's Handbook ability ids |
 
 The last used list is also kept in `localStorage`, so a plain visit to `/`
 restores it. URL wins when both are present. History is _replaced_ rather than
@@ -287,7 +288,7 @@ silently breaking army filtering later.
 
 | Section                          | `source`                                                                |
 | -------------------------------- | ----------------------------------------------------------------------- |
-| `factionAbilities`               | `{ "kind": "faction" }`                                                 |
+| `factionAbilities`               | `{ "kind": "faction" }` — always applies                                |
 | `battleFormations[].abilities`   | `{ "kind": "battle-formation", "formationId": "<the formation's id>" }` |
 | `heroicTraits`                   | `{ "kind": "heroic-trait" }`                                            |
 | `artefactsOfPower`               | `{ "kind": "artefact-of-power" }`                                       |

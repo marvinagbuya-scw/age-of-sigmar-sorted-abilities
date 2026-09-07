@@ -21,6 +21,7 @@ describe('hasSelections', () => {
     expect(hasSelections(army({ battleFormationId: 'f' }))).toBe(true);
     expect(hasSelections(army({ unitIds: new Set(['u']) }))).toBe(true);
     expect(hasSelections(army({ spellLoreIds: new Set(['l']) }))).toBe(true);
+    expect(hasSelections(army({ generalsHandbookIds: new Set(['gh']) }))).toBe(true);
   });
 });
 
@@ -61,6 +62,7 @@ describe('armyListFromParams', () => {
         ar: 'art-a',
         sl: 'lore-a',
         ml: 'manifest-a',
+        gh: 'handbook-a',
       },
       'default-faction',
     );
@@ -72,6 +74,7 @@ describe('armyListFromParams', () => {
     expect([...parsed.artefactIds]).toEqual(['art-a']);
     expect([...parsed.spellLoreIds]).toEqual(['lore-a']);
     expect([...parsed.manifestationLoreIds]).toEqual(['manifest-a']);
+    expect([...parsed.generalsHandbookIds]).toEqual(['handbook-a']);
   });
 
   it('ignores empty segments and stray whitespace', () => {
@@ -98,6 +101,7 @@ describe('armyListFromParams', () => {
       artefactIds: new Set(['a1']),
       spellLoreIds: new Set(['s1']),
       manifestationLoreIds: new Set(['m1']),
+      generalsHandbookIds: new Set(['gh1']),
     });
 
     const restored = armyListFromParams(armyListToParams(original), 'default-faction');
@@ -113,6 +117,7 @@ describe('pruneArmyList', () => {
     artefactIds: new Set(['a-known']),
     spellLoreIds: new Set(['s-known']),
     manifestationLoreIds: new Set(['m-known']),
+    generalsHandbookIds: new Set(['gh-known']),
   };
 
   it('drops ids that no longer exist in the data', () => {
@@ -126,6 +131,7 @@ describe('pruneArmyList', () => {
         artefactIds: new Set(['a-known']),
         spellLoreIds: new Set(['s-gone']),
         manifestationLoreIds: new Set(['m-known']),
+        generalsHandbookIds: new Set(['gh-known', 'gh-gone']),
       }),
       known,
     );
@@ -136,6 +142,7 @@ describe('pruneArmyList', () => {
     expect([...pruned.artefactIds]).toEqual(['a-known']);
     expect(pruned.spellLoreIds.size).toBe(0);
     expect([...pruned.manifestationLoreIds]).toEqual(['m-known']);
+    expect([...pruned.generalsHandbookIds]).toEqual(['gh-known']);
   });
 
   it('keeps a valid list untouched', () => {

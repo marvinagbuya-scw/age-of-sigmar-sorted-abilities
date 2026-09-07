@@ -18,8 +18,8 @@ export type SourceKind = (typeof SOURCE_KINDS)[number];
  * Where an ability comes from, and therefore what has to be present in an army
  * list for it to be relevant.
  *
- * `faction` and `generals-handbook` abilities always apply. The rest are
- * unlocked by a specific selection the player makes when building their army.
+ * Only `faction` abilities always apply. Everything else is unlocked by a
+ * specific selection the player makes when building their army.
  */
 export type AbilitySource =
   /** Army-wide rules that always apply, e.g. Deathless Minions. */
@@ -36,7 +36,7 @@ export type AbilitySource =
   | { kind: 'manifestation-lore'; loreId: string }
   /**
    * From the General's Handbook, e.g. battle tactics and grand strategies.
-   * Available to any army, so these always apply.
+   * Seasonal content, chosen per army rather than tied to a unit.
    */
   | { kind: 'generals-handbook' }
   /** Printed on a specific unit's warscroll. */

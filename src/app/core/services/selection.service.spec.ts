@@ -59,7 +59,6 @@ describe('SelectionService', () => {
   it('narrows to the selected units once something is picked', () => {
     const abilities = [
       ability('faction-a', { kind: 'faction' }),
-      ability('handbook-a', { kind: 'generals-handbook' }),
       ability('scroll-a', { kind: 'warscroll', unitId: 'unit-a' }),
       ability('scroll-b', { kind: 'warscroll', unitId: 'unit-b' }),
     ];
@@ -67,12 +66,19 @@ describe('SelectionService', () => {
     selection.toggle('unitIds', 'unit-a');
 
     expect(selection.filtersActive()).toBe(true);
-    // Faction and handbook abilities always survive; only unit-b's is dropped.
-    expect(selection.filter(abilities).map((a) => a.id)).toEqual([
-      'faction-a',
-      'handbook-a',
-      'scroll-a',
-    ]);
+    // Faction abilities always survive; only unit-b's is dropped.
+    expect(selection.filter(abilities).map((a) => a.id)).toEqual(['faction-a', 'scroll-a']);
+  });
+
+  it("includes a General's Handbook ability only once it is selected", () => {
+    const abilities = [ability('handbook-a', { kind: 'generals-handbook' })];
+
+    // Filtering is a pass-through until something is picked.
+    selection.toggle('unitIds', 'unit-a');
+    expect(selection.filter(abilities)).toEqual([]);
+
+    selection.toggle('generalsHandbookIds', 'handbook-a');
+    expect(selection.filter(abilities).map((a) => a.id)).toEqual(['handbook-a']);
   });
 
   it('keeps a battle formation ability only for the chosen formation', () => {

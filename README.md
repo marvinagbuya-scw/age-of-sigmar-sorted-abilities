@@ -144,17 +144,46 @@ The panel is hidden when printing.
 
 ## Display options
 
-A **Flavour text** checkbox next to the Print button turns the italic flavour
-line off. It's on by default. Turning it off makes the printed sheet noticeably
-shorter, since flavour is the one part of a card that carries no rules meaning.
+Two checkboxes sit next to the Print button.
 
-The line is removed from the DOM rather than hidden with CSS, so it costs nothing
-on paper and isn't read out by screen readers. The toggle only appears when
-something on screen actually has flavour text.
+**Core abilities** merges in the universal abilities from the core rules — Normal
+Move, Run, Charge, Fight, Rally and so on — which every army has regardless of
+faction. On by default. They interleave into the phases like anything else but
+sort _after_ the faction's own abilities, since they're identical for every army
+and shouldn't push your list's specifics down the page. Turn it off once you no
+longer need the core rules on the sheet.
 
-This is stored in `localStorage`, deliberately **not** in the URL: it describes
+**Flavour text** turns the italic flavour line off. On by default. Turning it off
+makes the printed sheet noticeably shorter, since flavour is the one part of a
+card that carries no rules meaning.
+
+The flavour line is removed from the DOM rather than hidden with CSS, so it costs
+nothing on paper and isn't read out by screen readers. Each toggle only appears
+when it would actually do something.
+
+Both are stored in `localStorage`, deliberately **not** in the URL: they describe
 how you want the sheet to look, not what's in the army, so a shared link
-shouldn't impose it on whoever opens it.
+shouldn't impose them on whoever opens it.
+
+## Universal abilities
+
+`public/data/universal.json` holds the core rules abilities shared by every
+army. It is **not** a faction file and has its own shape — two flat sections, no
+id, name, units or lores:
+
+```jsonc
+{
+  "core": [], // { "kind": "core" } — Normal Move, Run, Charge, Fight, ...
+  "commands": [], // { "kind": "command" } — Rally, All-out Attack, ...
+}
+```
+
+Abilities here use the same schema as anywhere else, and always apply — they're
+never filtered by the army list, since every army can use them. Whether they
+appear at all is the **Core abilities** toggle.
+
+The validator checks this file against its own rules and skips the
+`FACTIONS` cross-check, so it doesn't need a registry entry.
 
 ## Adding a faction
 
@@ -188,6 +217,8 @@ between `FACTIONS` and the data files. It also warns when:
   and its rules text never replaced
 - two abilities in one faction share a name, which is nearly always a
   copy-pasted card whose name was never changed
+- two abilities share identical `declare` _and_ `effect` text, which is a
+  duplicated card that was only partly edited
 - an override has no effect (`section` equal to `phase`, a `band` matching what
   `phase` already produces, or `turn` on a phase no player owns)
 - a value is set without its matching keyword (`castingValue` without `Spell`,

@@ -541,7 +541,7 @@
           "name": "Seething Swarm",
           "sample": false,
           "keywords": [],
-          "timing": { "phase": "end-of-turn", "timing": "any" },
+          "timing": { "phase": "end-of-turn", "turn": "any" },
           "effect": "You can return D3 slain models to this unit.",
           "usedBy": "Clanrats",
           "source": { "kind": "warscroll", "unitId": "skv-clanrats" }

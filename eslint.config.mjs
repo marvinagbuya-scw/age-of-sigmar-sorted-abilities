@@ -69,6 +69,9 @@ const ROOT_KEY_ORDER = [
   'manifestationLores',
   'generalsHandbook',
   'units',
+  // universal.json only
+  'core',
+  'commands',
 ];
 
 export default defineConfig([

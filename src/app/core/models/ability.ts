@@ -11,6 +11,8 @@ export const SOURCE_KINDS = [
   'manifestation-lore',
   'generals-handbook',
   'warscroll',
+  'command',
+  'core',
 ] as const;
 
 export type SourceKind = (typeof SOURCE_KINDS)[number];
@@ -43,7 +45,17 @@ export type AbilitySource =
    */
   | { kind: 'generals-handbook' }
   /** Printed on a specific unit's warscroll. */
-  | { kind: 'warscroll'; unitId: string };
+  | { kind: 'warscroll'; unitId: string }
+  /**
+   * A universal command from the core rules, available to every army.
+   * Lives in `universal.json`, not a faction file.
+   */
+  | { kind: 'command' }
+  /**
+   * A universal core ability such as Normal Move or Fight, available to every
+   * army. Lives in `universal.json`, not a faction file.
+   */
+  | { kind: 'core' };
 
 /**
  * Human-readable labels for each source kind, used for grouping in the UI.
@@ -58,11 +70,17 @@ export const SOURCE_KIND_LABELS: Record<SourceKind, string> = {
   'manifestation-lore': 'Manifestation Lore',
   'generals-handbook': "General's Handbook",
   warscroll: 'Warscroll',
+  command: 'Command Ability',
+  core: 'Core Ability',
 };
 
 /**
  * Sort priority for sources within a single phase. Faction-wide things first
- * (they apply to everything), unit-specific things last.
+ * (they apply to everything), unit-specific things next.
+ *
+ * Universal core and command abilities sort last: they're identical for every
+ * army, so they're reference material and shouldn't push the abilities specific
+ * to your list further down the page.
  */
 export const SOURCE_KIND_ORDER: Record<SourceKind, number> = {
   faction: 0,
@@ -74,6 +92,8 @@ export const SOURCE_KIND_ORDER: Record<SourceKind, number> = {
   'manifestation-lore': 6,
   'generals-handbook': 7,
   warscroll: 8,
+  command: 9,
+  core: 10,
 };
 
 export interface Ability {

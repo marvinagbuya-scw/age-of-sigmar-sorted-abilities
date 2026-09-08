@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 
 import { SOURCE_KINDS } from '../src/app/core/models/ability.ts';
 import { FACTIONS, isKnownFaction } from '../src/app/core/models/factions.ts';
+import { UNIVERSAL_ID, UNIVERSAL_SECTIONS } from '../src/app/core/models/universal.ts';
 import {
   BANDS,
   FREQUENCIES,
@@ -60,6 +61,38 @@ const seenAbilityIds = new Map<string, string>();
 /** Ability names seen so far, keyed by owner so the same name can appear on
  * different warscrolls (e.g. every monster has its own "Battle Damaged"). */
 const seenAbilityNames = new Map<string, string>();
+
+/**
+ * Effect text seen so far, mapped to the ability that first used it. Two
+ * abilities with byte-identical effects is a copy-paste that was never edited.
+ */
+const seenEffects = new Map<string, string>();
+
+/** Flattens an effect to a single comparable string, whatever shape it takes. */
+function effectToComparableText(effect: unknown): string {
+  if (typeof effect === 'string') {
+    return effect.trim();
+  }
+  if (!Array.isArray(effect)) {
+    return '';
+  }
+  return effect
+    .flatMap((block) => {
+      if (typeof block === 'string') return [block];
+      if (!isPlainObject(block)) return [];
+      if (Array.isArray(block['list'])) {
+        return (block['list'] as unknown[]).filter((i): i is string => typeof i === 'string');
+      }
+      if (Array.isArray(block['table'])) {
+        return (block['table'] as unknown[]).flatMap((row) =>
+          isPlainObject(row) ? [String(row['roll'] ?? ''), String(row['text'] ?? '')] : [],
+        );
+      }
+      return [];
+    })
+    .join(' ')
+    .trim();
+}
 
 /**
  * Identifies what an ability belongs to, so duplicate-name detection is scoped.
@@ -312,6 +345,23 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
     checkForFiller(prose, path, isSample);
   }
 
+  // Byte-identical declare *and* effect on two abilities means a card was
+  // duplicated and only partly edited. Comparing the pair rather than the effect
+  // alone avoids flagging short effects that genuinely recur, like
+  // "Heal (1) this unit."
+  if (id && !isSample) {
+    const declareText = typeof raw['declare'] === 'string' ? raw['declare'].trim() : '';
+    const combined = `${declareText}\u0000${effectToComparableText(raw['effect'])}`;
+    if (combined.replace(/\u0000/g, '').length >= 60) {
+      const previous = seenEffects.get(combined);
+      if (previous) {
+        warn(path, `has the same declare and effect text as "${previous}" — is one a copy-paste?`);
+      } else {
+        seenEffects.set(combined, id);
+      }
+    }
+  }
+
   if (id) {
     const previous = seenAbilityIds.get(id);
     if (previous) {
@@ -326,6 +376,18 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
   if (!isPlainObject(timing)) {
     fail(path, '"timing" must be an object');
   } else {
+    // Reject stray keys: a typo such as `"timing": "any"` instead of
+    // `"turn": "any"` would otherwise be silently ignored, quietly dropping the
+    // qualifier from the card's label.
+    const allowedTimingKeys = ['phase', 'section', 'band', 'turn', 'reaction', 'frequency'];
+    const strayKeys = Object.keys(timing).filter((k) => !allowedTimingKeys.includes(k));
+    if (strayKeys.length > 0) {
+      fail(
+        path,
+        `unexpected key(s) in "timing": ${strayKeys.join(', ')} — expected one of: ${allowedTimingKeys.join(', ')}`,
+      );
+    }
+
     const phase = timing['phase'];
     if (typeof phase !== 'string' || !(PHASES as readonly string[]).includes(phase)) {
       fail(path, `timing.phase "${String(phase)}" is not one of: ${PHASES.join(', ')}`);
@@ -602,6 +664,29 @@ if (files.length === 0) {
   process.exit(1);
 }
 
+/**
+ * Validates `universal.json`, which holds the core rules abilities every army
+ * shares. Deliberately a different shape from a faction: two flat sections and
+ * no id, name, units or lores.
+ */
+function validateUniversal(raw: unknown): void {
+  if (!isPlainObject(raw)) {
+    fail('$', 'file must contain a JSON object');
+    return;
+  }
+
+  const known = new Set<string>(UNIVERSAL_SECTIONS.map((s) => s.key));
+  for (const key of Object.keys(raw)) {
+    if (key !== '_note' && !known.has(key)) {
+      fail(`$.${key}`, `unexpected section; expected one of: ${[...known].join(', ')}`);
+    }
+  }
+
+  for (const section of UNIVERSAL_SECTIONS) {
+    validateAbilityList(raw[section.key], `$.${section.key}`, { kind: section.kind });
+  }
+}
+
 let sampleCount = 0;
 let abilityCount = 0;
 
@@ -620,12 +705,20 @@ for (const file of files) {
     continue;
   }
 
+  const isUniversal = file === `${UNIVERSAL_ID}.json`;
+
   seenAbilityIds.clear();
   seenAbilityNames.clear();
-  validateFaction(parsed);
+  seenEffects.clear();
 
-  if (isPlainObject(parsed) && typeof parsed['id'] === 'string') {
-    fileIds.set(file.replace(/\.json$/, ''), parsed['id']);
+  if (isUniversal) {
+    validateUniversal(parsed);
+  } else {
+    validateFaction(parsed);
+
+    if (isPlainObject(parsed) && typeof parsed['id'] === 'string') {
+      fileIds.set(file.replace(/\.json$/, ''), parsed['id']);
+    }
   }
 
   abilityCount += seenAbilityIds.size;
@@ -661,7 +754,6 @@ for (const [fileName, declaredId] of fileIds) {
     );
   }
 }
-
 for (const warning of warnings) {
   console.warn(`warn  ${warning}`);
 }

@@ -7,9 +7,25 @@
     </p>
   </div>
   <div class="page-header__controls">
+    @if (hasUniversalData() || !includeUniversal()) {
+      <label class="toggle" for="toggle-universal">
+        <input
+          id="toggle-universal"
+          type="checkbox"
+          [checked]="includeUniversal()"
+          (change)="setIncludeUniversal($event)"
+        />
+        Core abilities
+      </label>
+    }
     @if (hasAnyFlavour() || !showFlavour()) {
-      <label class="toggle">
-        <input type="checkbox" [checked]="showFlavour()" (change)="setShowFlavour($event)" />
+      <label class="toggle" for="toggle-flavour">
+        <input
+          id="toggle-flavour"
+          type="checkbox"
+          [checked]="showFlavour()"
+          (change)="setShowFlavour($event)"
+        />
         Flavour text
       </label>
     }
@@ -26,6 +42,14 @@
     <span class="print-heading__note">army list</span>
   }
 </h1>
+
+@if (universalError()) {
+  <p class="banner no-print">
+    <strong>Could not load the universal abilities.</strong>
+    Check that <code>public/data/universal.json</code> exists and is valid JSON. The faction's own
+    abilities are unaffected.
+  </p>
+}
 
 @if (hasSampleData()) {
   <p class="banner no-print">

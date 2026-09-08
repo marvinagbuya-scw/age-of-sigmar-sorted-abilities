@@ -184,13 +184,16 @@ export interface KnownIds {
 /**
  * Whether an ability is relevant to the given army list.
  *
- * Only faction abilities always apply. Heroic traits, artefacts and General's
- * Handbook entries are matched by the ability's own id, since each of those
- * *is* a single ability.
+ * Faction abilities always apply, as do universal core and command abilities —
+ * whether those are shown at all is a separate preference, not an army-list
+ * question. Heroic traits, artefacts and General's Handbook entries are matched
+ * by the ability's own id, since each of those *is* a single ability.
  */
 export function isUnlocked(source: AbilitySource, abilityId: string, army: ArmyList): boolean {
   switch (source.kind) {
     case 'faction':
+    case 'core':
+    case 'command':
       return true;
     case 'battle-formation':
       return army.battleFormationId === source.formationId;

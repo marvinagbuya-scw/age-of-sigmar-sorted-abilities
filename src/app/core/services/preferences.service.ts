@@ -6,6 +6,7 @@ const STORAGE_KEY = 'aos-sorted-abilities:preferences';
 
 interface StoredPreferences {
   showFlavour?: boolean;
+  includeUniversal?: boolean;
 }
 
 /**
@@ -19,9 +20,10 @@ interface StoredPreferences {
 export class PreferencesService {
   private readonly storage = resolveStorage(inject(DOCUMENT));
 
-  private readonly flavour = signal(
-    readJson<StoredPreferences>(this.storage, STORAGE_KEY)?.showFlavour ?? true,
-  );
+  private readonly stored = readJson<StoredPreferences>(this.storage, STORAGE_KEY);
+
+  private readonly flavour = signal(this.stored?.showFlavour ?? true);
+  private readonly universal = signal(this.stored?.includeUniversal ?? true);
 
   /**
    * Whether the italic flavour line is rendered on cards. On by default; turning
@@ -29,9 +31,19 @@ export class PreferencesService {
    */
   readonly showFlavour = this.flavour.asReadonly();
 
+  /**
+   * Whether universal core and command abilities are merged into the list. On by
+   * default, since they apply to every army; turn it off once you no longer need
+   * the core rules on the sheet.
+   */
+  readonly includeUniversal = this.universal.asReadonly();
+
   constructor() {
     effect(() => {
-      const value: StoredPreferences = { showFlavour: this.flavour() };
+      const value: StoredPreferences = {
+        showFlavour: this.flavour(),
+        includeUniversal: this.universal(),
+      };
       writeJson(this.storage, STORAGE_KEY, value);
     });
   }
@@ -42,5 +54,13 @@ export class PreferencesService {
 
   toggleFlavour(): void {
     this.flavour.update((show) => !show);
+  }
+
+  setIncludeUniversal(include: boolean): void {
+    this.universal.set(include);
+  }
+
+  toggleUniversal(): void {
+    this.universal.update((include) => !include);
   }
 }

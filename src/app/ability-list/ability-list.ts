@@ -20,6 +20,9 @@ export class AbilityList {
   private readonly preferences = inject(PreferencesService);
 
   readonly showFlavour = this.preferences.showFlavour;
+  readonly includeUniversal = this.preferences.includeUniversal;
+  readonly hasUniversalData = this.data.hasUniversalData;
+  readonly universalError = this.data.universalError;
 
   /** True when any visible ability actually has flavour text to hide. */
   readonly hasAnyFlavour = computed(() => this.visible().some((a) => a.flavour));
@@ -48,6 +51,10 @@ export class AbilityList {
 
   setShowFlavour(event: Event): void {
     this.preferences.setShowFlavour((event.target as HTMLInputElement).checked);
+  }
+
+  setIncludeUniversal(event: Event): void {
+    this.preferences.setIncludeUniversal((event.target as HTMLInputElement).checked);
   }
 
   print(): void {

@@ -1,4 +1,4 @@
-import type { Ability } from './ability';
+import type { Ability, SourceKind } from './ability';
 
 /** File name (without extension) of the universal ability data. */
 export const UNIVERSAL_ID = 'universal';
@@ -26,4 +26,16 @@ export const UNIVERSAL_SECTIONS = [
 
 export function allUniversalAbilities(universal: UniversalAbilities): Ability[] {
   return [...universal.core, ...universal.commands];
+}
+
+/**
+ * Source kinds that come from `universal.json` rather than a faction file.
+ *
+ * Used to separate them out in the printed list: they're the same for every
+ * army, so they sit under their own subheading below the army's own abilities.
+ */
+const UNIVERSAL_SOURCE_KINDS: ReadonlySet<SourceKind> = new Set<SourceKind>(['core', 'command']);
+
+export function isUniversalSource(kind: SourceKind): boolean {
+  return UNIVERSAL_SOURCE_KINDS.has(kind);
 }

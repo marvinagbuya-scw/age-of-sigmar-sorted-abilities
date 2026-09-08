@@ -207,4 +207,24 @@ describe('AbilityList universal abilities toggle', () => {
     // 1 faction ability + 1 universal, both visible with nothing selected.
     expect(el.textContent).toContain('2 of 2 abilities');
   });
+
+  it('renders core abilities under their own "Core" subheading', () => {
+    const el = render().nativeElement as HTMLElement;
+    const subheadings = [...el.querySelectorAll('.phase__subheading')].map((n) =>
+      n.textContent?.trim(),
+    );
+    expect(subheadings).toContain('Core');
+  });
+
+  it('drops the Core subheading when universal abilities are off', () => {
+    const includeUniversal = signal(true);
+    const fixture = render(includeUniversal);
+
+    TestBed.inject(PreferencesService).setIncludeUniversal(false);
+    includeUniversal.set(false);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.phase__subheading')).toBeNull();
+  });
 });

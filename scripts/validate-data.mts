@@ -419,7 +419,14 @@ function validateAbility(raw: unknown, path: string, expected: ExpectedSource): 
     const band = timing['band'];
     if (band !== undefined) {
       if (typeof band !== 'string' || !(BANDS as readonly string[]).includes(band)) {
-        fail(path, `timing.band "${String(band)}" is not one of: ${BANDS.join(', ')}`);
+        // `section` takes a phase name and `band` takes a band name; the two
+        // overlap but not entirely, so point at the mapping rather than just
+        // listing the valid values.
+        const asPhase =
+          typeof band === 'string' && (PHASES as readonly string[]).includes(band)
+            ? ` — "${band}" is a phase, did you mean "${bandForPhase(band as Phase)}"?`
+            : '';
+        fail(path, `timing.band "${String(band)}" is not one of: ${BANDS.join(', ')}${asPhase}`);
       } else if (
         typeof phase === 'string' &&
         (PHASES as readonly string[]).includes(phase) &&

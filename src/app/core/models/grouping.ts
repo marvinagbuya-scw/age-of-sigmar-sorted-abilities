@@ -1,10 +1,20 @@
 import { SOURCE_KIND_ORDER, type Ability } from './ability';
 import { PHASES, PHASE_LABELS, TURNS, sectionForTiming, type Phase } from './timing';
+import { isUniversalSource } from './universal';
 
 export interface PhaseGroup {
   phase: Phase;
   label: string;
+  /** The army's own abilities: faction, formation, lore, warscroll and so on. */
   abilities: Ability[];
+  /**
+   * Universal core and command abilities, shown under their own subheading
+   * below the army's. Kept separate rather than interleaved because they're
+   * identical for every army, so they read as reference material.
+   */
+  coreAbilities: Ability[];
+  /** Count across both lists, for the phase heading. */
+  total: number;
 }
 
 const PHASE_ORDER = new Map<Phase, number>(PHASES.map((p, i) => [p, i]));
@@ -39,6 +49,9 @@ function compareWithinPhase(a: Ability, b: Ability): number {
  * Phases with no abilities are omitted, so the printed list has no empty
  * headings. Reactions are interleaved into the phase they trigger in.
  *
+ * Within a phase, universal core and command abilities are split into their own
+ * list so they can be rendered below the army's own under a "Core" subheading.
+ *
  * Cards are filed by `sectionForTiming`, so an ability can be printed under a
  * different heading than its own phase while keeping its own label and colour.
  */
@@ -57,9 +70,20 @@ export function groupByPhase(abilities: readonly Ability[]): PhaseGroup[] {
 
   return [...bySection.entries()]
     .sort(([a], [b]) => (PHASE_ORDER.get(a) ?? 0) - (PHASE_ORDER.get(b) ?? 0))
-    .map(([phase, group]) => ({
-      phase,
-      label: PHASE_LABELS[phase],
-      abilities: group.sort(compareWithinPhase),
-    }));
+    .map(([phase, group]) => {
+      const own: Ability[] = [];
+      const core: Ability[] = [];
+
+      for (const ability of group) {
+        (isUniversalSource(ability.source.kind) ? core : own).push(ability);
+      }
+
+      return {
+        phase,
+        label: PHASE_LABELS[phase],
+        abilities: own.sort(compareWithinPhase),
+        coreAbilities: core.sort(compareWithinPhase),
+        total: own.length + core.length,
+      };
+    });
 }

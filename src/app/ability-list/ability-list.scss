@@ -127,6 +127,28 @@ code {
   opacity: 0.8;
 }
 
+/* Subheading separating the universal core abilities from the army's own.
+   Understated on purpose: it's a divider, not a phase. */
+.phase__subheading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 var(--space-2);
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  // Rule trailing off to the right, so it reads as a divider.
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+}
+
 .phase__cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -168,6 +190,14 @@ code {
     break-after: avoid;
     break-inside: avoid;
     font-size: 11pt;
+  }
+
+  .phase__subheading {
+    margin: 3mm 0 2mm;
+    // Don't leave the subheading stranded at the foot of a page.
+    break-after: avoid;
+    break-inside: avoid;
+    font-size: 8pt;
   }
 
   .phase__cards {

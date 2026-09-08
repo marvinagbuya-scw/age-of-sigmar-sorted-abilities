@@ -86,14 +86,25 @@
     <section class="phase">
       <h2 class="phase__heading" [attr.data-band]="bandForPhase(group.phase)">
         {{ group.label }}
-        <span class="phase__count">{{ group.abilities.length }}</span>
+        <span class="phase__count">{{ group.total }}</span>
       </h2>
 
-      <div class="phase__cards">
-        @for (ability of group.abilities; track ability.id) {
-          <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
-        }
-      </div>
+      @if (group.abilities.length > 0) {
+        <div class="phase__cards">
+          @for (ability of group.abilities; track ability.id) {
+            <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
+          }
+        </div>
+      }
+
+      @if (group.coreAbilities.length > 0) {
+        <h3 class="phase__subheading">Core</h3>
+        <div class="phase__cards">
+          @for (ability of group.coreAbilities; track ability.id) {
+            <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
+          }
+        </div>
+      }
     </section>
   }
 }

@@ -127,7 +127,7 @@
       "name": "Standard Bearer",
       "sample": false,
       "keywords": [],
-      "timing": { "phase": "passive", "section": "end-of-turn", "band": "end-of-turn" },
+      "timing": { "phase": "passive", "section": "end-of-turn", "band": "end" },
       "effect": "While this unit contains any standard bearers, add 1 to this unit's control score.",
       "source": { "kind": "core" }
     },

@@ -119,11 +119,66 @@ describe('groupByPhase', () => {
     const groups = groupByPhase([ability('a', { phase: 'passive', section: 'combat' })]);
     expect(groups.map((g) => g.phase)).toEqual(['combat']);
   });
+});
+
+describe('groupByPhase universal split', () => {
+  it('separates universal core and command abilities from the army own', () => {
+    const groups = groupByPhase([
+      ability('core-move', { phase: 'movement' }, { kind: 'core' }),
+      ability('faction-move', { phase: 'movement' }, { kind: 'faction' }),
+      ability('rally', { phase: 'movement' }, { kind: 'command' }),
+      ability('scroll', { phase: 'movement' }, { kind: 'warscroll', unitId: 'u' }),
+    ]);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0].abilities.map((a) => a.id)).toEqual(['faction-move', 'scroll']);
+    // Commands come from universal.json too, so they sit with core.
+    expect(groups[0].coreAbilities.map((a) => a.id)).toEqual(['rally', 'core-move']);
+  });
+
+  it('counts both lists in the phase total', () => {
+    const groups = groupByPhase([
+      ability('faction-a', { phase: 'hero' }, { kind: 'faction' }),
+      ability('core-a', { phase: 'hero' }, { kind: 'core' }),
+      ability('core-b', { phase: 'hero' }, { kind: 'core' }),
+    ]);
+
+    expect(groups[0].total).toBe(3);
+    expect(groups[0].abilities).toHaveLength(1);
+    expect(groups[0].coreAbilities).toHaveLength(2);
+  });
+
+  it('leaves coreAbilities empty when there are none', () => {
+    const groups = groupByPhase([ability('a', { phase: 'hero' }, { kind: 'faction' })]);
+    expect(groups[0].coreAbilities).toEqual([]);
+  });
+
+  it('still creates a phase section when only core abilities fall in it', () => {
+    // Turning core abilities on can introduce a phase the army has nothing in.
+    const groups = groupByPhase([ability('core-shoot', { phase: 'shooting' }, { kind: 'core' })]);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0].phase).toBe('shooting');
+    expect(groups[0].abilities).toEqual([]);
+    expect(groups[0].coreAbilities.map((a) => a.id)).toEqual(['core-shoot']);
+  });
+
+  it('sorts within each list independently', () => {
+    const groups = groupByPhase([
+      ability('core-enemy', { phase: 'hero', turn: 'enemy' }, { kind: 'core' }),
+      ability('core-your', { phase: 'hero', turn: 'your' }, { kind: 'core' }),
+      ability('own-enemy', { phase: 'hero', turn: 'enemy' }, { kind: 'faction' }),
+      ability('own-your', { phase: 'hero', turn: 'your' }, { kind: 'faction' }),
+    ]);
+
+    expect(groups[0].abilities.map((a) => a.id)).toEqual(['own-your', 'own-enemy']);
+    expect(groups[0].coreAbilities.map((a) => a.id)).toEqual(['core-your', 'core-enemy']);
+  });
 
   it('keeps every ability across all phases', () => {
     const phases: Phase[] = ['deployment', 'hero', 'hero', 'combat', 'passive'];
     const abilities = phases.map((phase, i) => ability(`a${i}`, { phase }));
-    const total = groupByPhase(abilities).reduce((n, g) => n + g.abilities.length, 0);
-    expect(total).toBe(phases.length);
+    const counted = groupByPhase(abilities).reduce((n, g) => n + g.total, 0);
+    expect(counted).toBe(phases.length);
   });
 });

@@ -200,7 +200,7 @@
     {
       "id": "skv-masterclan-connections",
       "name": "Masterclan Connections",
-      "flavour": "This Skaven’s obsequious nature has allowed them to curry favour with a member of the sorcerous Masterclan.",
+      "flavour": "This Skaven's obsequious nature has allowed them to curry favour with a member of the sorcerous Masterclan.",
       "sample": false,
       "keywords": [],
       "timing": {
@@ -265,7 +265,7 @@
       "keywords": [],
       "timing": { "phase": "combat", "turn": "any", "frequency": "once-per-battle" },
       "declare": "Pick a friendly non-HERO SKAVEN INFANTRY unit wholly within 13\" of this unit to be the target.",
-      "effect": "Inflict D3 mortal damage on the target. Then, add 1 to the Attacks characteristic of the target’s melee weapons for the rest of the turn.",
+      "effect": "Inflict D3 mortal damage on the target. Then, add 1 to the Attacks characteristic of the target's melee weapons for the rest of the turn.",
       "source": { "kind": "artefact-of-power" }
     }
   ],
@@ -329,7 +329,7 @@
           "timing": { "phase": "hero", "turn": "your" },
           "chantingValue": 4,
           "declare": "Pick a friendly SKAVEN PRIEST to chant this prayer, pick a visible friendly SKAVEN INFANTRY unit wholly within 13\" of them to be the target, then make a chanting roll of D6.",
-          "effect": "Add 1 to wound rolls for the target’s combat attacks until the start of your next turn. In addition, if the chanting roll was 8+, the target’s melee weapons have Crit (Mortal) until the start of your next turn.",
+          "effect": "Add 1 to wound rolls for the target's combat attacks until the start of your next turn. In addition, if the chanting roll was 8+, the target's melee weapons have Crit (Mortal) until the start of your next turn.",
           "source": { "kind": "prayer-lore", "loreId": "skv-noxious-prayers" }
         },
         {
@@ -409,7 +409,7 @@
     {
       "id": "skv-transplanted-brains",
       "name": "Transplanted Brains",
-      "flavour": "The grey matter of various ‘willing’ Moulder volunteers has been grafted onto these mutants’ brains, allowing them to change their personalities in an instant.",
+      "flavour": "The grey matter of various ‘willing' Moulder volunteers has been grafted onto these mutants' brains, allowing them to change their personalities in an instant.",
       "sample": false,
       "keywords": [],
       "timing": { "phase": "hero", "turn": "any" },
@@ -417,8 +417,8 @@
         "Pick 1 of the following brains. Its effects apply for the rest of the turn:",
         {
           "list": [
-            "Warpstone Addict’s Brain: Add 1 to hit rolls for this unit’s combat attacks. This unit has a maximum control score of 1.",
-            "Warlock Whelp’s Brain: Add 10 to this unit’s control score."
+            "Warpstone Addict's Brain: Add 1 to hit rolls for this unit's combat attacks. This unit has a maximum control score of 1.",
+            "Warlock Whelp's Brain: Add 10 to this unit's control score."
           ]
         }
       ],
@@ -446,5 +446,207 @@
     }
   ],
 
-  "units": []
+  "units": [
+    {
+      "id": "skv-clawlord-on-gnaw-beast",
+      "name": "Clawlord on Gnaw-Beast",
+      "keywords": ["HERO", "CAVALRY", "SKAVEN", "CHAOS", "VERMINUS"],
+      "abilities": [
+        {
+          "id": "skv-cornered-rat",
+          "name": "Cornered Rat",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "combat" },
+          "effect": "While this unit is damaged, add 3 to the Attacks characteristic of its Warpforged Halberd.",
+          "usedBy": "Clawlord on Gnaw-Beast",
+          "source": { "kind": "warscroll", "unitId": "skv-clawlord-on-gnaw-beast" }
+        },
+        {
+          "id": "skv-cruel-commander",
+          "name": "Cruel Commander",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "hero", "turn": "your" },
+          "declare": "Pick a friendly non-HERO VERMINUS INFANTRY unit wholly within 13\" of this unit to be the target.",
+          "effect": "Inflict 1 mortal damage on the target. Then, add 5 to the target's control score until the start of your next turn.",
+          "usedBy": "Clawlord on Gnaw-Beast",
+          "source": { "kind": "warscroll", "unitId": "skv-clawlord-on-gnaw-beast" }
+        }
+      ]
+    },
+    {
+      "id": "skv-deathmaster",
+      "name": "Deathmaster",
+      "keywords": ["HERO", "INFANTRY", "WARD (6+)", "SKAVEN", "CHAOS", "ESHIN"],
+      "abilities": [
+        {
+          "id": "skv-shadowy-killers",
+          "name": "Shadowy Killers",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
+          "effect": "If the unmodified hit roll for an attack that targets this unit is 1-4, the attack fails and the attack sequence ends.",
+          "usedBy": "Deathmaster",
+          "source": { "kind": "warscroll", "unitId": "skv-deathmaster" }
+        },
+        {
+          "id": "skv-running-death",
+          "name": "Running Death",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "movement" },
+          "effect": "While friendly ESHIN units are wholly within 13\" of this unit, they can use SHOOT and/or CHARGE abilities even if they used a RUN ability in the same turn.",
+          "usedBy": "Deathmaster",
+          "source": { "kind": "warscroll", "unitId": "skv-deathmaster" }
+        }
+      ]
+    },
+    {
+      "id": "skv-grey-seer",
+      "name": "Grey Seer",
+      "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "SKAVEN", "CHAOS", "ESHIN"],
+      "abilities": [
+        {
+          "id": "skv-warpstone-shards",
+          "name": "Warpstone Shards",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "hero", "turn": "your" },
+          "effect": [
+            "The next time you make a casting roll for this unit this phase, roll 3D6 instead of 2D6. This roll cannot be re-rolled or modified.",
+            "If the casting roll is 13, the spell is successfully cast and cannot be unbound. After the effect of that spell has been resolved, inflict D3 mortal damage on this unit.",
+            "If the casting roll is not 13, remove 1 dice of your choice from the casting roll and use the remaining 2D6 as the casting roll."
+          ],
+          "usedBy": "Grey Seer",
+          "source": { "kind": "warscroll", "unitId": "skv-grey-seer" }
+        }
+      ]
+    },
+    {
+      "id": "skv-clanrats",
+      "name": "Clanrats",
+      "keywords": [
+        "INFANTRY",
+        "CHAMPION",
+        "MUSICIAN (1/20)",
+        "STANDARD BEARER (1/20)",
+        "CHAOS",
+        "SKAVEN",
+        "VERMINUS"
+      ],
+      "abilities": [
+        {
+          "id": "skv-seething-swarm",
+          "name": "Seething Swarm",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "end-of-turn", "timing": "any" },
+          "effect": "You can return D3 slain models to this unit.",
+          "usedBy": "Clanrats",
+          "source": { "kind": "warscroll", "unitId": "skv-clanrats" }
+        }
+      ]
+    },
+    {
+      "id": "skv-stormvermin",
+      "name": "Stormvermin",
+      "keywords": [
+        "INFANTRY",
+        "CHAMPION",
+        "MUSICIAN (1/10)",
+        "STANDARD BEARER (1/10)",
+        "CHAOS",
+        "SKAVEN",
+        "VERMINUS"
+      ],
+      "abilities": [
+        {
+          "id": "skv-elite-bodyguard",
+          "name": "Elite Bodyguard",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "reaction" },
+          "effect": "Friendly SKAVEN INFANTRY HEROES have WARD (5+) while they are within this unit's combat range.",
+          "usedBy": "Stormvermin",
+          "source": { "kind": "warscroll", "unitId": "skv-stormvermin" }
+        }
+      ]
+    },
+    {
+      "id": "skv-stormfiends",
+      "name": "Stormfiends",
+      "keywords": ["INFANTRY", "CHAOS", "SKAVEN", "MOULDER"],
+      "abilities": [
+        {
+          "id": "skv-grinderfist-tunnellers",
+          "name": "Grinderfist Tunnellers",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "movement", "turn": "any", "frequency": "once-per-turn-army" },
+          "declare": "Pick this unit if it is in the tunnels below and includes any models armed with Grinderfists.",
+          "effect": "Set up this unit anywhere on the battlefield more than 9\" from all enemy units.",
+          "usedBy": "Stormfiends",
+          "source": { "kind": "warscroll", "unitId": "skv-stormfiends" }
+        },
+        {
+          "id": "skv-shock-gauntlets",
+          "name": "Shock Gauntlets",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "combat", "band": "combat" },
+          "effect": "Each time an attack made with this unit's Shock Gauntlets scores a critical hit, that attack scores D6 hits on the target unit instead of 1. Make a wound roll for each hit.",
+          "usedBy": "Stormfiends",
+          "source": { "kind": "warscroll", "unitId": "skv-stormfiends" }
+        }
+      ]
+    },
+    {
+      "id": "skv-rat-ogors",
+      "name": "Rat Ogors",
+      "keywords": ["INFANTRY", "CHAOS", "SKAVEN", "MOULDER"],
+      "abilities": [
+        {
+          "id": "skv-unleashed-warp-fury",
+          "name": "Unleashed Warp-Fury",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "combat", "turn": "any" },
+          "effect": "Inflict D3 mortal damage on this unit. Then, add 1 to the Attacks characteristic of this unit's melee weapons for the rest of the turn.",
+          "usedBy": "Rat Ogors",
+          "source": { "kind": "warscroll", "unitId": "skv-rat-ogors" }
+        }
+      ]
+    },
+    {
+      "id": "skv-warp-lightning-cannon",
+      "name": "Warp Lightning Cannon",
+      "keywords": ["WAR MACHINE", "CHAOS", "SKAVEN", "SKYRE"],
+      "abilities": [
+        {
+          "id": "skv-more-more-warp-lightning",
+          "name": "More-More Warp Lightning!",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "shooting", "turn": "your", "frequency": "once-per-turn-army" },
+          "effect": [
+            "If this unit is within the combat range of a friendly SKRYRE HERO, add 6 to the Attacks characteristic of this unit's Warp Lightning Blast for the rest of the turn.",
+            "However, for each unmodified hit roll of 1 for an attack made with this unit's Warp Lightning Blast, inflict D3 mortal damage on this unit after the SHOOT ability has been resolved."
+          ],
+          "usedBy": "Warp Lightning Cannon",
+          "source": { "kind": "warscroll", "unitId": "skv-warp-lightning-cannon" }
+        },
+        {
+          "id": "skv-warp-lightning-blast",
+          "name": "Warp Lightning Blast",
+          "sample": false,
+          "keywords": [],
+          "timing": { "phase": "passive", "section": "shooting", "band": "shooting" },
+          "effect": "Each attack made with this weapon in a single phase must target the same enemy unit. Each hit inflicts 1 mortal damage on the target and the attack sequence ends.",
+          "usedBy": "Warp Lightning Cannon",
+          "source": { "kind": "warscroll", "unitId": "skv-warp-lightning-cannon" }
+        }
+      ]
+    }
+  ]
 }

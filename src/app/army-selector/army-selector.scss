@@ -1,6 +1,5 @@
 :host {
   display: block;
-  margin-bottom: var(--space-6);
 }
 
 .panel {
@@ -100,7 +99,6 @@
 
 .field__control {
   width: 100%;
-  max-width: 22rem;
   padding: var(--space-2);
   border: 1px solid var(--rule);
   border-radius: var(--card-radius);
@@ -132,8 +130,10 @@
 }
 
 .group__list {
+  // Single column in the sidebar, but still wraps into more if the panel is
+  // given room (e.g. stacked full-width on a narrow screen).
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
   gap: var(--space-1) var(--space-3);
   margin: 0;
   padding: 0;

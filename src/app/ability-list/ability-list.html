@@ -33,78 +33,84 @@
   </div>
 </header>
 
-<app-army-selector />
+<div class="layout">
+  <aside class="layout__sidebar no-print">
+    <app-army-selector />
+  </aside>
 
-<!-- Printed page needs its own heading, since the screen header is hidden. -->
-<h1 class="print-heading">
-  {{ factionName() }}
-  @if (filtersActive()) {
-    <span class="print-heading__note">army list</span>
-  }
-</h1>
+  <main class="layout__main">
+    <!-- Printed page needs its own heading, since the screen header is hidden. -->
+    <h1 class="print-heading">
+      {{ factionName() }}
+      @if (filtersActive()) {
+        <span class="print-heading__note">army list</span>
+      }
+    </h1>
 
-@if (universalError()) {
-  <p class="banner no-print">
-    <strong>Could not load the universal abilities.</strong>
-    Check that <code>public/data/universal.json</code> exists and is valid JSON. The faction's own
-    abilities are unaffected.
-  </p>
-}
-
-@if (hasSampleData()) {
-  <p class="banner no-print">
-    <strong>This list contains sample data.</strong>
-    Abilities marked as samples were written to demonstrate the layout and are not accurate rules
-    text. Edit
-    <code>public/data/{{ factionId() }}.json</code>
-    to replace them.
-  </p>
-}
-
-@if (isLoading()) {
-  <p class="status">Loading abilities…</p>
-} @else if (error()) {
-  <p class="status status--error">
-    Could not load ability data. Check that
-    <code>public/data/{{ factionId() }}.json</code> exists and is valid JSON.
-  </p>
-} @else if (isEmpty()) {
-  <p class="status">
-    No abilities yet for this faction. Add them to
-    <code>public/data/{{ factionId() }}.json</code>.
-  </p>
-} @else if (groups().length === 0) {
-  <p class="status">
-    @if (filtersActive()) {
-      Nothing matches the current army list.
-    } @else {
-      Pick your army above to see its abilities.
+    @if (universalError()) {
+      <p class="banner no-print">
+        <strong>Could not load the universal abilities.</strong>
+        Check that <code>public/data/universal.json</code> exists and is valid JSON. The faction's
+        own abilities are unaffected.
+      </p>
     }
-  </p>
-} @else {
-  @for (group of groups(); track group.phase) {
-    <section class="phase">
-      <h2 class="phase__heading" [attr.data-band]="bandForPhase(group.phase)">
-        {{ group.label }}
-        <span class="phase__count">{{ group.total }}</span>
-      </h2>
 
-      @if (group.abilities.length > 0) {
-        <div class="phase__cards">
-          @for (ability of group.abilities; track ability.id) {
-            <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
-          }
-        </div>
-      }
+    @if (hasSampleData()) {
+      <p class="banner no-print">
+        <strong>This list contains sample data.</strong>
+        Abilities marked as samples were written to demonstrate the layout and are not accurate
+        rules text. Edit
+        <code>public/data/{{ factionId() }}.json</code>
+        to replace them.
+      </p>
+    }
 
-      @if (group.coreAbilities.length > 0) {
-        <h3 class="phase__subheading">Core</h3>
-        <div class="phase__cards">
-          @for (ability of group.coreAbilities; track ability.id) {
-            <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
+    @if (isLoading()) {
+      <p class="status">Loading abilities…</p>
+    } @else if (error()) {
+      <p class="status status--error">
+        Could not load ability data. Check that
+        <code>public/data/{{ factionId() }}.json</code> exists and is valid JSON.
+      </p>
+    } @else if (isEmpty()) {
+      <p class="status">
+        No abilities yet for this faction. Add them to
+        <code>public/data/{{ factionId() }}.json</code>.
+      </p>
+    } @else if (groups().length === 0) {
+      <p class="status">
+        @if (filtersActive()) {
+          Nothing matches the current army list.
+        } @else {
+          Pick your army in the sidebar to see its abilities.
+        }
+      </p>
+    } @else {
+      @for (group of groups(); track group.phase) {
+        <section class="phase">
+          <h2 class="phase__heading" [attr.data-band]="bandForPhase(group.phase)">
+            {{ group.label }}
+            <span class="phase__count">{{ group.total }}</span>
+          </h2>
+
+          @if (group.abilities.length > 0) {
+            <div class="phase__cards">
+              @for (ability of group.abilities; track ability.id) {
+                <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
+              }
+            </div>
           }
-        </div>
+
+          @if (group.coreAbilities.length > 0) {
+            <h3 class="phase__subheading">Core</h3>
+            <div class="phase__cards">
+              @for (ability of group.coreAbilities; track ability.id) {
+                <app-ability-card [ability]="ability" [showFlavour]="showFlavour()" />
+              }
+            </div>
+          }
+        </section>
       }
-    </section>
-  }
-}
+    }
+  </main>
+</div>

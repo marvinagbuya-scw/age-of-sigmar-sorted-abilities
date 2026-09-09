@@ -2,9 +2,50 @@
 
 :host {
   display: block;
-  max-width: 1200px;
+  // Wider than a single column, since the sidebar now takes a fixed slice.
+  max-width: 1500px;
   margin: 0 auto;
   padding: var(--space-6) var(--space-4);
+}
+
+/* --- two-column layout -------------------------------------------------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width, 320px) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.layout__sidebar {
+  // Stays put while the list scrolls, so units can be ticked while reading it.
+  position: sticky;
+  top: var(--space-4);
+  // Its own scrollbar rather than growing past the viewport: the unit list gets
+  // long once a faction is filled in.
+  max-height: calc(100vh - var(--space-6) * 2);
+  overflow-y: auto;
+  // Room for the scrollbar so it doesn't sit on top of the checkboxes.
+  padding-right: var(--space-1);
+}
+
+.layout__main {
+  // Without this a wide card can force the grid column past its share.
+  min-width: 0;
+}
+
+// Below this the sidebar has no room to sit alongside, so stack it on top.
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .layout__sidebar {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+  }
 }
 
 .page-header {
@@ -164,6 +205,13 @@ code {
   :host {
     max-width: none;
     padding: 0;
+  }
+
+  // The sidebar is hidden on paper, so drop the grid entirely rather than
+  // leaving an empty column's worth of gap down the left edge.
+  .layout {
+    display: block;
+    gap: 0;
   }
 
   .print-heading {

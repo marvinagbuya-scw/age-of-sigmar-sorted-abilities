@@ -165,7 +165,6 @@
 .ability-card__keyword {
   padding: 0.05rem 0.4rem;
   border: 1px solid var(--rule);
-  border-radius: 999px;
   background: var(--surface);
   font-size: 0.68rem;
   font-weight: 600;
@@ -186,10 +185,43 @@
 
   &chanting {
     color: white;
+    background: unset;
+    position: relative;
+    z-index: 1;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0.2rem;
+      background: rgb(80, 80, 80);
+      transform: rotate(45deg);
+      z-index: -1;
+      border-style: outset;
+    }
   }
 
   &casting {
     color: white;
+    position: relative;
+    z-index: 1;
+
+    &::before,
+    &::after {
+      content: '';
+      border-radius: 99px;
+      z-index: -1;
+      position: absolute;
+    }
+
+    &::before {
+      inset: -0.2rem;
+      background: conic-gradient(rgb(255, 0, 0), orange, yellow, green, blue, indigo, violet, red);
+      border: 1px outset;
+    }
+
+    &::after {
+      inset: 0;
+      background: hsl(0, 0%, 18%);
+    }
   }
 }
 

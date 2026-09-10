@@ -14,6 +14,7 @@ import {
   pruneArmyList,
   type Ability,
   type ArmyList,
+  type Unit,
 } from '../models';
 import { AbilityDataService } from './ability-data.service';
 import { readJson, resolveStorage, writeJson } from './local-storage';
@@ -102,6 +103,17 @@ export class SelectionService {
   filter(abilities: readonly Ability[]): readonly Ability[] {
     const army = this.army();
     return abilities.filter((ability) => isUnlocked(ability.source, ability.id, army));
+  }
+
+  /**
+   * Narrows a list of warscrolls to the units actually in the army list.
+   *
+   * Unlike `filter` there is no always-applies case: a warscroll is only
+   * relevant if you're fielding it, so nothing selected means no stat blocks.
+   */
+  filterUnits(units: readonly Unit[]): readonly Unit[] {
+    const { unitIds } = this.army();
+    return units.filter((unit) => unitIds.has(unit.id));
   }
 
   // --- mutations -----------------------------------------------------------

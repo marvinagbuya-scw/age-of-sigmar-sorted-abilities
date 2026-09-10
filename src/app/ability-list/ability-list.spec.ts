@@ -7,7 +7,14 @@ import { provideRouter } from '@angular/router';
 import { AbilityList } from './ability-list';
 import { AbilityDataService } from '../core/services/ability-data.service';
 import { PreferencesService } from '../core/services/preferences.service';
-import { FACTIONS, type Ability, type Faction } from '../core/models';
+import { SelectionService } from '../core/services/selection.service';
+import {
+  FACTIONS,
+  hasWarscrollProfile,
+  type Ability,
+  type Faction,
+  type Unit,
+} from '../core/models';
 
 const flavoured: Ability = {
   id: 'skv-lurking',
@@ -28,6 +35,23 @@ const coreAbility: Ability = {
   source: { kind: 'core' },
 };
 
+const unit: Unit = {
+  id: 'skv-grey-seer',
+  name: 'Grey Seer',
+  keywords: ['HERO', 'WIZARD (1)'],
+  stats: { health: 5, move: 6, save: 6, control: 2, ward: 6 },
+  attacks: [
+    {
+      id: 'skv-warpstone-staff',
+      name: 'Warpstone Staff',
+      abilities: ['Crit (Mortal)'],
+      type: 'melee',
+      characteristics: { attacks: 3, hit: 4, wound: 3, rend: 1, damage: 2 },
+    },
+  ],
+  abilities: [],
+};
+
 const faction: Faction = {
   id: 'skaven',
   name: 'Skaven',
@@ -39,7 +63,7 @@ const faction: Faction = {
   prayerLores: [],
   manifestationLores: [],
   generalsHandbook: [],
-  units: [],
+  units: [unit],
 };
 
 /**
@@ -49,6 +73,7 @@ const faction: Faction = {
 function stubDataService(includeUniversal = signal(true)) {
   const value = signal<Faction | undefined>(faction);
   const universalAbilities = computed(() => (includeUniversal() ? [coreAbility] : []));
+  const units = signal<readonly Unit[]>(faction.units).asReadonly();
   return {
     factions: FACTIONS,
     factionId: signal('skaven').asReadonly(),
@@ -63,6 +88,8 @@ function stubDataService(includeUniversal = signal(true)) {
     abilities: computed(() => [flavoured, ...universalAbilities()]),
     hasSampleData: signal(false).asReadonly(),
     isEmpty: signal(false).asReadonly(),
+    units,
+    hasUnitProfiles: computed(() => units().some(hasWarscrollProfile)),
     load: () => undefined,
   };
 }
@@ -226,5 +253,85 @@ describe('AbilityList universal abilities toggle', () => {
 
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('.phase__subheading')).toBeNull();
+  });
+});
+
+describe('AbilityList unit stats toggle', () => {
+  function render() {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: AbilityDataService, useValue: stubDataService() },
+      ],
+    });
+
+    const fixture = TestBed.createComponent(AbilityList);
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  /** Stat blocks only cover units you're fielding, so field one. */
+  function selectUnit(fixture: ReturnType<typeof render>) {
+    TestBed.inject(SelectionService).toggle('unitIds', unit.id, true);
+    fixture.detectChanges();
+  }
+
+  afterEach(() => {
+    TestBed.inject(PreferencesService).setShowUnits(false);
+    TestBed.inject(SelectionService).clear();
+  });
+
+  it('offers a unit stats toggle, unchecked by default', () => {
+    const el = render().nativeElement as HTMLElement;
+    const toggle = el.querySelector<HTMLInputElement>('#toggle-units');
+    expect(toggle).not.toBeNull();
+    expect(toggle?.checked).toBe(false);
+  });
+
+  it('hides the stat blocks until the toggle is on', () => {
+    const fixture = render();
+    selectUnit(fixture);
+    expect((fixture.nativeElement as HTMLElement).querySelector('app-unit-card')).toBeNull();
+  });
+
+  it('appends the stat blocks under a "Unit" heading once switched on', () => {
+    const fixture = render();
+    selectUnit(fixture);
+
+    TestBed.inject(PreferencesService).setShowUnits(true);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelectorAll('app-unit-card').length).toBe(1);
+
+    const headings = [...el.querySelectorAll('.phase__heading')].map(
+      (n) => n.textContent?.trim().split(/\s+/)[0],
+    );
+    // Last section on the page: stat blocks are reference material, so they sit
+    // below every phase.
+    expect(headings.at(-1)).toBe('Unit');
+  });
+
+  it('shows nothing when the toggle is on but no unit is selected', () => {
+    const fixture = render();
+    TestBed.inject(PreferencesService).setShowUnits(true);
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('app-unit-card')).toBeNull();
+  });
+
+  it('updates the preference when the checkbox is clicked', () => {
+    const fixture = render();
+    const toggle = (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>(
+      '#toggle-units',
+    );
+
+    toggle!.checked = true;
+    toggle!.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(TestBed.inject(PreferencesService).showUnits()).toBe(true);
   });
 });

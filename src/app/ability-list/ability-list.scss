@@ -199,6 +199,25 @@ code {
   align-items: start;
 }
 
+/* --- unit stat blocks ---------------------------------------------------- */
+
+/* Fixed two columns rather than the ability grid's `auto-fill`: a stat block is
+   a wide table, so it needs the room, and pairing them keeps the section from
+   running down the page as a single narrow ribbon. */
+.unit-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  align-items: start;
+}
+
+// A weapon table won't fit two-up on a narrow screen.
+@media (max-width: 700px) {
+  .unit-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* --- print --------------------------------------------------------------- */
 
 @media print {
@@ -251,6 +270,11 @@ code {
   .phase__cards {
     // Two columns fit an A4 portrait page comfortably at this font size.
     grid-template-columns: repeat(2, 1fr);
+    gap: 4mm;
+  }
+
+  .unit-cards {
+    // Already two columns on screen; just tighten the gutter for paper.
     gap: 4mm;
   }
 }

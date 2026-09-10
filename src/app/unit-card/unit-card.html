@@ -1,0 +1,67 @@
+<header class="unit-card__header">
+  <h3 class="unit-card__name">{{ unit().name }}</h3>
+</header>
+
+<div class="unit-card__body">
+  @if (stats(); as stats) {
+    <dl class="unit-card__stats">
+      @for (stat of stats; track stat.key) {
+        <div class="unit-card__stat">
+          <dt class="unit-card__stat-label">{{ stat.label }}</dt>
+          <dd class="unit-card__stat-value">{{ stat.value }}</dd>
+        </div>
+      }
+    </dl>
+  }
+
+  @for (group of weaponGroups(); track group.type) {
+    <h4 class="unit-card__weapons-heading">{{ group.label }}</h4>
+    <table class="unit-card__weapons">
+      <thead>
+        <tr>
+          <th scope="col" class="unit-card__weapon-name-col">Name</th>
+          @if (group.showRange) {
+            <th scope="col" abbr="Range">Rng</th>
+          }
+          <th scope="col" abbr="Attacks">Atk</th>
+          <th scope="col" abbr="Hit">Hit</th>
+          <th scope="col" abbr="Wound">Wnd</th>
+          <th scope="col" abbr="Rend">Rnd</th>
+          <th scope="col" abbr="Damage">Dmg</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (weapon of group.weapons; track weapon.id) {
+          <tr>
+            <th scope="row" class="unit-card__weapon-name">
+              {{ weapon.name }}
+              @if (weapon.abilities.length > 0) {
+                <span class="unit-card__weapon-abilities">{{ weapon.abilities.join(', ') }}</span>
+              }
+            </th>
+            @if (group.showRange) {
+              <td>{{ weapon.range }}</td>
+            }
+            <td>{{ weapon.attacks }}</td>
+            <td>{{ weapon.hit }}</td>
+            <td>{{ weapon.wound }}</td>
+            <td>{{ weapon.rend }}</td>
+            <td>{{ weapon.damage }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  @if (isIncomplete()) {
+    <p class="unit-card__missing">Stats and weapons not transcribed yet.</p>
+  }
+</div>
+
+@if (unit().keywords.length > 0) {
+  <footer class="unit-card__keywords">
+    @for (keyword of unit().keywords; track keyword) {
+      <span class="unit-card__keyword">{{ keyword }}</span>
+    }
+  </footer>
+}

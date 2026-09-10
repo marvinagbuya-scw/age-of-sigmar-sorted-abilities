@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { SOURCE_KINDS } from '../src/app/core/models/ability.ts';
 import { FACTIONS, isKnownFaction } from '../src/app/core/models/factions.ts';
 import { UNIVERSAL_ID, UNIVERSAL_SECTIONS } from '../src/app/core/models/universal.ts';
+import { ATTACK_TYPES } from '../src/app/core/models/warscroll.ts';
 import {
   BANDS,
   FREQUENCIES,
@@ -57,6 +58,10 @@ function requireString(
 
 /** Ability ids seen so far, mapped to where they were first declared. */
 const seenAbilityIds = new Map<string, string>();
+
+/** Weapon profile ids seen so far. Kept in the same namespace as abilities, so
+ * a weapon can't reuse an ability's id. */
+const seenWeaponIds = new Map<string, string>();
 
 /** Ability names seen so far, keyed by owner so the same name can appear on
  * different warscrolls (e.g. every monster has its own "Battle Damaged"). */
@@ -543,6 +548,125 @@ function validateAbilityList(raw: unknown, path: string, expected: ExpectedSourc
   raw.forEach((ability, i) => validateAbility(ability, `${path}[${i}]`, expected));
 }
 
+/**
+ * A characteristic value: a plain number, or a string such as `3+`, `D6` or `*`.
+ * The card mixes the two, so both are allowed everywhere and the app formats
+ * numbers on the way out.
+ */
+function validateStatValue(
+  obj: Record<string, unknown>,
+  key: string,
+  path: string,
+  required: boolean,
+): void {
+  const value = obj[key];
+  if (value === undefined) {
+    if (required) {
+      fail(path, `"${key}" is required`);
+    }
+    return;
+  }
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) {
+      fail(path, `"${key}" must be a finite number`);
+    }
+    return;
+  }
+  if (typeof value !== 'string' || value.trim() === '') {
+    fail(path, `"${key}" must be a number, or a non-empty string like "3+", "D6" or "*"`);
+  }
+}
+
+/** The unit's profile box. Optional as a whole, but complete once present. */
+function validateUnitStats(raw: unknown, path: string): void {
+  if (!isPlainObject(raw)) {
+    fail(path, '"stats" must be an object');
+    return;
+  }
+
+  const required = ['health', 'move', 'save', 'control'];
+  // `ward` is the only optional one: most units simply don't have a ward.
+  const allowed = [...required, 'ward'];
+
+  const unknown = Object.keys(raw).filter((k) => !allowed.includes(k));
+  if (unknown.length > 0) {
+    fail(path, `unexpected key(s) in "stats": ${unknown.join(', ')}`);
+  }
+
+  for (const key of required) {
+    validateStatValue(raw, key, path, true);
+  }
+  validateStatValue(raw, 'ward', path, false);
+}
+
+/** One weapon profile. */
+function validateAttack(raw: unknown, path: string): void {
+  if (!isPlainObject(raw)) {
+    fail(path, 'attack must be an object');
+    return;
+  }
+
+  const allowed = ['id', 'name', 'abilities', 'type', 'characteristics'];
+  const unknown = Object.keys(raw).filter((k) => !allowed.includes(k));
+  if (unknown.length > 0) {
+    fail(path, `unexpected key(s): ${unknown.join(', ')}`);
+  }
+
+  const id = requireString(raw, 'id', path);
+  requireString(raw, 'name', path);
+
+  // Ids share the ability id namespace: both end up as `track` keys, and a
+  // clash makes it impossible to point at one profile unambiguously.
+  if (id) {
+    const previous = seenWeaponIds.get(id) ?? seenAbilityIds.get(id);
+    if (previous) {
+      fail(path, `duplicate id "${id}" (already declared at ${previous})`);
+    } else {
+      seenWeaponIds.set(id, path);
+    }
+  }
+
+  const type = raw['type'];
+  if (typeof type !== 'string' || !(ATTACK_TYPES as readonly string[]).includes(type)) {
+    fail(path, `"type" "${String(type)}" is not one of: ${ATTACK_TYPES.join(', ')}`);
+  }
+
+  // Weapon abilities are plain labels ("Crit (Mortal)"), not full abilities:
+  // they modify this profile and have no timing of their own.
+  const abilities = raw['abilities'];
+  if (!Array.isArray(abilities) || abilities.some((a) => typeof a !== 'string')) {
+    fail(path, '"abilities" must be an array of strings (use [] if there are none)');
+  }
+
+  const characteristics = raw['characteristics'];
+  if (!isPlainObject(characteristics)) {
+    fail(path, '"characteristics" must be an object');
+    return;
+  }
+
+  const charsPath = `${path}.characteristics`;
+  const allowedChars = ['attacks', 'hit', 'wound', 'rend', 'damage', 'range'];
+  const unknownChars = Object.keys(characteristics).filter((k) => !allowedChars.includes(k));
+  if (unknownChars.length > 0) {
+    fail(charsPath, `unexpected key(s) in "characteristics": ${unknownChars.join(', ')}`);
+  }
+
+  for (const key of ['attacks', 'hit', 'wound', 'damage']) {
+    validateStatValue(characteristics, key, charsPath, true);
+  }
+  // Rend is omitted rather than written as 0 on most profiles, and only ranged
+  // weapons have a range.
+  validateStatValue(characteristics, 'rend', charsPath, false);
+  validateStatValue(characteristics, 'range', charsPath, false);
+
+  if (type === 'ranged' && characteristics['range'] === undefined) {
+    fail(charsPath, 'a ranged weapon needs a "range"');
+  }
+  if (type === 'melee' && characteristics['range'] !== undefined) {
+    warn(charsPath, 'a melee weapon has no range, so "range" will not be shown');
+  }
+}
+
 /** Validates a section of named groups that each own a list of abilities. */
 function validateGroups(
   raw: unknown,
@@ -648,6 +772,32 @@ function validateFaction(raw: unknown): void {
         fail(unitPath, '"keywords" must be an array of strings');
       }
 
+      // Reject stray keys here (unlike the ability sections, which predate
+      // this), so `"stat"` or `"weapons"` can't be silently ignored and leave
+      // the card looking like the data was never entered.
+      const allowedUnitKeys = ['id', 'name', 'keywords', 'stats', 'attacks', 'abilities'];
+      const strayUnitKeys = Object.keys(unit).filter((k) => !allowedUnitKeys.includes(k));
+      if (strayUnitKeys.length > 0) {
+        fail(unitPath, `unexpected key(s): ${strayUnitKeys.join(', ')}`);
+      }
+
+      // Both halves of the profile are optional: abilities were transcribed
+      // first, so a unit may have those long before its characteristics.
+      if (unit['stats'] !== undefined) {
+        validateUnitStats(unit['stats'], `${unitPath}.stats`);
+      }
+
+      const attacks = unit['attacks'];
+      if (attacks !== undefined) {
+        if (!Array.isArray(attacks)) {
+          fail(`${unitPath}.attacks`, 'must be an array of weapon profiles');
+        } else if (attacks.length === 0) {
+          warn(`${unitPath}.attacks`, 'is empty — omit the key rather than writing []');
+        } else {
+          attacks.forEach((attack, a) => validateAttack(attack, `${unitPath}.attacks[${a}]`));
+        }
+      }
+
       validateAbilityList(unit['abilities'], `${unitPath}.abilities`, {
         kind: 'warscroll',
         refKey: 'unitId',
@@ -717,6 +867,7 @@ for (const file of files) {
   seenAbilityIds.clear();
   seenAbilityNames.clear();
   seenEffects.clear();
+  seenWeaponIds.clear();
 
   if (isUniversal) {
     validateUniversal(parsed);

@@ -144,7 +144,7 @@ The panel is hidden when printing.
 
 ## Display options
 
-Two checkboxes sit next to the Print button.
+Three checkboxes sit next to the Print button.
 
 **Core abilities** merges in the universal abilities from the core rules — Normal
 Move, Run, Charge, Fight, Rally and so on — which every army has regardless of
@@ -161,8 +161,15 @@ The flavour line is removed from the DOM rather than hidden with CSS, so it cost
 nothing on paper and isn't read out by screen readers. Each toggle only appears
 when it would actually do something.
 
-Both are stored in `localStorage`, deliberately **not** in the URL: they describe
-how you want the sheet to look, not what's in the army, so a shared link
+**Unit stats** appends the warscroll stat blocks — the profile box and weapon
+tables — below every phase, under a `Unit` heading in a two-column grid. Off by
+default: the sheet is about the turn sequence, and the stat blocks are a bulky
+extra you opt into when you want the whole warscroll on paper. Only units in the
+army list get one, and the toggle is hidden for a faction with no profiles
+transcribed yet.
+
+All three are stored in `localStorage`, deliberately **not** in the URL: they
+describe how you want the sheet to look, not what's in the army, so a shared link
 shouldn't impose them on whoever opens it.
 
 ## Universal abilities
@@ -248,7 +255,9 @@ declare, effect, usedBy, source
 
 and nested objects follow suit — `timing` as `phase, section, band, turn,
 reaction, frequency`, `source` as `kind` then its id, units as `id, name,
-keywords, abilities`.
+keywords, stats, attacks, abilities`, a unit's `stats` as `health, move, save,
+control, ward`, and a weapon as `id, name, abilities, type, characteristics`
+with `range, attacks, hit, wound, rend, damage` inside.
 
 Both orders are defined at the top of `eslint.config.mjs`. Adding a new field
 there is all it takes to bring it under the rule; unlisted keys are left
@@ -279,7 +288,7 @@ reading.
   "prayerLores": [], // { id, name, abilities: [] } — chosen separately from spell lores
   "manifestationLores": [], // { id, name, abilities: [] }
   "generalsHandbook": [], // always apply, e.g. battle tactics, grand strategies
-  "units": [], // { id, name, keywords: [], abilities: [] }
+  "units": [], // { id, name, keywords: [], stats?, attacks?, abilities: [] }
 }
 ```
 
@@ -386,11 +395,45 @@ silently breaking army filtering later.
 
 ### Adding a warscroll
 
+`stats` and `attacks` are optional: abilities were transcribed first, so a unit
+may have its rules long before its characteristics. Only the profile box and
+weapon tables go here — the unit's abilities stay in `abilities` and are rendered
+in their phase sections, never on the stat block.
+
+Characteristics are authored as **plain numbers wherever one exists**, and the UI
+adds the presentation: `"move": 12` renders as `12"` and `"save": 3` as `3+`.
+Write a string when the value isn't a number — `"D6"`, `"2D3"`, `"*"`, or an
+already-suffixed `"3+"` — and it passes through untouched.
+
 ```jsonc
 {
   "id": "sbgl-vampire-lord",
   "name": "Vampire Lord",
   "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "VAMPIRE"],
+  "stats": {
+    "health": 7, // required
+    "move": 6, // required; inches
+    "save": 4, // required; the roll needed, so 4 means 4+
+    "control": 2, // required
+    "ward": 6, // optional; most units have none, and the box omits it
+  },
+  "attacks": [
+    // omit the key entirely rather than writing []
+    {
+      "id": "sbgl-vl-shroudsword", // unique across the file, like an ability id
+      "name": "Shroudsword",
+      "abilities": ["Crit (Mortal)"], // plain labels, not abilities; [] if none
+      "type": "melee", // "melee" | "ranged"
+      "characteristics": {
+        "range": 12, // ranged only — required there, rejected on melee
+        "attacks": 4,
+        "hit": 3, // 3 renders as 3+
+        "wound": 3,
+        "rend": 1, // optional; omitted or 0 renders as a dash
+        "damage": 2,
+      },
+    },
+  ],
   "abilities": [
     {
       "id": "sbgl-vl-supernatural-strength",
@@ -405,6 +448,11 @@ silently breaking army filtering later.
 }
 ```
 
+Stat blocks are off by default. The **Unit stats** toggle in the header appends
+them below every phase, under a `Unit` heading, two to a row — and only for the
+units actually in the army list, since a warscroll you aren't fielding is just
+noise. The toggle is hidden for a faction with no profiles transcribed yet.
+
 ## Project layout
 
 ```
@@ -413,9 +461,10 @@ eslint.config.mjs            JSON lint rules (key order, duplicates)
 scripts/validate-data.mts    data validation (imports the app's own enums)
 src/styles.scss              --aos-* palette, resets, @page print rules
 src/styles/_bands.scss       band list + mixins that generate the colour classes
-src/app/core/models/         Ability, Effect, Timing/Phase/Band, ArmyList, grouping
+src/app/core/models/         Ability, Effect, Timing/Phase/Band, ArmyList, grouping, warscroll stats
 src/app/core/services/       data loading, army selection
 src/app/ability-card/        the card component + Storybook stories
+src/app/unit-card/           warscroll stat block + Storybook stories
 src/app/ability-list/        phase-grouped list and print layout
 ```
 

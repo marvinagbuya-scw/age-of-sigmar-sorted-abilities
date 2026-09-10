@@ -6,3 +6,4 @@ export * from './factions';
 export * from './grouping';
 export * from './timing';
 export * from './universal';
+export * from './warscroll';

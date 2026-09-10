@@ -7,6 +7,7 @@ const STORAGE_KEY = 'aos-sorted-abilities:preferences';
 interface StoredPreferences {
   showFlavour?: boolean;
   includeUniversal?: boolean;
+  showUnits?: boolean;
 }
 
 /**
@@ -24,6 +25,7 @@ export class PreferencesService {
 
   private readonly flavour = signal(this.stored?.showFlavour ?? true);
   private readonly universal = signal(this.stored?.includeUniversal ?? true);
+  private readonly units = signal(this.stored?.showUnits ?? false);
 
   /**
    * Whether the italic flavour line is rendered on cards. On by default; turning
@@ -38,11 +40,19 @@ export class PreferencesService {
    */
   readonly includeUniversal = this.universal.asReadonly();
 
+  /**
+   * Whether the warscroll stat blocks are appended to the list under "Unit".
+   * Off by default: this sheet is about the turn sequence, and the stat blocks
+   * are a bulky extra you opt into when you want the whole warscroll on paper.
+   */
+  readonly showUnits = this.units.asReadonly();
+
   constructor() {
     effect(() => {
       const value: StoredPreferences = {
         showFlavour: this.flavour(),
         includeUniversal: this.universal(),
+        showUnits: this.units(),
       };
       writeJson(this.storage, STORAGE_KEY, value);
     });
@@ -62,5 +72,13 @@ export class PreferencesService {
 
   toggleUniversal(): void {
     this.universal.update((include) => !include);
+  }
+
+  setShowUnits(show: boolean): void {
+    this.units.set(show);
+  }
+
+  toggleUnits(): void {
+    this.units.update((show) => !show);
   }
 }

@@ -7,9 +7,11 @@ import {
   UNIVERSAL_ID,
   allAbilities,
   allUniversalAbilities,
+  hasWarscrollProfile,
   isKnownFaction,
   type Faction,
   type UniversalAbilities,
+  type Unit,
 } from '../models';
 import { PreferencesService } from './preferences.service';
 
@@ -79,6 +81,15 @@ export class AbilityDataService {
 
   /** The faction's abilities plus, when enabled, the universal ones. */
   readonly abilities = computed(() => [...this.factionAbilities(), ...this.universalAbilities()]);
+
+  /** The faction's warscrolls, whether or not their stats are transcribed. */
+  readonly units = computed<readonly Unit[]>(() => this.faction.value()?.units ?? []);
+
+  /**
+   * True when at least one warscroll has a profile box or weapon profiles, i.e.
+   * there is something for the unit stats toggle to reveal.
+   */
+  readonly hasUnitProfiles = computed(() => this.units().some(hasWarscrollProfile));
 
   /** True while any loaded ability is still flagged as unverified sample data. */
   readonly hasSampleData = computed(() => this.abilities().some((a) => a.sample));

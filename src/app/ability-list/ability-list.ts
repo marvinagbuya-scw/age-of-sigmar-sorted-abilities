@@ -6,13 +6,14 @@ import { bandForPhase, groupByPhase } from '../core/models';
 import { AbilityDataService } from '../core/services/ability-data.service';
 import { PreferencesService } from '../core/services/preferences.service';
 import { SelectionService } from '../core/services/selection.service';
+import { UnitCard } from '../unit-card/unit-card';
 
 @Component({
   selector: 'app-ability-list',
   templateUrl: './ability-list.html',
   styleUrl: './ability-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AbilityCard, ArmySelector],
+  imports: [AbilityCard, ArmySelector, UnitCard],
 })
 export class AbilityList {
   private readonly data = inject(AbilityDataService);
@@ -21,7 +22,9 @@ export class AbilityList {
 
   readonly showFlavour = this.preferences.showFlavour;
   readonly includeUniversal = this.preferences.includeUniversal;
+  readonly showUnits = this.preferences.showUnits;
   readonly hasUniversalData = this.data.hasUniversalData;
+  readonly hasUnitProfiles = this.data.hasUnitProfiles;
   readonly universalError = this.data.universalError;
 
   /** True when any visible ability actually has flavour text to hide. */
@@ -47,7 +50,20 @@ export class AbilityList {
   readonly visibleCount = computed(() => this.visible().length);
   readonly totalCount = computed(() => this.data.abilities().length);
 
+  /**
+   * The warscrolls of the units in the army list, shown as stat blocks in their
+   * own section below the phases. Empty until the toggle is on, so the section
+   * disappears entirely rather than collapsing to a bare heading.
+   */
+  readonly units = computed(() =>
+    this.showUnits() ? this.selection.filterUnits(this.data.units()) : [],
+  );
+
   readonly bandForPhase = bandForPhase;
+
+  setShowUnits(event: Event): void {
+    this.preferences.setShowUnits((event.target as HTMLInputElement).checked);
+  }
 
   setShowFlavour(event: Event): void {
     this.preferences.setShowFlavour((event.target as HTMLInputElement).checked);

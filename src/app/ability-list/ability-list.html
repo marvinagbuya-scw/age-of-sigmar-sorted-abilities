@@ -29,6 +29,17 @@
         Flavour text
       </label>
     }
+    @if (hasUnitProfiles() || showUnits()) {
+      <label class="toggle" for="toggle-units">
+        <input
+          id="toggle-units"
+          type="checkbox"
+          [checked]="showUnits()"
+          (change)="setShowUnits($event)"
+        />
+        Unit stats
+      </label>
+    }
     <button type="button" class="print-button" (click)="print()">Print list</button>
   </div>
 </header>
@@ -111,6 +122,23 @@
           }
         </section>
       }
+    }
+
+    <!-- Warscroll stat blocks, below every phase: they're reference material,
+         not part of the turn sequence. Outside the branch above so they still
+         show if the army happens to unlock no abilities at all. -->
+    @if (units().length > 0) {
+      <section class="phase">
+        <h2 class="phase__heading" data-band="deployment">
+          Warscrolls
+          <span class="phase__count">{{ units().length }}</span>
+        </h2>
+        <div class="unit-cards">
+          @for (unit of units(); track unit.id) {
+            <app-unit-card [unit]="unit" />
+          }
+        </div>
+      </section>
     }
   </main>
 </div>

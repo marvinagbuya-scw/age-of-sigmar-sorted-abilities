@@ -38,7 +38,7 @@
       "name": "The Rising Dead",
       "sample": false,
       "keywords": [],
-      "timing": { "phase": "movement" },
+      "timing": { "phase": "movement", "turn": "your" },
       "declare": "Pick a friendly unit that is in the grave.",
       "effect": "Set up that unit wholly within 6\" of a friendly Cursed Sepulchre and more than 9\" from all enemy units, or wholly within 6\" of the edge of the battlefield edge, wholly within friendly territory and more than 9\" from all enemy units.",
       "source": { "kind": "faction" }
@@ -375,6 +375,54 @@
         "DEATH",
         "SOULBLIGHT GRAVELORDS"
       ],
+      "stats": {
+        "health": 14,
+        "move": 12,
+        "save": 3,
+        "control": 5,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-akmet-har-the-dager-of-jet",
+          "name": "Akmet-har, the Dager of Jet",
+          "abilities": ["Anti-HERO (+1 Rend)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": "3+",
+            "wound": "3+",
+            "rend": 2,
+            "damage": 1
+          }
+        },
+        {
+          "id": "sbgl-aken-seth-the-staff-of-pain",
+          "name": "Aken-seth, the Staff of Pain",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": 2,
+            "wound": 3,
+            "rend": 2,
+            "damage": 2
+          }
+        },
+        {
+          "id": "sbgl-nagadrons-claws",
+          "name": "Nagadron's Claws",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": 4,
+            "wound": 2,
+            "rend": 3,
+            "damage": 3
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "sbgl-neferata-battle-damaged",
@@ -443,6 +491,41 @@
         "VAMPIRE",
         "DEATH",
         "SOULBLIGHT GRAVELORDS"
+      ],
+      "stats": {
+        "health": 14,
+        "move": 12,
+        "save": 3,
+        "control": 5,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-gheistvor-the-sword-of-unholy-power",
+          "name": "Gheistvor, the Sword of Unholy Power",
+          "abilities": ["Anti-HERO (+1 Rend)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 6,
+            "hit": "3+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 2
+          }
+        },
+        {
+          "id": "sbgl-Ashigaroths-claws",
+          "name": "Ashigaroth's Claws",
+          "abilities": ["Companion"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": "4+",
+            "wound": "2+",
+            "rend": 3,
+            "damage": 3
+          }
+        }
       ],
       "abilities": [
         {
@@ -526,6 +609,28 @@
         "DEATH",
         "SOULBLIGHT GRAVELORDS"
       ],
+      "stats": {
+        "health": 5,
+        "move": 6,
+        "save": 3,
+        "control": 2,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-dynastic-war-relic",
+          "name": "Dynastic War-relic",
+          "abilities": ["Anti-HERO (+1 Rend)", "Crit (2 Hits)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": "3+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 2
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "sbgl-sanguine-blur",
@@ -550,6 +655,28 @@
         "SOULBLIGHT GRAVELORDS",
         "DEATHRATTLE"
       ],
+      "stats": {
+        "health": 5,
+        "move": 4,
+        "save": 3,
+        "control": 2,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-baleful-tomb-blade",
+          "name": "Baleful Tomb Blade",
+          "abilities": ["Crit (Mortal)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": "4+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 2
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "sbgl-king-of-shambling-bones",
@@ -558,7 +685,7 @@
           "keywords": [],
           "timing": { "phase": "hero", "turn": "your", "frequency": "once-per-turn-army" },
           "declare": "Pick a friendly DEATHRATTLE unit within this unit's combat range to be the target.",
-          "effect": "Roll a dice. On a 3+, the target's melee weapons have Crit (2 hits) for the rest of the turn.",
+          "effect": "Roll a dice. On a 3+, the target's melee weapons have Crit (2 Hits) for the rest of the turn.",
           "usedBy": "Wight King",
           "source": { "kind": "warscroll", "unitId": "sbgl-wight-king" }
         },
@@ -582,6 +709,28 @@
       "id": "sbgl-necromancer",
       "name": "Necromancer",
       "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "WARD (6+)", "DEATH", "SOULBLIGHT GRAVELORDS"],
+      "stats": {
+        "health": 5,
+        "move": 5,
+        "save": 6,
+        "control": 2,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-mortis-staff",
+          "name": "Mortis Staff",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": "4+",
+            "wound": "4+",
+            "rend": 1,
+            "damage": 2
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "sbgl-vanhels-danse-macabre",
@@ -628,6 +777,41 @@
         "SOULBLIGHT GRAVELORDS",
         "DEATHRATTLE"
       ],
+      "stats": {
+        "health": 3,
+        "move": 10,
+        "save": 4,
+        "control": 1,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-barrow-lance",
+          "name": "Barrow Lance",
+          "abilities": ["Crit (Mortal)", "Charge (+1 Damage)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 2,
+            "hit": "4+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 1
+          }
+        },
+        {
+          "id": "sbgl-skeletal-steeds-hooves-and-teeth",
+          "name": "Skeletal Steed's Hooves and Teeth",
+          "abilities": ["Companion"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 2,
+            "hit": "5+",
+            "wound": "3+",
+            "rend": 0,
+            "damage": 1
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "sbgl-knights-of-the-king",
@@ -664,6 +848,28 @@
         "SOULBLIGHT GRAVELORDS",
         "DEATHRATTLE"
       ],
+      "stats": {
+        "health": 1,
+        "move": 4,
+        "save": 4,
+        "control": 1,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-wight-blade",
+          "name": "Wight Blade",
+          "abilities": ["Crit (Mortal)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 2,
+            "hit": "3+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 1
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "sbgl-guardians-of-the-king",
@@ -688,6 +894,28 @@
         "DEATH",
         "SOULBLIGHT GRAVELORDS",
         "DEATHRATTLE"
+      ],
+      "stats": {
+        "health": 1,
+        "move": 4,
+        "save": 5,
+        "control": 1,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-ancient-weapon",
+          "name": "Ancient Weapon",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 2,
+            "hit": "4+",
+            "wound": "4+",
+            "rend": 0,
+            "damage": 1
+          }
+        }
       ],
       "abilities": [
         {
@@ -714,6 +942,28 @@
         "SOULBLIGHT GRAVELORDS",
         "DEATHRATTLE"
       ],
+      "stats": {
+        "health": 4,
+        "move": 12,
+        "save": 5,
+        "control": 1,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-murderous-fangs-and-talons",
+          "name": "Murderous Fangs and Talons",
+          "abilities": ["Crit (2 Hits)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": "4+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 2
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "sbgl-deaths-descent",
@@ -739,6 +989,41 @@
         "DEATH",
         "SOULBLIGHT GRAVELORDS",
         "DEATHRATTLE"
+      ],
+      "stats": {
+        "health": 3,
+        "move": 10,
+        "save": 4,
+        "control": 1,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "sbgl-templar-weapon",
+          "name": "Templar Weapon",
+          "abilities": ["Anti-INFANTRY (+1 Rend)", "Charge (+1 Damage)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": "3+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 1
+          }
+        },
+        {
+          "id": "sbgl-nightmares-hooves-and-teeth",
+          "name": "Nightmare's Hooves and Teeth",
+          "abilities": ["Companion"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": "5+",
+            "wound": "3+",
+            "rend": 0,
+            "damage": 1
+          }
+        }
       ],
       "abilities": [
         {

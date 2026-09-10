@@ -15,7 +15,10 @@ import jsonc from 'eslint-plugin-jsonc';
  *                chantingValue, commandValue, declare, effect, usedBy, source
  *   timing       phase, section, band, turn, reaction, frequency
  *   source       kind, formationId | loreId | unitId
- *   unit         id, name, keywords, abilities
+ *   unit         id, name, keywords, stats, attacks, abilities
+ *   unit stats   health, move, save, control, ward
+ *   attack       id, name, abilities, type, characteristics
+ *   character.   range, attacks, hit, wound, rend, damage
  *   lore/format. id, name, abilities
  *   effect list  list, ordered
  *   roll table   table, then roll, text per row
@@ -52,7 +55,26 @@ const NESTED_KEY_ORDER = [
   'formationId',
   'loreId',
   'unitId',
+  // Warscroll profile. `stats` and `attacks` precede `abilities` so a unit
+  // reads profile-then-rules; the weapon characteristics trail `abilities`
+  // because an attack lists its weapon abilities before its numbers.
+  'stats',
+  'health',
+  'move',
+  'save',
+  'control',
+  'ward',
+  // Also the Attacks characteristic inside `characteristics`, which is why it
+  // sits ahead of hit/wound/rend/damage — with `range` ahead of it, as printed.
+  'range',
+  'attacks',
   'abilities',
+  'type',
+  'characteristics',
+  'hit',
+  'wound',
+  'rend',
+  'damage',
 ];
 
 /** Top-level order: identity first, then sections as they appear in the book. */

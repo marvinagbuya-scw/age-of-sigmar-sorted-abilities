@@ -1,0 +1,180 @@
+// Deliberately no colour band: a warscroll doesn't belong to a phase, so the
+// card is neutral and won't read as another timing colour.
+
+:host {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+.unit-card__header {
+  padding: var(--space-2) var(--space-3);
+  // Matches the black `Unit` section heading above it, which reuses the
+  // deployment band rather than inventing a ninth colour for warscrolls.
+  background: var(--aos-deployment);
+  color: #fff;
+}
+
+.unit-card__name {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.unit-card__body {
+  flex: 1;
+  padding: var(--space-3);
+}
+
+/* --- profile box --------------------------------------------------------- */
+
+/* One column per characteristic, matching the profile box on the warscroll.
+   `auto-fit` keeps them on one row when a ward pushes the count to five. */
+.unit-card__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(3.1rem, 1fr));
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.unit-card__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--card-radius);
+  background: var(--surface-sunken);
+}
+
+.unit-card__stat-label {
+  color: var(--ink-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.unit-card__stat-value {
+  margin: 0;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* --- weapon profiles ----------------------------------------------------- */
+
+.unit-card__weapons-heading {
+  margin: var(--space-3) 0 var(--space-1);
+  color: var(--ink-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.unit-card__weapons {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  // The characteristic columns hold one or two glyphs, so keep them narrow and
+  // let the weapon name take whatever is left.
+  table-layout: auto;
+
+  th,
+  td {
+    padding: 0.15rem var(--space-1);
+    text-align: center;
+    vertical-align: top;
+  }
+
+  thead th {
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  tbody tr + tr th,
+  tbody tr + tr td {
+    border-top: 1px solid var(--rule);
+  }
+}
+
+.unit-card__weapon-name-col {
+  width: 99%;
+  text-align: left !important;
+}
+
+.unit-card__weapon-name {
+  padding-left: 0 !important;
+  font-weight: 600;
+  text-align: left !important;
+}
+
+/* Weapon abilities sit under the name rather than in a column of their own:
+   they're prose of variable length and would wreck the grid. */
+.unit-card__weapon-abilities {
+  display: block;
+  color: var(--ink-muted);
+  font-size: 0.7rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.unit-card__missing {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* --- keywords ------------------------------------------------------------ */
+
+.unit-card__keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--rule);
+  background: var(--surface-sunken);
+}
+
+.unit-card__keyword {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+@media print {
+  :host {
+    // Keep a whole warscroll on one page.
+    break-inside: avoid;
+    border-color: #999;
+  }
+
+  .unit-card__header,
+  .unit-card__stat {
+    // Browsers drop backgrounds when printing; the profile box is much harder
+    // to read as plain text, so force the fill.
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

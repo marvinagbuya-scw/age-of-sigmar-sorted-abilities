@@ -1,5 +1,6 @@
 import type { Ability } from './ability';
 import type { KnownIds } from './army-list';
+import type { UnitStats, WeaponProfile } from './warscroll';
 
 /** A named thing the player picks when building an army. */
 export interface NamedEntry {
@@ -10,6 +11,13 @@ export interface NamedEntry {
 export interface Unit extends NamedEntry {
   /** Warscroll keywords, e.g. `HERO`, `WIZARD (1)`, `INFANTRY`. */
   keywords: string[];
+  /**
+   * The profile box. Optional: abilities were transcribed first, so a unit may
+   * have its abilities long before its characteristics — a known gap, not a bug.
+   */
+  stats?: UnitStats;
+  /** Weapon profiles, melee and ranged together. Optional, as with `stats`. */
+  attacks?: WeaponProfile[];
   /** Abilities printed on this unit's warscroll. */
   abilities: Ability[];
 }

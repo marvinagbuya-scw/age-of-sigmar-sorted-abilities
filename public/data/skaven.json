@@ -451,6 +451,55 @@
       "id": "skv-clawlord-on-gnaw-beast",
       "name": "Clawlord on Gnaw-Beast",
       "keywords": ["HERO", "CAVALRY", "SKAVEN", "CHAOS", "VERMINUS"],
+      "stats": {
+        "health": 7,
+        "move": 9,
+        "save": 4,
+        "control": 2,
+        "ward": 0
+      },
+      "attacks": [
+        {
+          "id": "skv-ratling-pistol",
+          "name": "Ratling Pistol",
+          "abilities": ["Shoot in Combat", "Crit (Auto-wound)"],
+          "type": "ranged",
+          "characteristics": {
+            "range": 10,
+            "attacks": "D6",
+            "hit": "3+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 1
+          }
+        },
+        {
+          "id": "skv-warpforged-halberd",
+          "name": "Warpforged Halberd",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": "5",
+            "hit": "3+",
+            "wound": "4+",
+            "rend": 1,
+            "damage": 2
+          }
+        },
+        {
+          "id": "skv-gnaw-beasts-chisel-fangs",
+          "name": "Gnaw-Beast's Chisel Fangs",
+          "abilities": ["Companion"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": "4",
+            "hit": "4+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": "D3"
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-cornered-rat",
@@ -479,6 +528,42 @@
       "id": "skv-deathmaster",
       "name": "Deathmaster",
       "keywords": ["HERO", "INFANTRY", "WARD (6+)", "SKAVEN", "CHAOS", "ESHIN"],
+      "stats": {
+        "health": 5,
+        "move": 7,
+        "save": 5,
+        "control": 2,
+        "ward": 6
+      },
+      "attacks": [
+        {
+          "id": "skv-eshin-throwing-stars",
+          "name": "Eshin Throwing Stars",
+          "abilities": ["Shoot in Combat", "Crit (Auto-wound)"],
+          "type": "ranged",
+          "characteristics": {
+            "range": 10,
+            "attacks": 5,
+            "hit": "3+",
+            "wound": "4+",
+            "rend": 0,
+            "damage": "D3"
+          }
+        },
+        {
+          "id": "skv-weeping-blade",
+          "name": "Weeping Blade",
+          "abilities": ["Anti-HERO (+1 Rend)", "Crit (Mortal)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": "3+",
+            "wound": "4+",
+            "rend": 1,
+            "damage": "D3"
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-shadowy-killers",
@@ -506,6 +591,28 @@
       "id": "skv-grey-seer",
       "name": "Grey Seer",
       "keywords": ["HERO", "WIZARD (1)", "INFANTRY", "SKAVEN", "CHAOS", "ESHIN"],
+      "stats": {
+        "health": 5,
+        "move": 6,
+        "save": 6,
+        "control": 2,
+        "ward": 0
+      },
+      "attacks": [
+        {
+          "id": "skv-warpstone-staff",
+          "name": "Warpstone Staff",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": "4+",
+            "wound": "4+",
+            "rend": 1,
+            "damage": "D3"
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-warpstone-shards",
@@ -535,6 +642,28 @@
         "SKAVEN",
         "VERMINUS"
       ],
+      "stats": {
+        "health": 1,
+        "move": 6,
+        "save": 5,
+        "control": 1,
+        "ward": 0
+      },
+      "attacks": [
+        {
+          "id": "skv-rusty-weapon",
+          "name": "Rusty Weapon",
+          "abilities": ["Crit (Auto-wound)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 2,
+            "hit": "4+",
+            "wound": "5+",
+            "rend": 0,
+            "damage": 1
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-seething-swarm",
@@ -560,6 +689,28 @@
         "SKAVEN",
         "VERMINUS"
       ],
+      "stats": {
+        "health": 1,
+        "move": 6,
+        "save": 4,
+        "control": 1,
+        "ward": 0
+      },
+      "attacks": [
+        {
+          "id": "skv-stormvermin-weapons",
+          "name": "Stormvermin Weapons",
+          "abilities": ["Anti-charge (+1 Rend)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": "3+",
+            "wound": "4+",
+            "rend": 1,
+            "damage": 1
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-elite-bodyguard",
@@ -577,6 +728,109 @@
       "id": "skv-stormfiends",
       "name": "Stormfiends",
       "keywords": ["INFANTRY", "CHAOS", "SKAVEN", "MOULDER"],
+      "stats": {
+        "health": 6,
+        "move": 6,
+        "save": 4,
+        "control": 2,
+        "ward": 0
+      },
+      "attacks": [
+        {
+          "id": "skv-ratling-cannons",
+          "name": "Ratling Cannons",
+          "abilities": [],
+          "type": "ranged",
+          "characteristics": {
+            "range": 15,
+            "attacks": "3D6",
+            "hit": "4+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 1
+          }
+        },
+        {
+          "id": "skv-windlaunchers",
+          "name": "Windlaunchers",
+          "abilities": [],
+          "type": "ranged",
+          "characteristics": {
+            "range": 15,
+            "attacks": 3,
+            "hit": "4+",
+            "wound": "3+",
+            "rend": 2,
+            "damage": "D3"
+          }
+        },
+        {
+          "id": "skv-warpfire-projectors",
+          "name": "Warpfire Projectors",
+          "abilities": ["Shoot in Combat"],
+          "type": "ranged",
+          "characteristics": {
+            "range": 10,
+            "attacks": "2D6",
+            "hit": "2+",
+            "wound": "4+",
+            "rend": 2,
+            "damage": 1
+          }
+        },
+        {
+          "id": "skv-doomflyer-gauntlets",
+          "name": "Doomflyer Gauntlets",
+          "abilities": ["Charge (+1 Damage)"],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": "4+",
+            "wound": "2+",
+            "rend": 2,
+            "damage": "D3"
+          }
+        },
+        {
+          "id": "skv-grinderfists",
+          "name": "Grinderfists",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 4,
+            "hit": "4+",
+            "wound": "2+",
+            "rend": 2,
+            "damage": 2
+          }
+        },
+        {
+          "id": "skv-shock-gauntlets",
+          "name": "Shock Gauntlets",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 4,
+            "hit": "4+",
+            "wound": "2+",
+            "rend": 1,
+            "damage": 2
+          }
+        },
+        {
+          "id": "skv-clubbing-blows",
+          "name": "Clubbing Blows",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 3,
+            "hit": "4+",
+            "wound": "2+",
+            "rend": 0,
+            "damage": 2
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-grinderfist-tunnellers",
@@ -605,6 +859,42 @@
       "id": "skv-rat-ogors",
       "name": "Rat Ogors",
       "keywords": ["INFANTRY", "CHAOS", "SKAVEN", "MOULDER"],
+      "stats": {
+        "health": 4,
+        "move": 6,
+        "save": 5,
+        "control": 1,
+        "ward": 0
+      },
+      "attacks": [
+        {
+          "id": "skv-warpfire-gun",
+          "name": "Warpfire Gun",
+          "abilities": ["Shoot in Combat"],
+          "type": "ranged",
+          "characteristics": {
+            "range": 10,
+            "attacks": "2D6",
+            "hit": "2+",
+            "wound": "4+",
+            "rend": 2,
+            "damage": 1
+          }
+        },
+        {
+          "id": "skv-claws-blades-and-fangs",
+          "name": "Claws, Blades and Fangs",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": 5,
+            "hit": "4+",
+            "wound": "3+",
+            "rend": 1,
+            "damage": 2
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-unleashed-warp-fury",
@@ -622,6 +912,42 @@
       "id": "skv-warp-lightning-cannon",
       "name": "Warp Lightning Cannon",
       "keywords": ["WAR MACHINE", "CHAOS", "SKAVEN", "SKYRE"],
+      "stats": {
+        "health": 8,
+        "move": 3,
+        "save": 4,
+        "control": 2,
+        "ward": 0
+      },
+      "attacks": [
+        {
+          "id": "skv-warp-lightning-blast",
+          "name": "Warp Lightning Blast",
+          "abilities": [],
+          "type": "ranged",
+          "characteristics": {
+            "range": 20,
+            "attacks": "2D6",
+            "hit": "4+",
+            "wound": "",
+            "rend": "",
+            "damage": ""
+          }
+        },
+        {
+          "id": "skv-crews-teeth-and-knives",
+          "name": "Crew's Teeth and Knives",
+          "abilities": [],
+          "type": "melee",
+          "characteristics": {
+            "attacks": "D6",
+            "hit": "4+",
+            "wound": "5+",
+            "rend": 0,
+            "damage": 1
+          }
+        }
+      ],
       "abilities": [
         {
           "id": "skv-more-more-warp-lightning",

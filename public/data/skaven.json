@@ -929,9 +929,8 @@
             "range": 20,
             "attacks": "2D6",
             "hit": "4+",
-            "wound": "",
-            "rend": "",
-            "damage": ""
+            "wound": "-",
+            "damage": "1"
           }
         },
         {

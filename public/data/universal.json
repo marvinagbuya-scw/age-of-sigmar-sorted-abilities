@@ -153,7 +153,7 @@
       "id": "cmd-rally",
       "name": "Rally",
       "sample": false,
-      "keywords": [],
+      "keywords": ["COMMAND"],
       "timing": { "phase": "hero", "turn": "any" },
       "commandValue": 1,
       "declare": "Pick a friendly unit that is not in combat to use this ability.",
@@ -173,7 +173,7 @@
       "id": "cmd-magical-intervention",
       "name": "Magical Intervention",
       "sample": false,
-      "keywords": [],
+      "keywords": ["COMMAND"],
       "timing": { "phase": "hero", "turn": "enemy" },
       "commandValue": 1,
       "declare": "Pick a friendly WIZARD or PRIEST to use this ability.",
@@ -184,7 +184,7 @@
       "id": "cmd-redeploy",
       "name": "Redeploy",
       "sample": false,
-      "keywords": ["MOVE", "RUN"],
+      "keywords": ["MOVE", "RUN", "COMMAND"],
       "timing": { "phase": "movement", "turn": "enemy" },
       "commandValue": 1,
       "declare": "Pick a friendly unit that is not in combat to use this ability.",
@@ -195,7 +195,7 @@
       "id": "cmd-at-the-double",
       "name": "At the Double",
       "sample": false,
-      "keywords": [],
+      "keywords": ["COMMAND"],
       "timing": {
         "phase": "movement",
         "band": "movement",
@@ -210,7 +210,7 @@
       "id": "cmd-covering-fire",
       "name": "Covering Fire",
       "sample": false,
-      "keywords": ["SHOOT", "ATTACK"],
+      "keywords": ["SHOOT", "ATTACK", "COMMAND"],
       "timing": {
         "phase": "shooting",
         "turn": "enemy"
@@ -224,7 +224,7 @@
       "id": "cmd-counter-charge",
       "name": "Counter Charge",
       "sample": false,
-      "keywords": [],
+      "keywords": ["COMMAND"],
       "timing": {
         "phase": "charge",
         "turn": "enemy"
@@ -238,7 +238,7 @@
       "id": "cmd-forward-to-victory",
       "name": "Forward to Victory",
       "sample": false,
-      "keywords": [],
+      "keywords": ["COMMAND"],
       "timing": {
         "phase": "charge",
         "band": "charge",
@@ -253,7 +253,7 @@
       "id": "cmd-all-out-attack",
       "name": "All-Out Attack",
       "sample": false,
-      "keywords": [],
+      "keywords": ["COMMAND"],
       "timing": {
         "phase": "combat",
         "band": "combat",
@@ -268,13 +268,13 @@
       "id": "cmd-all-out-defence",
       "name": "All-Out Defence",
       "sample": false,
-      "keywords": [],
+      "keywords": ["COMMAND"],
       "timing": {
         "phase": "combat",
         "reaction": "Opponent declared an ATTACK ability"
       },
       "commandValue": 1,
-      "effect": "Add 1 to hit rolls for attacks made as part of that ATTACK ability. This also affects weapons that have the Companion weapon ability. For the rest of the turn, subtract 1 from save rolls for the unit using this ability.",
+      "effect": "Add 1 to save rolls for that unit until that ATTACK ability has been resolved.",
       "usedBy": "A unit targeted by that ATTACK ability.",
       "source": { "kind": "command" }
     },
@@ -282,7 +282,7 @@
       "id": "cmd-power-through",
       "name": "Power Through",
       "sample": false,
-      "keywords": ["MOVE"],
+      "keywords": ["MOVE", "COMMAND"],
       "timing": {
         "phase": "end-of-turn",
         "turn": "any"

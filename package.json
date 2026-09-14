@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:pages": "ng build --base-href /age-of-sigmar-sorted-abilities/",
     "watch": "ng build --watch --configuration development",
     "test": "npm run lint && npm run validate:data && ng test",
     "test:unit": "ng test",

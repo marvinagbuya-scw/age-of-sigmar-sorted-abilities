@@ -1,0 +1,59 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a newer push cancel an in-flight deploy rather than queue behind it.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  DIST_DIR: dist/age-of-sigmar-sorted-abilities/browser
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run validate:data
+
+      # Sets --base-href to the repo name; see package.json.
+      - run: npm run build:pages
+
+      # SPA fallback: any unknown path serves the app, which redirects via the
+      # '**' route.
+      - run: cp "$DIST_DIR/index.html" "$DIST_DIR/404.html"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.DIST_DIR }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
